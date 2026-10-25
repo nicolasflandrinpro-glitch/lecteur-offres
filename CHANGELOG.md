@@ -10,3 +10,4 @@
 - Procédures (procedures/) : installer, mettre à jour, ajouter une plateforme, régler mes critères, lire un débrief. Questions posées par cartes à choix ; fichiers du dépôt téléchargés au tag et contrôlés par leur empreinte.
 - Skills (skills/) : cinq skills qui téléchargent leur procédure à la version du kit installée (ligne Paramètres « Version du kit ») et l'appliquent ; proposées par l'installeur.
 - Extension Chrome 0.6 (extension/) : code inchangé, archive identique à celle du kit 4.
+- Page d'accueil (docs/index.html, publiée par GitHub Pages) : ce que fait le kit, prérequis, prompt d'installation à coller dans Cowork, questions fréquentes.

@@ -46,6 +46,7 @@
     "extension/pont.js": "02dfa3fef5046f2ba72783fa3f26f1d7722511d24ec8ed79f4b1281dbbfd6379",
     "extension/popup.html": "2d414f1ea41aaaa0d70f3c771919c3d5dc3dee78d61d6d2ff01e26979386843d",
     "extension/popup.js": "5ea60440253c5f6d0aaea8c4712f73f02131912f2a0419a582fcc89ae181fedc",
-    "extension/reglages.js": "a48308bd4679093a73ed410d3a5690533d2ee98d0a5211e6593302a577791c91"
+    "extension/reglages.js": "a48308bd4679093a73ed410d3a5690533d2ee98d0a5211e6593302a577791c91",
+    "docs/index.html": "3e3c14fd44c62ec764899460214d98ac971f2bccde3afbde1ca4b875d8135b38"
   }
 }
