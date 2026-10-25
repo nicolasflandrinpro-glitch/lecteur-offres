@@ -14,7 +14,7 @@ Procédure pour Claude (Cowork). Suis-la seulement quand l'utilisateur te le dem
 
 ## 1. Versions
 
-1. NOUVEAU = champ « tag » de https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/main/versions.json. Télécharge `versions.json` au tag NOUVEAU (BASE = …/lecteur-offres/NOUVEAU/) et contrôle que son champ « tag » vaut NOUVEAU.
+1. NOUVEAU = la version donnée par l'utilisateur dans sa demande (exemple : v5.0), s'il en donne une ; sinon, le champ « tag » de https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/main/versions.json. Télécharge `versions.json` au tag NOUVEAU (BASE = …/lecteur-offres/NOUVEAU/) et contrôle que son champ « tag » vaut NOUVEAU.
 2. Trouve la page de configuration (titre par défaut « Lecteur d'offres : configuration » ; plusieurs pages ou aucune : carte). Lis dans Paramètres « Version du kit » (ANCIEN) et « Version du modèle ».
    - « Version du kit » absente et « Version du modèle » égale à 4 : ANCIEN = kit 4, installé depuis Notion (sans dépôt GitHub).
    - « Version du modèle » inférieure à 4 : dis que la mise à jour automatique n'est pas prévue depuis cette version et arrête-toi.

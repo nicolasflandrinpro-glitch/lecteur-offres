@@ -28,12 +28,12 @@
     "procedures/ajouter-plateforme.md": "ea1824474a05e22dd41f23a7f6b0893a9ae5c2f25ac860bc83e6ba98d1402266",
     "procedures/installer.md": "815a7c8dd0934d5426d38c48412449bdc98284afc579080d40263703587594c8",
     "procedures/lire-debrief.md": "0544cde97ad054b3948c57a036ae2747dfdea3ded1ca0d79050ef3bfebea3c38",
-    "procedures/mettre-a-jour.md": "fdd303fd2a34c00de2c622a1989bae04b704eff880f9adef5069a758da8d0049",
+    "procedures/mettre-a-jour.md": "b61a0e94c3624d295ef6e1407073f08ae6753c09b2ca01d3f7429ca3d89d900b",
     "procedures/regler-criteres.md": "1f916108ea0b61d1a85fe733931695cb1399488aeaea24fe4e0e7ce45be3102f",
     "skills/lecteur-offres-ajouter-plateforme/SKILL.md": "f3b9540ae640d6e3f97e0843e7ab2ca36323d2993d23b9a4888ce8f97c0d36f8",
     "skills/lecteur-offres-installer/SKILL.md": "66aeaaf68da00e11e6688abb1e15e144a0fb2e3fedecd06531200f4483c98fac",
     "skills/lecteur-offres-lire-debrief/SKILL.md": "83534849336254c2bc7d2eb0d04914e8fbe4e1007f1d5ef37ba2d42418874532",
-    "skills/lecteur-offres-mettre-a-jour/SKILL.md": "9d094b2e23d773753ee933024c13d9763bae3f098c9fa2d5fecf8beee62c7df9",
+    "skills/lecteur-offres-mettre-a-jour/SKILL.md": "b4f7f68977ef4fb88e6a3d5875d6ec9ead120ba7225082bd86177add844a92ff",
     "skills/lecteur-offres-regler-criteres/SKILL.md": "7e645f62025befa721a3aea815fef62474dba74c8ed49e464bc3921f38b4e3d4",
     "extension/lecteur-offres-extension-0.6.zip": "a0f7cb01da30a6c55e50c7c328fdd88c70c474678285874ad28d23fd784bcaef",
     "extension/background.js": "12db3d6401b57c7f979a7e6d8070c15b3fcc68964fd20afae99a5020d453ee19",
@@ -47,6 +47,6 @@
     "extension/popup.html": "2d414f1ea41aaaa0d70f3c771919c3d5dc3dee78d61d6d2ff01e26979386843d",
     "extension/popup.js": "5ea60440253c5f6d0aaea8c4712f73f02131912f2a0419a582fcc89ae181fedc",
     "extension/reglages.js": "a48308bd4679093a73ed410d3a5690533d2ee98d0a5211e6593302a577791c91",
-    "docs/index.html": "3e3c14fd44c62ec764899460214d98ac971f2bccde3afbde1ca4b875d8135b38"
+    "docs/index.html": "78c9c1bc6be734df4298703ac3d6c33907807ee879b17d2de5fa341e618c6487"
   }
 }
