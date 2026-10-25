@@ -7,7 +7,7 @@
   "modele_notion_tolere": "4",
   "modele_taches": "claude-sonnet-5-5",
   "modele_taches_note": "identifiant accepté par la mise à jour d'une tâche le 25/10/2026 (organisation de Nicolas) ; à vérifier chez chaque utilisateur à l'installation",
-  "lecteur": "19.3 (E4, à venir)",
+  "lecteur": "19.4",
   "fichiers": {
     "schema/configuration.json": "69b9e56dbd2bf4b42c729dbb31484bb6f2f82e5e8b9416d9b3072f1248475df9",
     "brique/manuel.md": "491412bb63e6eb0065599cca601ab18eceb7f573a4ee010a450a56ec30713bbb",
@@ -16,6 +16,12 @@
     "brique/amorce-offres.md": "8604fec69bb801b04be153402000dca313d2b845802ca47fe36ed1015c84bae8",
     "brique/amorce-test-source.md": "9ba3552724a742b5414f0aeed2fa95a1fd5cbbd66cb9015d0f253dcc1bbf06ac",
     "brique/tests/test_offres.py": "c644c1c59a85a2a34bd0eb8a628de9429831e871dff07ee89d4e8cc91b69a1aa",
-    "brique/tests/jeu-verification.md": "946f836ed867e0d7b88b077346f60b755cde3afba4439b5826b2bf0265489049"
+    "brique/tests/jeu-verification.md": "946f836ed867e0d7b88b077346f60b755cde3afba4439b5826b2bf0265489049",
+    "lecteur/lecteur.html": "f3e49b87bca3eee230754057be6a60424e34b19e8488605cef3165b08d94cc86",
+    "lecteur/tests/tests-config-v19.js": "a5ba5e11404c2ce13021e15fa723b65e30f13940411052a422f44c764d857ae9",
+    "lecteur/tests/tests-jsdom-v19.js": "66b702676d0c33a47a5fd821d48af96b859ced27339682d1c93ba2d3b2246008",
+    "lecteur/tests/tests-plateformes-v19-2.js": "78617e9e907b56e4c740ec24d07ba5f291837dcabe7275867b8543cbedac34bc",
+    "lecteur/tests/tests-v19-3.js": "146476beab1b5db244ea65d8fcf0ae2ffc2d9d90a25ee655b03eaf5cd3bbabb7",
+    "lecteur/tests/tests-v19-4.js": "c1a3d99e8b9eebff05647c5f8e29c94c15262549a982448ef2ac09ace4a3037d"
   }
 }
