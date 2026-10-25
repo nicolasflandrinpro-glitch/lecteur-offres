@@ -168,7 +168,7 @@ r, out = run(BASE, [], test_mode(src={**TS, "gabarit": "indeed_xyz"}, offres_uni
 verdict("TEST SOURCE : gabarit inconnu, code 3", r.returncode == 3 and "inconnu" in out["dernier_test"], r.stdout)
 r, out = run(BASE, [], test_mode(src={**TS, "adresse": "hiway"}, offres_uniques=0))
 verdict("TEST SOURCE : expéditeur sans @, code 3", r.returncode == 3, r.stdout)
-many = [off(f"hw-po-{k}", source="S12", lien=f"https://www.hiway.example/missions/po-{k}", titre="Product Owner " + "x" * 60) for k in range(60)]
+many = [off(f"hw-po-{k}", source="S12", lien=f"https://www.hiway.example/missions/po-{k}", titre=f"Product Owner {k} " + "x" * 60) for k in range(60)]
 r, out = run(BASE, many, test_mode())
 verdict("TEST SOURCE : résultat tronqué sous 1900 caractères", r.returncode == 0 and len(out["dernier_test"]) <= 1900 and "lignes tronquées" in out["dernier_test"], str(len(out["dernier_test"]) if out else r.stdout))
 # ---- Expéditeurs détectés (étape 6 ter) ----
@@ -219,4 +219,26 @@ r, _ = run(BASE, [off(500002)]); verdict("1.9 : modèle 5, débrief à écrire, 
 r, _ = run(M4, [off(500003)]); verdict("1.9 : avertissement du modèle 4 renvoie à la procédure « mettre à jour »", r.returncode == 0 and "procédure « mettre à jour »" in r.stdout and "page des mises à jour" not in r.stdout, r.stdout)
 r, _ = run(BASE, [OH], test_mode()); verdict("1.9 : TEST SOURCE sans ligne DEBRIEF", r.returncode == 0 and "DEBRIEF" not in r.stdout, r.stdout)
 r, out = run(BASE, [], test_mode(src={**TS, "gabarit": "indeed_xyz"}, offres_uniques=0)); verdict("1.9 : gabarit inconnu cité avec la brique 1.9", r.returncode == 3 and "inconnu de la brique 1.9" in out["dernier_test"], r.stdout)
+# ---- Complément 1.9 du 25/10 : fusion dans un même passage, offres relayées comptées en doublons entre plateformes ----
+AT = dict(titre="Senior Product Manager - Open Platforms & Firmware H/F", org="Atos")
+FA = [off(4473151322, lieu="Paris", **AT), off(4473147558, lieu="Les Clayes-sous-Bois", **AT), off(4473154238, lieu="Paris", **AT), off(4473139800, lieu="Les Clayes-sous-Bois", **AT)]
+r, out = run(BASE, FA); c = out["offres_a_creer"] if out else []
+verdict("Fusion : 4 offres Atos du même passage donnent une offre, premier identifiant gardé", r.returncode == 0 and len(c) == 1 and c[0]["id"] == "4473151322", r.stdout)
+verdict("Fusion : lieux distincts regroupés « Paris ; Les Clayes-sous-Bois »", bool(c) and c[0]["properties"]["Lieu"] == "Paris ; Les Clayes-sous-Bois", str(c))
+verdict("Fusion : compteur doublons_passage=3 et retenues=1", "doublons_passage=3 " in r.stdout and "retenues=1" in r.stdout, r.stdout)
+verdict("Fusion : ligne FUSION avec les quatre identifiants", "FUSION Senior Product Manager - Open Platforms & Firmware H/F ; Atos ; 4473151322, 4473147558, 4473154238, 4473139800" in r.stdout, r.stdout)
+r, out = run(BASE, [off(510001, titre="Product  OWNER", org="Société X"), off(510002, titre="product owner", org="societe x", lieu="Nanterre")])
+verdict("Fusion : casse, accents et espaces ignorés", r.returncode == 0 and len(out["offres_a_creer"]) == 1 and out["offres_a_creer"][0]["properties"]["Lieu"] == "Paris ; Nanterre", r.stdout)
+r, out = run(BASE, [off(510003, org="Alpha"), off(510004, org="Beta")])
+verdict("Fusion : même titre, entreprises différentes : deux offres", r.returncode == 0 and len(out["offres_a_creer"]) == 2 and "doublons_passage=0 " in r.stdout and "FUSION" not in r.stdout, r.stdout)
+FW = lambda i: off(f"fw-po-{i}", source="S08", org="", lien=f"https://www.free-work.com/fr/tech-it/job-mission/product-owner/po-{i}")
+r, out = run(BASE, [FW(1), FW(2)])
+verdict("Fusion : entreprise vide (Free-Work) jamais fusionnée", r.returncode == 0 and len(out["offres_a_creer"]) == 2 and "doublons_passage=0 " in r.stdout, r.stdout)
+r, out = run(BASE, [off(510005, lieu="Paris"), off(510006, lieu="paris"), off(510007, lieu="")])
+verdict("Fusion : lieu répété ou vide non ajouté", r.returncode == 0 and len(out["offres_a_creer"]) == 1 and out["offres_a_creer"][0]["properties"]["Lieu"] == "Paris", str(out and out["offres_a_creer"]))
+r, out = run(BASE, [off(510008, poste="hors_liste"), off(510009, poste="Product Owner")])
+verdict("Fusion : faits de la première lue gardés (groupe écarté une seule fois)", r.returncode == 0 and len(out["ecartees"]) == 1 and not out["offres_a_creer"] and "doublons_passage=1 " in r.stdout, r.stdout)
+def relais(D, K): D["offres_uniques"], D["doublons_plateformes"] = 10, 4
+r, out = run(BASE, [off(520000 + k, titre=f"PO {k}") for k in range(6)], relais)
+verdict("Offres Free-Work relayées par LinkedIn comptées en doublons entre plateformes : identité respectée", r.returncode == 0 and "uniques=10 doublons=0 deja_vues=0 doublons_plateformes=4 doublons_passage=0 " in r.stdout, r.stdout)
 print(f"\n{nb - ko}/{nb} contrôles OK"); sys.exit(1 if ko else 0)

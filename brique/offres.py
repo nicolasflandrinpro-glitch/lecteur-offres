@@ -7,6 +7,7 @@ from urllib.parse import urlsplit, parse_qsl
 
 VERSION_BRIQUE, MODELE_ATTENDU, MODELE_TOLERE = "1.9", "5", "4"   # modèle N-1 toléré : nouveautés du modèle N sautées, avec avertissement
 # v1.9 : script téléchargé depuis le dépôt GitHub (tag figé) ; modèle 5 = modèle 4 + ligne Paramètres « Dernier débrief » ; modèle 4 : débrief non écrit
+# v1.9 (complément du 25/10) : fusion des offres de même entreprise et de même titre dans un même passage (compteur doublons_passage, lignes FUSION)
 
 # ---- Table de correspondance (seul endroit où figurent les noms Notion utilisés par le script) ----
 PARAM = {"version": "Version du modèle", "prenom": "Prénom", "postes": "Postes recherchés", "proches": "Postes proches",
@@ -255,6 +256,24 @@ if DET is not None and not TEST:
         err.append("expediteurs_detectes : liste d'objets {adresse, nom, mails (entier ≥ 1), objet, dernier (AAAA-MM-JJ)} attendue")
 if err: print("ERREURS :"); [print(" -", e) for e in err]; sys.exit(1)
 
+# ---- Fusion dans un même passage (v1.9) : même entreprise et même titre normalisés ; entreprise vide : jamais fusionnées ; première lue gardée avec ses faits ----
+VUS, O2, FUS = {}, [], []
+for o in O:
+    k = (norm(o.get("org")), norm(o.get("titre")))
+    l = str(o.get("lieu") or "").strip()
+    if k[0] and k in VUS:
+        p = VUS[k]; p["_fus"].append(str(o["id"]))
+        if l and norm(l) not in [norm(x) for x in p["_lieux"]]: p["_lieux"].append(l)
+        continue
+    o["_fus"], o["_lieux"] = [], ([l] if l else [])
+    if k[0]: VUS[k] = o
+    O2.append(o)
+N_FUS = len(O) - len(O2); O = O2
+for o in O:
+    if o["_fus"]:
+        o["lieu"] = " ; ".join(o["_lieux"])
+        FUS.append(f'FUSION {propre(o["titre"])} ; {propre(o.get("org"))} ; {", ".join([str(o["id"])] + o["_fus"])}')
+
 # ---- Décision ----
 CPT = {c: 0 for c, _ in CRITERES}; N_OFF, ECART, ECART_T = [], [], []
 for o in O:
@@ -326,8 +345,9 @@ print("REGLAGES " + " ; ".join([f"contrats={'/'.join(x for x in TYPES if x in R[
       f"jours_min={R['jours'] or '-'}", f"zone={'oui' if R['zone'] else 'non'}", f"plancher={R['plancher'] or '-'}", f"messagerie={MSG}"]))
 print("SOURCES " + " ; ".join(f"{s['id']}={s['plateforme'] or '?'}/{s['gabarit'] or '?'}/{s['prefixe'] or '-'}/{s['domaine'] or '-'}" for s in SRC.values()))
 for a in avert + avert_src: print("AVERTISSEMENT", a)
-print(f'COMPTEURS mails={D.get("mails_lus", 0)} uniques={D["offres_uniques"]} doublons={D.get("doublons", 0)} deja_vues={D.get("deja_vues", 0)} doublons_plateformes={D.get("doublons_plateformes", 0)} '
+print(f'COMPTEURS mails={D.get("mails_lus", 0)} uniques={D["offres_uniques"]} doublons={D.get("doublons", 0)} deja_vues={D.get("deja_vues", 0)} doublons_plateformes={D.get("doublons_plateformes", 0)} doublons_passage={N_FUS} '
       + " ".join(f"ecartees_{c}={v}" for c, v in CPT.items()) + f" retenues={len(N_OFF)}")
+for l in FUS: print(l)
 print("A_VERIFIER " + " ".join(f"{a.replace(' ', '_')}={sum(a in x['properties'][PROP['verif']] for x in N_OFF)}" for a in VERIF))
 if TEST:
     print(f"TEST liens_ecartes={len(LE)} longueur_resultat={len(TXT_TEST)}")

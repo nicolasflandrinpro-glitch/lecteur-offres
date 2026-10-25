@@ -1,10 +1,12 @@
 # Brique Offres 1.9 : jeu de vérification (25/10/2026)
 
-Script vérifié : brique/offres.py, empreinte sha256 `7040600e4608c41a33e21af84219099a7499870ac4a6a0907b0040b84c3f854a` (340 lignes).
+Script vérifié : brique/offres.py, empreinte sha256 `15f7c496799cdfb690dca30c7f38865aa8fd9bd8ccc60de39ca88af16f82c4bc` (360 lignes).
 Version précédente : brique 1.8, empreinte `10e6acea77a5a7b6c65b0397b3b89fd368cd20b90c0e6173630ee889fd7150bd` (338 lignes, 106 contrôles).
-Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 25/10/2026 : 111/111 contrôles OK.
+Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 25/10/2026 : 121/121 contrôles OK.
 
 Écarts avec la 1.8 : modèle 5 attendu et modèle 4 toléré (le modèle 3 est refusé) ; en modèle 4, expéditeurs détectés et test de source restent écrits, seul le débrief n'est pas écrit (ligne « Dernier débrief » absente) ; plus de repli Gmail sans ligne Messagerie ; nouvelle ligne DEBRIEF ; avertissement qui renvoie à la procédure « mettre à jour ». Contrôles 94 à 96 et 101 réécrits pour le modèle 4, contrôles 107 à 111 ajoutés.
+
+Complément du 25/10 (constats du passage du 25/10) : fusion des offres de même entreprise et de même titre dans un même passage (première lue gardée, lieux regroupés « ; », compteur doublons_passage, lignes FUSION ; entreprise vide jamais fusionnée) ; offres d'une plateforme suivie en direct relayées par LinkedIn comptées en doublons entre plateformes (règle du manuel, identité vérifiée par le script). Contrôle 83 : titres rendus distincts (sinon fusionnés). Contrôles 112 à 121 ajoutés.
 
 Non couvert : téléchargement du script et écriture du débrief (comportement de l'agent), à vérifier au premier passage réel.
 
@@ -119,3 +121,13 @@ Non couvert : téléchargement du script et écriture du débrief (comportement 
 109. 1.9 : avertissement du modèle 4 renvoie à la procédure « mettre à jour » : OK
 110. 1.9 : TEST SOURCE sans ligne DEBRIEF : OK
 111. 1.9 : gabarit inconnu cité avec la brique 1.9 : OK
+112. Fusion : 4 offres Atos du même passage donnent une offre, premier identifiant gardé : OK
+113. Fusion : lieux distincts regroupés « Paris ; Les Clayes-sous-Bois » : OK
+114. Fusion : compteur doublons_passage=3 et retenues=1 : OK
+115. Fusion : ligne FUSION avec les quatre identifiants : OK
+116. Fusion : casse, accents et espaces ignorés : OK
+117. Fusion : même titre, entreprises différentes : deux offres : OK
+118. Fusion : entreprise vide (Free-Work) jamais fusionnée : OK
+119. Fusion : lieu répété ou vide non ajouté : OK
+120. Fusion : faits de la première lue gardés (groupe écarté une seule fois) : OK
+121. Offres Free-Work relayées par LinkedIn comptées en doublons entre plateformes : identité respectée : OK

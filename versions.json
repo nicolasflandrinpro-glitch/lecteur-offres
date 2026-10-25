@@ -10,12 +10,12 @@
   "lecteur": "19.3 (E4, à venir)",
   "fichiers": {
     "schema/configuration.json": "69b9e56dbd2bf4b42c729dbb31484bb6f2f82e5e8b9416d9b3072f1248475df9",
-    "brique/manuel.md": "1a30454afa47c522030387fe7040ab8bece07c6b1bf3a867b4c97edc10535227",
+    "brique/manuel.md": "491412bb63e6eb0065599cca601ab18eceb7f573a4ee010a450a56ec30713bbb",
     "brique/test-source.md": "a7520b60056dfc60b2fd4478bb7176fd7871f74d955ba7d285885f29bf92cf5a",
-    "brique/offres.py": "7040600e4608c41a33e21af84219099a7499870ac4a6a0907b0040b84c3f854a",
-    "brique/amorce-offres.md": "59f9e7bb79d2f817a15b4785dba90c7aa87baf6c6e11b156ae76b4f91bdab014",
-    "brique/amorce-test-source.md": "58f1d088ac92841573fcaef296a25080addc205644a502b13997050c709d78d6",
-    "brique/tests/test_offres.py": "6cc7315f6c3a812cb0b59b763b58e454fba77cab264e9c78f7a1248de83df697",
-    "brique/tests/jeu-verification.md": "42567181fdc9d8c9296a10b657debf785288cf9dec832f6d23a41ff5f13ac395"
+    "brique/offres.py": "15f7c496799cdfb690dca30c7f38865aa8fd9bd8ccc60de39ca88af16f82c4bc",
+    "brique/amorce-offres.md": "8604fec69bb801b04be153402000dca313d2b845802ca47fe36ed1015c84bae8",
+    "brique/amorce-test-source.md": "9ba3552724a742b5414f0aeed2fa95a1fd5cbbd66cb9015d0f253dcc1bbf06ac",
+    "brique/tests/test_offres.py": "c644c1c59a85a2a34bd0eb8a628de9429831e871dff07ee89d4e8cc91b69a1aa",
+    "brique/tests/jeu-verification.md": "946f836ed867e0d7b88b077346f60b755cde3afba4439b5826b2bf0265489049"
   }
 }
