@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Lecteur d'offres : réglages de l'extension</title>
+<style>
+  body { font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; margin: 0; padding: 20px 16px; background: #f3f5f4; color: #18231f; }
+  main { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+  h1 { font-size: 1.3rem; margin: 0; }
+  .champ { background: #fff; border: 1px solid #d7dfdb; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+  label { font-weight: 700; }
+  .aide { color: #5b6b64; font-size: .88rem; margin: 0; }
+  input, textarea, select { font: inherit; padding: 8px 10px; border: 1px solid #d7dfdb; border-radius: 8px; background: #fff; color: inherit; }
+  textarea { min-height: 70px; }
+  button { font: 600 .95rem system-ui, sans-serif; padding: 10px 16px; border-radius: 8px; border: 1px solid #1f6f5c; background: #1f6f5c; color: #fff; cursor: pointer; align-self: flex-start; }
+  #msg { margin: 0; min-height: 1.3em; }
+  .ok { color: #1f6f5c; } .ko { color: #a2342b; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Lecteur d'offres : réglages de l'extension</h1>
+  <div class="champ">
+    <label for="lecteurs">Adresse de ton lecteur d'offres</label>
+    <p class="aide">Copie l'adresse de la page du lecteur sur claude.ai (par exemple https://claude.ai/artifact/…). Une adresse par ligne si tu en as plusieurs. Elle sert à reconnaître ton lecteur et à lui donner son icône d'onglet.</p>
+    <textarea id="lecteurs" spellcheck="false"></textarea>
+  </div>
+  <div class="champ">
+    <label for="ecran">Écran de la fenêtre de lecture</label>
+    <p class="aide">Écran sur lequel la fenêtre de lecture s'ouvre quand elle n'existe pas encore. Tu peux aussi choisir une fenêtre déjà ouverte : clique sur l'icône de l'extension dans cette fenêtre, puis « Utiliser cette fenêtre ».</p>
+    <select id="ecran"></select>
+  </div>
+  <div class="champ">
+    <label for="dossier">Sous-dossier des enregistrements de posts LinkedIn</label>
+    <p class="aide">Dossier, à l'intérieur de ton dossier Téléchargements, où sont gardées les copies datées des recherches enregistrées. Chrome n'accepte pas d'autre emplacement que Téléchargements.</p>
+    <input id="dossier" type="text" spellcheck="false">
+  </div>
+  <button id="enregistrer" type="button">Enregistrer</button>
+  <p id="msg" role="status" aria-live="polite"></p>
+</main>
+<script src="reglages.js"></script>
+<script src="options.js"></script>
+</body>
+</html>

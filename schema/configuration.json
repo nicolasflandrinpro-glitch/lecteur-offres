@@ -1,7 +1,7 @@
 {
   "version_schema": 1,
   "version_modele": "5",
-  "source": "Modèle Notion 4 (page 40234f6d2f8d8163845fcb60b4c805f6), relevé le 25/10/2026, plus la ligne Paramètres « Dernier débrief » et la version 5.",
+  "source": "Modèle Notion 4 (page 40234f6d2f8d8163845fcb60b4c805f6), relevé le 25/10/2026, plus les lignes Paramètres « Dernier débrief » et « Version du kit » et la version 5.",
   "page": {
     "titre_defaut": "Lecteur d'offres : configuration",
     "icone": "📬",
@@ -23,6 +23,7 @@
       "vue": {"type": "table", "affichees": ["Paramètre", "Commentaire", "Dernier import", "Valeur", "À supprimer"]},
       "lignes": [
         {"Paramètre": "Version du modèle", "Valeur": "5", "Commentaire": "Version de la structure Notion. Lue par la brique Offres, qui s'arrête sans rien écrire si elle ne correspond pas à la version attendue. Ne la modifier qu'en appliquant une mise à jour."},
+        {"Paramètre": "Version du kit", "Valeur": null, "Commentaire": "Version du kit installée (exemple : v5.0). Écrite par l'installeur et par la procédure de mise à jour ; lue par les skills pour télécharger leurs procédures à cette version. Ne la modifier qu'en appliquant une mise à jour."},
         {"Paramètre": "Prénom", "Valeur": null, "Commentaire": "Prénom de l'utilisateur, affiché par le lecteur et repris dans le débrief de la brique Offres."},
         {"Paramètre": "Postes recherchés", "Valeur": null, "Commentaire": "Critère « Poste », obligatoire : une offre qui n'est ni un poste recherché ni un poste proche est écartée. Postes séparés par des points-virgules (exemple : Product Owner; Business Analyst). Modifiable depuis l'écran Réglages du lecteur."},
         {"Paramètre": "Postes proches", "Valeur": null, "Commentaire": "Facultatif. Postes acceptés en plus des postes recherchés, classés « Métier proche ». Séparés par des points-virgules."},

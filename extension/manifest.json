@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Lecteur d'offres (fenêtre de lecture et import LinkedIn)",
+  "version": "0.6.0",
+  "version_name": "0.6",
+  "description": "Ouvre les offres du lecteur d'offres claude.ai dans une fenêtre de lecture et transmet au lecteur les recherches de posts LinkedIn enregistrées (Ctrl+S, « Page Web, un seul fichier »).",
+  "permissions": ["storage", "system.display", "downloads"],
+  "host_permissions": ["file:///*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://claude.ai/*", "https://*.claude.ai/*", "https://*.claudeusercontent.com/*"],
+      "js": ["pont.js"],
+      "all_frames": true,
+      "match_origin_as_fallback": true,
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://claude.ai/artifact/*", "https://claude.ai/code/artifact/*"],
+      "js": ["icone.js"],
+      "all_frames": false,
+      "run_at": "document_idle"
+    }
+  ],
+  "action": { "default_title": "Lecteur d'offres", "default_popup": "popup.html" },
+  "options_ui": { "page": "options.html", "open_in_tab": true }
+}

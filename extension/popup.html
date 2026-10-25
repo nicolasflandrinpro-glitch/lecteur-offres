@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Lecteur d'offres</title>
+<style>
+  body { font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; margin: 0; padding: 12px; width: 280px; background: #f3f5f4; color: #18231f; }
+  h1 { font-size: 1rem; margin: 0 0 8px; }
+  button { display: block; width: 100%; text-align: left; font: 600 .9rem system-ui, sans-serif; padding: 9px 10px; margin: 0 0 6px; border-radius: 8px; border: 1px solid #d7dfdb; background: #fff; color: inherit; cursor: pointer; }
+  button.prim { background: #1f6f5c; border-color: #1f6f5c; color: #fff; }
+  #etat { color: #5b6b64; font-size: .85rem; margin: 2px 0 10px; min-height: 1.2em; }
+</style>
+</head>
+<body>
+  <h1>Lecteur d'offres</h1>
+  <p id="etat" role="status" aria-live="polite"></p>
+  <button id="choisir" class="prim" type="button">Utiliser cette fenêtre comme fenêtre de lecture</button>
+  <button id="oublier" type="button">Ouvrir une nouvelle fenêtre de lecture</button>
+  <button id="options" type="button">Réglages de l'extension</button>
+  <button id="journal" type="button">Journal de l'import des posts LinkedIn</button>
+<script src="popup.js"></script>
+</body>
+</html>
