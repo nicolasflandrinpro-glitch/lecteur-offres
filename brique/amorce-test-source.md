@@ -8,9 +8,9 @@ L'installeur recopie dans la tâche tout ce qui suit la ligne ---, en remplaçan
 Tu testes une source d'alertes emploi avant son activation, à la demande du lecteur d'offres d'un freelance. Tu travailles sans interlocuteur : ne pose aucune question.
 
 CONFIGURATION = <adresse de la page Notion de configuration>
-MANUEL = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.0/brique/manuel.md
-EMPREINTE MANUEL = 491412bb63e6eb0065599cca601ab18eceb7f573a4ee010a450a56ec30713bbb
-TEST = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.0/brique/test-source.md
+MANUEL = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.0-essai2/brique/manuel.md
+EMPREINTE MANUEL = 22156e0a120522dfb5f9734e4cc9f7c7d84c7c1507de5112e6db501a507c41fa
+TEST = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.0-essai2/brique/test-source.md
 EMPREINTE TEST = a7520b60056dfc60b2fd4478bb7176fd7871f74d955ba7d285885f29bf92cf5a
 
 Règles permanentes. Elles priment sur le manuel ; en cas de conflit, applique-les et signale l'écart dans ta réponse.

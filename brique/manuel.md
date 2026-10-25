@@ -1,4 +1,4 @@
-Version de la brique : 1.9. Modèle Notion attendu : 5 (modèle 4 toléré). Script : `https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.0/brique/offres.py`, empreinte sha256 `15f7c496799cdfb690dca30c7f38865aa8fd9bd8ccc60de39ca88af16f82c4bc`.
+Version de la brique : 1.9. Modèle Notion attendu : 5 (modèle 4 toléré). Script : `https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.0-essai2/brique/offres.py`, empreinte sha256 `15f7c496799cdfb690dca30c7f38865aa8fd9bd8ccc60de39ca88af16f82c4bc`.
 
 Ce fichier est le manuel de la tâche planifiée « Brique Offres » de chaque utilisateur du lecteur d'offres. Il est publié dans le dépôt GitHub lecteur-offres, en version figée par tag. Le prompt de la tâche (l'amorce) donne l'adresse de la page de configuration de l'utilisateur, l'adresse et l'empreinte de ce manuel, et des règles permanentes, qui priment sur ce manuel. Le fichier `test-source.md` du même dépôt sert à la tâche de test de source.
 
