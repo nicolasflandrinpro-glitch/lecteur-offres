@@ -1,0 +1,128 @@
+{
+  "version_schema": 1,
+  "version_modele": "5",
+  "source": "Modèle Notion 4 (page 40234f6d2f8d8163845fcb60b4c805f6), relevé le 25/10/2026, plus la ligne Paramètres « Dernier débrief » et la version 5.",
+  "page": {
+    "titre_defaut": "Lecteur d'offres : configuration",
+    "icone": "📬",
+    "contenu": "Configuration du lecteur d'offres (kit version 5), créée par l'installeur. Ne renomme pas les cinq bases ci-dessous et ne pose ni filtre, ni tri, ni masquage sur leurs vues « Lecteur : ne pas modifier » : la brique Offres et le lecteur les retrouvent par ces noms. Documentation et mises à jour : https://github.com/nicolasflandrinpro-glitch/lecteur-offres",
+    "titre_section_bases": "Bases"
+  },
+  "ordre_creation": ["Paramètres", "Sources", "Interdits", "Candidatures", "Offres"],
+  "vue_lecteur": "Lecteur : ne pas modifier",
+  "bases": {
+    "Paramètres": {
+      "titre": "Paramètre",
+      "colonnes": [
+        {"nom": "Paramètre", "type": "title"},
+        {"nom": "Valeur", "type": "text"},
+        {"nom": "Commentaire", "type": "text"},
+        {"nom": "Dernier import", "type": "date"},
+        {"nom": "À supprimer", "type": "checkbox"}
+      ],
+      "vue": {"type": "table", "affichees": ["Paramètre", "Commentaire", "Dernier import", "Valeur", "À supprimer"]},
+      "lignes": [
+        {"Paramètre": "Version du modèle", "Valeur": "5", "Commentaire": "Version de la structure Notion. Lue par la brique Offres, qui s'arrête sans rien écrire si elle ne correspond pas à la version attendue. Ne la modifier qu'en appliquant une mise à jour."},
+        {"Paramètre": "Prénom", "Valeur": null, "Commentaire": "Prénom de l'utilisateur, affiché par le lecteur et repris dans le débrief de la brique Offres."},
+        {"Paramètre": "Postes recherchés", "Valeur": null, "Commentaire": "Critère « Poste », obligatoire : une offre qui n'est ni un poste recherché ni un poste proche est écartée. Postes séparés par des points-virgules (exemple : Product Owner; Business Analyst). Modifiable depuis l'écran Réglages du lecteur."},
+        {"Paramètre": "Postes proches", "Valeur": null, "Commentaire": "Facultatif. Postes acceptés en plus des postes recherchés, classés « Métier proche ». Séparés par des points-virgules."},
+        {"Paramètre": "Zone de présentiel", "Valeur": null, "Commentaire": "Critère « Localisation » : une mission en présentiel ou hybride dont le lieu affiché est hors de cette zone est écartée ; lieu non indiqué : « Lieu à vérifier ». Zone interprétée par Claude (exemple : Paris; Île-de-France, y compris toute commune des départements 75, 77, 78, 91, 92, 93, 94, 95). Vide : aucune offre écartée pour son lieu."},
+        {"Paramètre": "Types de collaboration acceptés", "Valeur": null, "Commentaire": "Critère « Contrat ». Valeurs possibles, séparées par des points-virgules : Freelance; Portage salarial; CDI; CDD (le CDD couvre aussi le CDD à objet défini). Intérim, alternance et stage sont toujours écartés. Une offre est gardée si l'un de ses types est accepté ; type non indiqué : « Contrat à vérifier ». Vide : les quatre types sont acceptés."},
+        {"Paramètre": "Temps de travail", "Valeur": "plein ou partiel", "Commentaire": "Critère « Temps de travail » : plein seulement, plein ou partiel, ou partiel seulement. Temps non indiqué : « Temps de travail à vérifier », sauf avec « plein ou partiel ». Vide : aucun filtre."},
+        {"Paramètre": "Modes de travail acceptés", "Valeur": "présentiel; hybride; télétravail total", "Commentaire": "Critère « Localisation » : présentiel; hybride; télétravail total, séparés par des points-virgules. Un mode affiché et non accepté écarte l'offre. Le télétravail total n'est jamais écarté pour la zone ni pour le pays. Vide : les trois modes sont acceptés."},
+        {"Paramètre": "Jours de télétravail minimum", "Valeur": null, "Commentaire": "Critère « Localisation », offres hybrides seulement : nombre de jours de télétravail par semaine en dessous duquel l'offre est écartée (entier de 1 à 5). Nombre non indiqué : « Télétravail à vérifier ». Vide : aucun minimum."},
+        {"Paramètre": "TJM plancher (euros par jour)", "Valeur": null, "Commentaire": "Facultatif. Vide : aucune offre écartée pour son tarif. Rempli (entier, euros par jour) : une offre qui affiche un tarif par jour dont le maximum est inférieur est écartée ; une rémunération par an ou par mois n'est jamais comparée."},
+        {"Paramètre": "Messagerie", "Valeur": null, "Commentaire": "Messagerie où arrivent les alertes emploi : Gmail, Outlook ou Fastmail (Outlook et Fastmail non vérifiés). Obligatoire depuis le modèle 4 : la brique s'arrête si la valeur est vide."},
+        {"Paramètre": "Domaines autorisés pour l'enrichissement", "Valeur": "free-work.com", "Commentaire": "Liste blanche : domaines dont le robots.txt et les CGU permettent la lecture automatisée des pages d'offres, vérifiés à la main, séparés par des points-virgules. free-work.com vérifié le 27/09/2026 (robots.txt sans interdiction des pages d'offres ; CGU art. 7.3 : pas d'extraction substantielle ni de reproduction) : seuls le tarif et les critères sont relevés, jamais le texte de l'offre. Vide ou « (aucun) » : aucune page d'offre n'est ouverte."},
+        {"Paramètre": "Plateformes suivies en direct", "Valeur": "(aucune)", "Commentaire": "Plateformes dont les offres relayées sur LinkedIn sont ignorées, parce que leurs offres arrivent déjà par leur propre alerte mail (exemple : Free-Work, Collective). N'y inscrire une plateforme qu'une fois son alerte mail active dans Sources. « (aucune) » : toutes les offres LinkedIn sont gardées."},
+        {"Paramètre": "Expéditeurs ignorés", "Valeur": null, "Commentaire": "Adresses ou domaines à ne plus signaler comme expéditeurs d'offres, séparés par des points-virgules. Rempli par toi ou par le bouton « Ignorer » du lecteur. Jamais écrit par la brique."},
+        {"Paramètre": "Tâche Test de source", "Valeur": null, "Commentaire": "Identifiant (trig_…) de la tâche planifiée « Brique Offres : test de source », lu par le lecteur. Rempli à l'installation."},
+        {"Paramètre": "Dernière exécution Offres", "Valeur": null, "Commentaire": "Écrite par la brique Offres à la fin d'une exécution réussie (date et heure). Vide : fenêtre de repli de 7 jours."},
+        {"Paramètre": "Dernier débrief", "Valeur": null, "Commentaire": "Écrit par la brique Offres à la fin de chaque passage : débrief du dernier passage (date, offres lues, retenues, écartées, erreurs). Lu par l'installeur et par la skill « Lire un débrief ». Ne pas modifier."},
+        {"Paramètre": "Offres non affichées (alertes LinkedIn)", "Valeur": null, "Commentaire": "Écrite par la brique Offres : une ligne par alerte LinkedIn dont le mail annonce plus d'offres qu'il n'en affiche. Lue par le lecteur pour afficher un rappel."},
+        {"Paramètre": "Expéditeurs détectés", "Valeur": null, "Commentaire": "Écrit par la brique Offres (étape 6 ter) : expéditeurs d'offres qui ne sont pas encore des sources. Ne pas modifier."},
+        {"Paramètre": "Dernier test de source", "Valeur": null, "Commentaire": "Écrit par la tâche « Brique Offres : test de source » : résultat du dernier test. Ne pas modifier."}
+      ]
+    },
+    "Sources": {
+      "titre": "Nom",
+      "colonnes": [
+        {"nom": "Nom", "type": "title"},
+        {"nom": "Actif", "type": "checkbox"},
+        {"nom": "Adresse ou URL", "type": "text"},
+        {"nom": "Type", "type": "select", "options": [{"nom": "mail", "couleur": "blue"}]},
+        {"nom": "Identifiant", "type": "text"},
+        {"nom": "Plateforme", "type": "text", "description": "Valeur écrite dans la colonne Offres « Plateforme » (doit y exister). Lue par la brique Offres 1.7 et suivantes."},
+        {"nom": "Préfixe d'identifiant", "type": "text", "description": "2 à 6 lettres minuscules, devant l'identifiant des offres (fw, cw…). Vide seulement pour LinkedIn."},
+        {"nom": "Domaine des offres", "type": "text", "description": "Domaine des pages d'offres (free-work.com…). Sert au contrôle des liens et à l'enrichissement."},
+        {"nom": "Gabarit", "type": "text"},
+        {"nom": "Remarques", "type": "text"},
+        {"nom": "Dernière erreur", "type": "text"},
+        {"nom": "À supprimer", "type": "checkbox"}
+      ],
+      "vue": {"type": "table", "affichees": ["Nom", "Actif", "Adresse ou URL", "Dernière erreur", "Domaine des offres", "Gabarit", "Identifiant", "Plateforme", "Préfixe d'identifiant", "Remarques", "Type", "À supprimer"]},
+      "lignes": [
+        {"Nom": "Alertes emploi LinkedIn", "Type": "mail", "Adresse ou URL": "jobalerts-noreply@linkedin.com", "Actif": false, "Plateforme": "LinkedIn", "Préfixe d'identifiant": null, "Domaine des offres": "linkedin.com", "Identifiant": "S01", "Gabarit": "linkedin_digest", "Remarques": "À cocher si l'utilisateur reçoit des alertes emploi LinkedIn par mail. Une même offre peut figurer dans plusieurs alertes : la brique dédoublonne par identifiant."},
+        {"Nom": "Collective : offres transmises (une offre par mail)", "Type": "mail", "Adresse ou URL": "ops@collective.work", "Actif": false, "Plateforme": "Collective", "Préfixe d'identifiant": "cw", "Domaine des offres": "collective.work", "Identifiant": "S06", "Gabarit": "collective_opportunite", "Remarques": "Objet « [<prénom> x <client>] Nouvelle opportunité ». Pas d'enrichissement : les CGU de Collective interdisent l'utilisation automatisée."},
+        {"Nom": "Free-Work : alertes emploi", "Type": "mail", "Adresse ou URL": "jobs@free-work.com", "Actif": false, "Plateforme": "Free-Work", "Préfixe d'identifiant": "fw", "Domaine des offres": "free-work.com", "Identifiant": "S08", "Gabarit": "freework_alerte", "Remarques": "Objet « N offres matchant avec vos critères ». contact@free-work.com envoie la lettre d'information, à ne pas lire."}
+      ]
+    },
+    "Interdits": {
+      "titre": "Valeur",
+      "colonnes": [
+        {"nom": "Valeur", "type": "title"},
+        {"nom": "Type", "type": "select", "options": [{"nom": "Site", "couleur": "blue"}, {"nom": "Action", "couleur": "red"}]},
+        {"nom": "Motif", "type": "text"},
+        {"nom": "Origine", "type": "text"}
+      ],
+      "vue": {"type": "table", "affichees": ["Valeur", "Motif", "Origine", "Type"]},
+      "lignes": [
+        {"Valeur": "linkedin.com", "Type": "Site", "Motif": "robots.txt : « User-agent: * / Disallow: / ». Les mails d'alerte restent lus ; aucune page LinkedIn n'est ouverte.", "Origine": "robots.txt lu le 23/09/2026"},
+        {"Valeur": "collective.work", "Type": "Site", "Motif": "CGU : « Le re-postage, le scraping, l'utilisation automatisée ou l'utilisation à grand volume de la Plateforme sont expressément interdits. » Seuls les mails sont lus.", "Origine": "https://www.collective.work/cgu, lu le 23/09/2026"},
+        {"Valeur": "Toute page dont le robots.txt ou les CGU interdisent l'accès automatisé", "Type": "Site", "Motif": "Règle générale : l'enrichissement n'est permis que sur les domaines de la ligne Paramètres « Domaines autorisés pour l'enrichissement », vérifiés à la main.", "Origine": "Décision du 23/09/2026"},
+        {"Valeur": "Supprimer des mails ou des fichiers", "Type": "Action", "Motif": "Sécurité de la tâche planifiée.", "Origine": "Décision du 21/09/2026"},
+        {"Valeur": "Transférer des mails", "Type": "Action", "Motif": "Sécurité de la tâche planifiée.", "Origine": "Décision du 21/09/2026"},
+        {"Valeur": "Envoyer vers une adresse autre que celle de l'utilisateur", "Type": "Action", "Motif": "Sécurité de la tâche planifiée.", "Origine": "Décision du 21/09/2026"}
+      ]
+    },
+    "Candidatures": {
+      "titre": "Titre",
+      "colonnes": [
+        {"nom": "Titre", "type": "title"},
+        {"nom": "Statut", "type": "select", "options": [{"nom": "À préparer", "couleur": "gray"}, {"nom": "Candidature envoyée", "couleur": "blue"}, {"nom": "Relancée", "couleur": "blue"}, {"nom": "Processus en cours", "couleur": "purple"}, {"nom": "Gagnée", "couleur": "green"}, {"nom": "Perdue", "couleur": "red"}, {"nom": "Abandonnée", "couleur": "brown"}]},
+        {"nom": "Origine", "type": "select", "options": [{"nom": "Offre d'emploi", "couleur": "blue"}, {"nom": "Signal de veille", "couleur": "purple"}, {"nom": "Prospection directe", "couleur": "green"}, {"nom": "Autre", "couleur": "gray"}]},
+        {"nom": "Date", "type": "date"},
+        {"nom": "Date de relance", "type": "date"},
+        {"nom": "Lien", "type": "url"},
+        {"nom": "Prochaine action", "type": "text"},
+        {"nom": "Commentaire", "type": "text"},
+        {"nom": "Relance prévue", "type": "formula", "description": "Date de relance si elle est renseignée, sinon Date + 15 jours.", "formule": "if(empty(prop(\"Date de relance\")), dateAdd(prop(\"Date\"), 15, \"days\"), prop(\"Date de relance\"))"},
+        {"nom": "À relancer", "type": "formula", "description": "Coché si la relance prévue est atteinte et la candidature encore en cours.", "formule": "if(empty(prop(\"Relance prévue\")), false, prop(\"Relance prévue\") <= today() and not includes([\"Gagnée\", \"Perdue\", \"Abandonnée\"], prop(\"Statut\")))"}
+      ],
+      "vue": {"type": "table", "affichees": ["Titre", "Commentaire", "Date", "Date de relance", "Lien", "Offre", "Origine", "Prochaine action", "Relance prévue", "Statut", "À relancer"]},
+      "lignes": []
+    },
+    "Offres": {
+      "titre": "Titre",
+      "colonnes": [
+        {"nom": "Titre", "type": "title"},
+        {"nom": "Identifiant", "type": "text"},
+        {"nom": "Plateforme", "type": "select", "options": [{"nom": "LinkedIn", "couleur": "blue"}, {"nom": "Collective", "couleur": "purple"}, {"nom": "Free-Work", "couleur": "orange"}, {"nom": "Post LinkedIn", "couleur": "default"}]},
+        {"nom": "Entreprise", "type": "text"},
+        {"nom": "Lieu", "type": "text"},
+        {"nom": "Lien", "type": "url"},
+        {"nom": "TJM", "type": "number"},
+        {"nom": "Contrat", "type": "multi_select", "options": [{"nom": "Freelance", "couleur": "green"}, {"nom": "Portage salarial", "couleur": "blue"}, {"nom": "CDI", "couleur": "gray"}, {"nom": "CDD", "couleur": "gray"}]},
+        {"nom": "Métier", "type": "select", "options": [{"nom": "Métier proche", "couleur": "gray"}]},
+        {"nom": "À vérifier", "type": "multi_select", "options": [{"nom": "Poste", "couleur": "orange"}, {"nom": "Contrat", "couleur": "orange"}, {"nom": "Lieu", "couleur": "orange"}, {"nom": "Temps de travail", "couleur": "orange"}, {"nom": "Télétravail", "couleur": "orange"}]},
+        {"nom": "Date de détection", "type": "date"},
+        {"nom": "Vue le", "type": "date"},
+        {"nom": "Retirée le", "type": "date", "description": "Date à laquelle la brique Offres (1.6 et suivantes) a constaté que l'offre n'est plus en ligne. Le lecteur masque ces offres."},
+        {"nom": "Commentaire", "type": "text"},
+        {"nom": "Candidature", "type": "relation", "vers": "Candidatures", "double": true, "nom_reciproque": "Offre"}
+      ],
+      "vue": {"type": "table", "affichees": ["Titre", "Candidature", "Commentaire", "Contrat", "Date de détection", "Entreprise", "Identifiant", "Lien", "Lieu", "Métier", "Plateforme", "Retirée le", "TJM", "Vue le", "À vérifier"]},
+      "lignes": []
+    }
+  }
+}
