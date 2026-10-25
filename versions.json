@@ -1,0 +1,21 @@
+{
+  "kit": "5.0",
+  "tag": "v5.0",
+  "etat": "en préparation : tag non encore créé",
+  "brique": "1.9",
+  "modele_notion": "5",
+  "modele_notion_tolere": "4",
+  "modele_taches": "claude-sonnet-5-5",
+  "modele_taches_note": "identifiant accepté par la mise à jour d'une tâche le 25/10/2026 (organisation de Nicolas) ; à vérifier chez chaque utilisateur à l'installation",
+  "lecteur": "19.3 (E4, à venir)",
+  "fichiers": {
+    "schema/configuration.json": "69b9e56dbd2bf4b42c729dbb31484bb6f2f82e5e8b9416d9b3072f1248475df9",
+    "brique/manuel.md": "1a30454afa47c522030387fe7040ab8bece07c6b1bf3a867b4c97edc10535227",
+    "brique/test-source.md": "a7520b60056dfc60b2fd4478bb7176fd7871f74d955ba7d285885f29bf92cf5a",
+    "brique/offres.py": "7040600e4608c41a33e21af84219099a7499870ac4a6a0907b0040b84c3f854a",
+    "brique/amorce-offres.md": "59f9e7bb79d2f817a15b4785dba90c7aa87baf6c6e11b156ae76b4f91bdab014",
+    "brique/amorce-test-source.md": "58f1d088ac92841573fcaef296a25080addc205644a502b13997050c709d78d6",
+    "brique/tests/test_offres.py": "6cc7315f6c3a812cb0b59b763b58e454fba77cab264e9c78f7a1248de83df697",
+    "brique/tests/jeu-verification.md": "42567181fdc9d8c9296a10b657debf785288cf9dec832f6d23a41ff5f13ac395"
+  }
+}
