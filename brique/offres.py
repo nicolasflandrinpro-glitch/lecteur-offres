@@ -6,7 +6,7 @@ import json, sys, re, unicodedata, hashlib, datetime
 from urllib.parse import urlsplit, parse_qsl
 
 VERSION_BRIQUE, MODELE_ATTENDU, MODELE_TOLERE = "1.9", "5", "4"   # modèle N-1 toléré : nouveautés du modèle N sautées, avec avertissement
-# v1.9 : script téléchargé depuis le dépôt GitHub (tag figé) ; modèle 5 = modèle 4 + ligne Paramètres « Dernier débrief » ; modèle 4 : débrief non écrit
+# v1.9 : script écrit à la fin du prompt de la tâche (amorce), jamais téléchargé ; modèle 5 = modèle 4 + ligne Paramètres « Dernier débrief » ; modèle 4 : débrief non écrit
 # v1.9 (complément du 25/10) : fusion des offres de même entreprise et de même titre dans un même passage (compteur doublons_passage, lignes FUSION)
 
 # ---- Table de correspondance (seul endroit où figurent les noms Notion utilisés par le script) ----

@@ -18,12 +18,12 @@ TAG est la version du kit donnée par le message qui t'a demandé l'installation
 BASE = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/TAG/
 
 1. Télécharge `versions.json` : `curl -fsSL -o versions.json BASE/versions.json`. Lis-le en entier. Son champ « tag » doit valoir TAG ; sinon, arrête-toi.
-2. Pour chaque fichier dont tu as besoin (schema/configuration.json, brique/amorce-offres.md, brique/amorce-test-source.md, lecteur/lecteur.html, skills/…/SKILL.md, extension) : `curl -fsSL -o <nom> BASE/<chemin>`, puis `sha256sum <nom>`. Le résultat doit être l'empreinte du fichier dans `versions.json`. Empreinte différente ou téléchargement en échec : recommence une fois, puis arrête-toi.
+2. Pour chaque fichier dont tu as besoin (schema/configuration.json, brique/amorce-offres.md, brique/amorce-test-source.md, brique/offres.py, lecteur/lecteur.html, skills/…/SKILL.md, extension) : `curl -fsSL -o <nom> BASE/<chemin>`, puis `sha256sum <nom>`. Le résultat doit être l'empreinte du fichier dans `versions.json`. Empreinte différente ou téléchargement en échec : recommence une fois, puis arrête-toi.
 
 ## 1. Connecteurs
 
 1. Notion : fais une recherche simple. Pas de réponse : explique comment ajouter le connecteur (claude.ai, Paramètres, Connecteurs), puis arrête-toi jusqu'à ce qu'il soit branché.
-2. Messagerie : carte « Où arrivent tes alertes emploi ? » avec Gmail, Outlook (connecteur Microsoft 365), Fastmail. Dis que Outlook et Fastmail ne sont pas encore vérifiés en usage réel. Vérifie que le connecteur choisi répond (une recherche simple dans la boîte) ; sinon, même conduite qu'au point 1.
+2. Messagerie : carte « Où arrivent tes alertes emploi ? » avec Gmail, Outlook (connecteur Microsoft 365), Fastmail. Dis que Outlook et Fastmail ne sont pas encore vérifiés en usage réel. Vérifie que le connecteur choisi répond (une recherche simple dans la boîte) ; sinon, même conduite qu'au point 1. Si les alertes arrivent dans une messagerie dont le connecteur n'est pas branché, ne choisis pas une autre messagerie à la place : propose de brancher ce connecteur et attends qu'il réponde.
 3. Tâches planifiées : liste les tâches de l'utilisateur (list_triggers). Pas de réponse : dis que la brique Offres ne peut pas être installée sans les tâches planifiées, puis arrête-toi.
 
 ## 2. Page de configuration
@@ -37,7 +37,7 @@ BASE = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offre
    - la relation de Offres « Candidature » vers Candidatures, double, réciproque « Offre » ;
    - les formules de Candidatures : « Relance prévue », puis « À relancer », qui en dépend ;
    - dans chaque base, une vue tableau nommée « Lecteur : ne pas modifier » qui affiche les colonnes de « affichees », sans filtre, ni tri, ni masquage.
-5. Contrôle de conformité : relis chaque base et compare-la au schéma (colonnes et types, options, lignes, vue, relation dans les deux sens, formules). Signale tout écart et corrige-le après confirmation.
+5. Contrôle de conformité : relis chaque base et compare-la au schéma (colonnes et types, options, lignes, vue, relation dans les deux sens, formules). Signale tout écart et corrige-le après confirmation. Chaque base garde aussi la vue créée par Notion : c'est normal, le lecteur et la brique lisent seulement la vue « Lecteur : ne pas modifier ». Ne la supprime pas et ne la signale pas comme un écart.
 6. Note l'adresse de la page : c'est CONFIGURATION pour la suite.
 
 ## 3. Critères (Paramètres)
@@ -58,10 +58,10 @@ BASE = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offre
 
 ## 5. Tâches planifiées
 
-1. Prépare les deux prompts : dans `brique/amorce-offres.md` et `brique/amorce-test-source.md`, garde tout ce qui suit la ligne `---` et remplace seulement la valeur de CONFIGURATION par l'adresse de l'étape 2. Ne change rien d'autre.
+1. Prépare les deux prompts : dans `brique/amorce-offres.md` et `brique/amorce-test-source.md`, garde tout ce qui suit la ligne `---`, remplace la valeur de CONFIGURATION par l'adresse de l'étape 2 et la ligne `<contenu exact de brique/offres.py>` par le contenu de `brique/offres.py` (téléchargé et contrôlé par son empreinte). Ne change rien d'autre.
 2. Demande le fuseau horaire de l'utilisateur s'il n'est pas connu (carte, Europe/Paris recommandé).
 3. Crée la tâche « Brique Offres » : chaque jour à 8 h 45 (`CRON_TZ=<fuseau> 45 8 * * *`), prompt de la brique. Crée la tâche « Brique Offres : test de source », sans planning, prompt du test de source.
-4. Fixe le modèle de chaque tâche sur la valeur « modele_taches » de `versions.json` (update_trigger, champ model), puis relis les deux tâches (list_triggers) : nom, planning, modèle. Modèle refusé : dis-le, garde le modèle par défaut et note-le pour le bilan.
+4. Carte « Faire tourner les deux tâches sur <modele_taches> (recommandé) ? » avec « Oui » et « Garder le modèle par défaut ». Sur « Oui » seulement, fixe le modèle de chaque tâche sur la valeur « modele_taches » de `versions.json` (update_trigger, champ model). Relis ensuite les deux tâches (list_triggers) : nom, planning, modèle. Modèle refusé : dis-le, garde le modèle par défaut et note-le pour le bilan.
 5. Dis à l'utilisateur quel réglage d'approbation chaque tâche a reçu. Si ses passages demandent une approbation, explique que la brique tourne sans personne et qu'il peut activer « Automatically approve » dans les réglages de la tâche, si son organisation le permet.
 6. Écris l'identifiant de la tâche de test (trig_…) dans la Valeur de « Tâche Test de source », puis relis-la.
 
