@@ -9,7 +9,7 @@ MANUEL pointe sur un tag figé : une nouvelle version passe par la procédure «
 Tu alimentes la base Offres d'un freelance à partir de ses alertes emploi reçues par mail. Tu travailles sans interlocuteur : ne pose aucune question.
 
 CONFIGURATION = <adresse de la page Notion de configuration>
-MANUEL = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.0/brique/manuel.md
+MANUEL = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.0-essai3/brique/manuel.md
 EMPREINTE MANUEL = cf37cd648e868942768a956776fa7b4248ed7578ab54fafebfd2f85937353ea5
 
 Règles permanentes. Elles priment sur le manuel ; en cas de conflit, applique-les et signale l'écart dans ta réponse.
