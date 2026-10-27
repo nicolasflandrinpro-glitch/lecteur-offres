@@ -1,5 +1,13 @@
 # Journal des versions du kit lecteur d'offres
 
+## 5.1 (27/10/2026)
+
+- Modèle Notion 7 : ligne Paramètres « Heure de passage » (heure du passage quotidien, choisie à l'installation, changée par Claude) ; ligne « Offres non affichées (alertes LinkedIn) » renommée « Offres non affichées (alertes) » ; statut de candidature « En pause », exclu de « À relancer » ; source « Collective (alertes quotidiennes) » (inactive par défaut). Migration depuis le modèle 6 par « mets à jour le lecteur d'offres ».
+- Brique Offres 1.11 : le script écrit lui-même le début du débrief (debrief.txt), recopié tel quel par la tâche, et la tâche relit les étapes 7 et 8 du manuel avant d'écrire dans Notion (un long passage pouvait résumer son contexte et lui faire rédiger le débrief de mémoire) ; alertes quotidiennes Collective signalées (nombre d'offres annoncées par alerte, lien « Voir les offres ») sans ouvrir Collective ; une candidature en pause ne reprend jamais d'elle-même (seule une clôture la passe en Perdue).
+- Lecteur 19.6 : heure de passage lue dans Paramètres (bandeau et message des réglages) ; groupe « En pause (n) » plié en bas des Candidatures, « Mettre en pause » dans le menu « ⋯ », « Reprendre ▾ » ; section « Alertes incomplètes » avec les alertes Collective (« Collective : N offres annoncées par l'alerte X », bouton « Voir les offres ») ; rubrique « Que demander à Claude » dans les réglages, une phrase à copier par action courante.
+- Procédures : carte d'heure de passage à l'installation, changement d'heure dans « régler mes critères » (tâche planifiée d'abord, puis Paramètres), migration 6 vers 7 dans « mettre à jour », choix des deux lignes Collective dans « ajouter une plateforme » ; lecteur publié en contrat « latest » dès l'installation.
+- Dépôt : README.md, script verifier-empreintes.py (contrôle des empreintes de versions.json).
+
 ## 5.0 (27/10/2026)
 
 - Contenu commun publié sur ce dépôt GitHub, en version figée par tag ; Notion ne garde que la configuration de chaque utilisateur.

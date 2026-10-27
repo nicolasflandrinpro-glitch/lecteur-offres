@@ -41,7 +41,12 @@ Télécharge `schema/configuration.json` au tag NOUVEAU. Chaque migration ajoute
 
 - Modèle 4 vers 5 : ajoute dans Paramètres les lignes « Dernier débrief » et « Version du kit » (Valeur vide, Commentaire du schéma), puis écris 5 dans « Version du modèle ».
 - Modèle 5 vers 6 : ajoute dans Paramètres la ligne « Prochain passage » (Valeur vide, Commentaire du schéma) ; ajoute la description de la colonne Offres « Métier » donnée par le schéma ; ajoute aux options de « Métier » chaque libellé de « Postes recherchés » qui y manque, en gardant les options existantes ; puis écris 6 dans « Version du modèle ».
-- Les migrations s'enchaînent : un modèle 4 passe par le modèle 5, puis par le modèle 6.
+- Modèle 6 vers 7 :
+  - Paramètres : ajoute la ligne « Heure de passage » (Commentaire du schéma) ; sa Valeur est l'heure du planning de la tâche « Brique Offres » (list_triggers, au format HH:MM, par exemple 08:45), ou 08:45 si la tâche est introuvable. Renomme la ligne « Offres non affichées (alertes LinkedIn) » en « Offres non affichées (alertes) » et remplace son Commentaire par celui du schéma, sans toucher à sa Valeur.
+  - Candidatures : ajoute l'option « En pause » à la colonne « Statut » (options existantes gardées) ; remplace la formule de « À relancer » et sa description par celles du schéma (« En pause » ajouté aux statuts exclus).
+  - Sources : ajoute la ligne « Collective (alertes quotidiennes) » du schéma (Identifiant S07, Actif décoché) si aucune ligne n'a déjà l'adresse no-reply@collective.work ; si l'Identifiant S07 est pris, prends le premier identifiant Sxx libre.
+  - Puis écris 7 dans « Version du modèle ».
+- Les migrations s'enchaînent : un modèle 4 passe par le modèle 5, puis par le modèle 6, puis par le modèle 7.
 
 Pour toute autre différence entre la configuration et le schéma (colonne, option, vue) : signale-la, sans la corriger d'office ; propose la correction et applique-la seulement après confirmation.
 
@@ -49,7 +54,7 @@ Pour toute autre différence entre la configuration et le schéma (colonne, opti
 
 1. Retrouve les deux tâches (list_triggers) : « Brique Offres » et la tâche dont l'identifiant est la Valeur de « Tâche Test de source ». Plusieurs candidates ou aucune : carte.
 2. Prépare les deux prompts depuis `brique/amorce-offres.md` et `brique/amorce-test-source.md` au tag NOUVEAU, comme dans la procédure « installer » (étape 5, point 1), avec l'adresse de la page de configuration.
-3. Remplace le prompt de chaque tâche (update_trigger, champ prompt), sans changer son nom ni son planning. Si « modele_taches » de `versions.json` diffère du modèle de la tâche, propose de le changer.
+3. Remplace le prompt de chaque tâche (update_trigger, champ prompt), sans changer son nom ni son planning (l'heure de passage de l'utilisateur est gardée). Si « modele_taches » de `versions.json` diffère du modèle de la tâche, propose de le changer.
 4. Relis les deux tâches.
 5. Propose un passage sans écriture, comme dans la procédure « installer » (étape 6), et commente-le selon « lire un débrief ».
 

@@ -1,4 +1,4 @@
-Version de la brique : 1.10. Ce fichier complète le manuel `manuel.md` du même dépôt et du même tag : lis-le aussi. Ses étapes et son script s'appliquent, avec les différences ci-dessous.
+Version de la brique : 1.11. Ce fichier complète le manuel `manuel.md` du même dépôt et du même tag : lis-le aussi. Ses étapes et son script s'appliquent, avec les différences ci-dessous.
 
 Tu testes une seule source d'alertes emploi avant son activation, à la demande du lecteur d'offres. Tu travailles sans interlocuteur : ne pose aucune question.
 
@@ -18,4 +18,4 @@ Déclenchement : la demande « TEST SOURCE <Id> GABARIT <gabarit> PLATEFORME <pl
 
 ## Débrief (ta réponse finale)
 
-Une ligne « Brique Offres 1.10 (<Prénom>) : test de la source <Id> (<gabarit>) », puis la ligne CONSIGNE, puis les lignes SOURCES, COMPTEURS, TEST et AVERTISSEMENT du script, puis chaque ligne de `dernier_test` (la ligne « expéditeur ; <adresse> ; fourni » ou « ; retrouvé », les autres expéditeurs vus, puis une offre gardée ou écartée, ou un lien écarté par ligne), puis « Dernier test de source écrit » ou la cause de l'absence d'écriture. Pas de rubrique « Fait sans demande ».
+Le script a écrit le débrief dans `debrief.txt` : ligne « Brique Offres 1.11 (<Prénom>) : test de la source <Id> (<gabarit>) », ligne CONSIGNE, lignes SOURCES, COMPTEURS, TEST et AVERTISSEMENT, puis chaque ligne de `dernier_test`. Lis-le avec l'outil Read et recopie-le sans rien changer, jamais de mémoire (absent ou illisible : relance le script). Ajoute ensuite « Dernier test de source écrit » ou la cause de l'absence d'écriture. Si le script a affiché TEST_ERREUR, `debrief.txt` n'est pas écrit : donne la ligne de titre, la ligne CONSIGNE, les lignes TEST_ERREUR, puis la ligne d'écriture. Pas de rubrique « Fait sans demande ».

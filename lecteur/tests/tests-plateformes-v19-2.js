@@ -1,7 +1,7 @@
 // Tests jsdom du lecteur 19.2 : plateformes suivies, ajout et test d'une plateforme, activation, expéditeurs détectés.
 // Usage : node lecteur/tests/tests-plateformes-v19-2.js (lecteur/lecteur.html = page de l'artefact sans la ligne d'enveloppe)
 // 25/10/2026 : seul changement pour la 19.4, le contrôle du pied de page (v19.4, modèles 5 et 4) et le chemin du lecteur.
-// 27/10/2026 : seul changement pour la 19.5, le contrôle du pied de page (v19.5, modèles 6, 5 et 4).
+// 27/10/2026 : 19.6 (modèle 7), pied de page seulement. Avant : seul changement pour la 19.5, le contrôle du pied de page (v19.5, modèles 6, 5 et 4).
 const fs = require("fs");
 const { JSDOM } = require("jsdom");
 const html = fs.readFileSync(__dirname + "/../lecteur.html", "utf8");
@@ -56,7 +56,7 @@ const RES_OK = i => `24/10/2026 16:10 ; ${i.text.split(" ")[2]} ; generique ; co
   // ---- Encart des expéditeurs détectés ----
   const det = [...$("detList").querySelectorAll("li")].map(l => l.querySelector(".cname").textContent);
   check("encart visible avec l'expéditeur non suivi seulement", !$("detView").hidden && JSON.stringify(det) === JSON.stringify(["Hiway · jobs@hiway.fr","Autre · jobs@autre.fr"]), JSON.stringify(det));
-  check("pied de page 19.5, modèle 4 accepté", /^Lecteur v19\.5 \(modèles 6, 5 et 4\)\./.test($("foot").textContent), $("foot").textContent);
+  check("pied de page 19.6, modèle 4 accepté", /^Lecteur v19\.6 \(modèles 7, 6, 5 et 4\)\./.test($("foot").textContent), $("foot").textContent);
   // ---- Réglages : plateformes suivies ----
   $("reglBtn").click(); await wait(80);
   const lignes = [...$("platBox").querySelectorAll("li.plat-ligne")];

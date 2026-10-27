@@ -1,6 +1,6 @@
 ---
 name: lecteur-offres-regler-criteres
-description: Quand l'utilisateur demande de changer ses critères du lecteur d'offres (« change mes critères », « modifie mon TJM plancher », « ignore cet expéditeur ») : télécharge et applique la procédure du kit.
+description: Quand l'utilisateur demande de changer ses critères du lecteur d'offres (« change mes critères », « règle mes critères », « modifie mon TJM plancher », « ignore cet expéditeur », « change l'heure de passage de la brique Offres ») : télécharge et applique la procédure du kit.
 ---
 
 # Lecteur d'offres : régler mes critères

@@ -1,6 +1,6 @@
 // Tests jsdom du lecteur 19.3 : valeurs échappées par la lecture de vue, zones pliables.
 // 25/10/2026 : seul changement pour la 19.4, le contrôle du pied de page et le chemin du lecteur.
-// 27/10/2026 : seul changement pour la 19.5, le contrôle du pied de page (v19.5, modèles 6, 5 et 4).
+// 27/10/2026 : 19.6 (modèle 7), pied de page seulement. Avant : seul changement pour la 19.5, le contrôle du pied de page (v19.5, modèles 6, 5 et 4).
 const fs = require("fs"); const { JSDOM } = require("jsdom");
 const html = fs.readFileSync(__dirname + "/../lecteur.html", "utf8");
 const fmt = d => new Intl.DateTimeFormat("fr-CA",{timeZone:"Europe/Paris",year:"numeric",month:"2-digit",day:"2-digit"}).format(d);
@@ -31,7 +31,7 @@ function check(n, c, i){ if (c) { ok++; console.log("OK  " + n); } else { ko++; 
 const btn = t => [...w.document.querySelectorAll("button")].find(b => b.textContent === t);
 (async () => {
   await wait(400);
-  check("pied de page 19.5", /^Lecteur v19\.5 /.test($("foot").textContent), $("foot").textContent);
+  check("pied de page 19.6", /^Lecteur v19\.6 /.test($("foot").textContent), $("foot").textContent);
   check("date échappée lue : pas de bandeau « brique pas encore passée »", $("status").hidden, $("status").textContent);
   check("offres pliées à l'ouverture", $("list").hidden && $("offTog").getAttribute("aria-expanded") === "false");
   check("titre et résumé par jour", $("offH").textContent === "Offres à lire (3)" && $("offResume").textContent === "· aujourd'hui 2 · " + ["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"][new Date(hier + "T12:00:00Z").getUTCDay()] + " 1", $("offH").textContent + " " + $("offResume").textContent);

@@ -37,7 +37,7 @@ async function scenario(modele, avecLigne){
 }
 (async () => {
   let r = await scenario("6", true);
-  check("modèle 6 : pied de page", r.pied.indexOf("Lecteur v19.5 (modèles 6, 5 et 4). ") === 0, r.pied);
+  check("modèle 6 : pied de page", r.pied.indexOf("Lecteur v19.6 (modèles 7, 6, 5 et 4). ") === 0, r.pied);
   const i = r.journal.findIndex(x => x.maj), f = r.journal.findIndex(x => x.fire);
   const maj = i >= 0 ? r.journal[i].maj : null;
   check("modèle 6 : consigne écrite dans « Prochain passage » avant le lancement", i >= 0 && f > i && maj.page_id === "a".repeat(29) + "306", JSON.stringify(r.journal));

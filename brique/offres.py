@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
-# Brique Offres v1.10 générique : lit offres.json (faits relevés) et config.json (Paramètres et Sources recopiés), applique les critères, écrit notion.json.
+# Brique Offres v1.11 générique : lit offres.json (faits relevés) et config.json (Paramètres et Sources recopiés), applique les critères, écrit notion.json.
 # Usage : python3 offres.py offres.json config.json ; avant le dédoublonnage : python3 offres.py --empreintes offres.json config.json (identifiants generique_suivi) ;
 #         au début du passage : python3 offres.py --consigne <offres|test> "<Valeur de « Prochain passage »>" <debut_iso>
+# Sorties : notion.json (écritures), debrief.txt (débrief à recopier, v1.11), consigne.out (ligne CONSIGNE, v1.11)
 # Évolution : un critère = une fonction c_<nom> + une entrée dans CRITERES + un gabarit à l'étape 5 du prompt ; un gabarit de mail = une entrée dans GABARITS + une section à l'étape 4.
 import json, sys, re, unicodedata, hashlib, datetime
 from urllib.parse import urlsplit, parse_qsl
 
-VERSION_BRIQUE, MODELE_ATTENDU, MODELES_TOLERES = "1.10", "6", ("5", "4")   # modèles antérieurs tolérés : nouveautés sautées, avec avertissement
+VERSION_BRIQUE, MODELE_ATTENDU, MODELES_TOLERES = "1.11", "7", ("6", "5", "4")   # modèles antérieurs tolérés : nouveautés sautées, avec avertissement
 # v1.9 : script écrit à la fin du prompt de la tâche (amorce), jamais téléchargé ; modèle 5 = modèle 4 + ligne Paramètres « Dernier débrief » ; modèle 4 : débrief non écrit
 # v1.9 (complément du 25/10) : fusion des offres de même entreprise et de même titre dans un même passage (compteur doublons_passage, lignes FUSION)
+# v1.11 : débrief écrit par le script (debrief.txt et champ debrief de notion.json), parade contre la compaction du contexte ; gabarit collective_alerte (alertes quotidiennes Collective : aucune offre, signalement dans non_affichees) ; non_affichees.source facultatif (plateforme ajoutée à la ligne) ; modèle 7 = modèle 6 + ligne Paramètres « Heure de passage », ligne « Offres non affichées (alertes) » renommée, statut de candidature « En pause » ; modèles 6, 5 et 4 tolérés
 # v1.10 : échappements Markdown de la lecture en mode vue retirés des valeurs de Paramètres et de la consigne ; modèle 6 = modèle 5 + ligne Paramètres « Prochain passage » (consigne du passage lancé à la main : mode sans écriture ou test de source) ; mode --consigne ; modèles 5 et 4 tolérés
 
 # ---- Table de correspondance (seul endroit où figurent les noms Notion utilisés par le script) ----
@@ -22,6 +24,7 @@ PROP = {"titre": "Titre", "id": "Identifiant", "org": "Entreprise", "plateforme"
 # ---- Catalogue des gabarits de mail (v1.8) : préfixe vide permis, entreprise facultative, poste « inconnu » permis, lien reconstruit, lien de suivi ----
 GABARITS = {"linkedin_digest":        {"sans_prefixe": True,  "org_facultative": False, "inconnu": True,  "suivi": False, "lien": lambda i, s: f"https://www.linkedin.com/jobs/view/{i}/"},
             "collective_opportunite": {"sans_prefixe": False, "org_facultative": False, "inconnu": False, "suivi": False, "lien": None},
+            "collective_alerte":      {"sans_prefixe": True,  "org_facultative": False, "inconnu": False, "suivi": False, "lien": None, "annonce": True},
             "freework_alerte":        {"sans_prefixe": False, "org_facultative": True,  "inconnu": False, "suivi": False, "lien": None},
             "generique":              {"sans_prefixe": False, "org_facultative": True,  "inconnu": False, "suivi": False, "lien": None},
             "generique_suivi":        {"sans_prefixe": False, "org_facultative": True,  "inconnu": False, "suivi": True,  "lien": None}}
@@ -69,7 +72,8 @@ if "--consigne" in sys.argv:
         except ValueError: return None
         return d if d.tzinfo else None
     def sortie(mode, eff, motif, dem=""):
-        print(f"CONSIGNE mode={mode} effacer={eff} motif={motif}")
+        l = f"CONSIGNE mode={mode} effacer={eff} motif={motif}"; print(l)
+        open("consigne.out", "w", encoding="utf-8").write(l + "\n")
         if dem: print("DEMANDE " + dem)
         sys.exit(0)
     if role not in ("offres", "test"): print("ERREURS rôle inconnu : offres ou test"); sys.exit(1)
@@ -113,10 +117,10 @@ AUJ = str(D.get("date_iso", "")); JFR = jfr(AUJ); HM = str(D.get("debut_iso", ""
 
 # ---- Lecture des réglages (valeur absente ou illisible : critère inactif, avertissement) ----
 if par("version") not in (MODELE_ATTENDU,) + MODELES_TOLERES:
-    print(f"MODELE : « {PARAM['version']} » vaut « {par('version')} », attendu « {MODELE_ATTENDU} », « {MODELES_TOLERES[0]} » ou « {MODELES_TOLERES[1]} » (brique {VERSION_BRIQUE})"); sys.exit(2)
+    print(f"MODELE : « {PARAM['version']} » vaut « {par('version')} », attendu « {MODELE_ATTENDU} » (tolérés : {', '.join(MODELES_TOLERES)}) (brique {VERSION_BRIQUE})"); sys.exit(2)
 ANCIEN = par("version") == "4"
 if ANCIEN: avert.append(f"modèle Notion 4 : « Dernier débrief » non écrit ; passez au modèle {MODELE_ATTENDU} (procédure « mettre à jour » du dépôt lecteur-offres)")
-elif par("version") != MODELE_ATTENDU: avert.append(f"modèle Notion {par('version')} : pas de ligne « Prochain passage », le mode sans écriture et le test de source dépendent du message ajouté au lancement ; passez au modèle {MODELE_ATTENDU} (procédure « mettre à jour » du dépôt lecteur-offres)")
+elif par("version") in ("5",): avert.append(f"modèle Notion {par('version')} : pas de ligne « Prochain passage », le mode sans écriture et le test de source dépendent du message ajouté au lancement ; passez au modèle {MODELE_ATTENDU} (procédure « mettre à jour » du dépôt lecteur-offres)")
 MESSAGERIES = {"gmail": "Gmail", "outlook": "Outlook", "fastmail": "Fastmail"}
 MSG = MESSAGERIES.get(norm(par("messagerie")))
 if not MSG: err.append(f"ligne Paramètres « {PARAM['messagerie']} » vide ou inconnue (« {par('messagerie')} ») : Gmail, Outlook ou Fastmail")
@@ -163,12 +167,13 @@ for s in K.get("sources", []):
         if pl and pl not in OPTS: avert_src.append(f"plateforme « {pl} » absente des valeurs de la colonne Offres « {PROP['plateforme']} » : à ajouter avant d'activer la source")
     if g not in GABARITS: continue                     # gabarit inconnu : source non lue (étape 4), erreur de lecture attendue
     if not pl: errc.append(f"source {i} : colonne Plateforme vide"); continue
+    if GABARITS[g].get("annonce"): continue            # v1.11 : gabarit d'annonce (aucune offre) : ni préfixe ni domaine exigés
     if px and not re.fullmatch(r"[a-z]{2,6}", px): errc.append(f"source {i} : préfixe d'identifiant « {px} » invalide (2 à 6 lettres minuscules)")
     if not px and not GABARITS[g]["sans_prefixe"]: errc.append(f"source {i} : préfixe d'identifiant obligatoire pour le gabarit {g}")
     if not dm and GABARITS[g]["lien"] is None and not GABARITS[g]["suivi"]: errc.append(f"source {i} : domaine des offres obligatoire pour le gabarit {g}")
 PFX = {}
 for s in SRC.values():
-    if s["lisible"]: PFX.setdefault(s["prefixe"], set()).add(s["plateforme"])
+    if s["lisible"] and not GABARITS[s["gabarit"]].get("annonce"): PFX.setdefault(s["prefixe"], set()).add(s["plateforme"])
 for px, pls in PFX.items():
     if len(pls) > 1: errc.append(f"préfixe d'identifiant « {px or '(vide)'} » partagé par plusieurs plateformes : " + ", ".join(sorted(pls)))
 if TEST and len(SRC) != 1: errc.append("mode test : config.json doit contenir une seule source, la source testée")
@@ -236,6 +241,7 @@ for o in O:
     i, s = str(o.get("id")), SRC.get(str(o.get("source")))
     if not s or not s["lisible"]: err.append(f"source « {o.get('source')} » absente des sources mail actives lisibles : " + i); continue
     G = GABARITS[s["gabarit"]]; o["_src"] = s
+    if G.get("annonce"): err.append(f"source {s['id']} de gabarit {s['gabarit']} : ce gabarit ne donne aucune offre (signalement dans non_affichees seulement) : " + i); continue
     if s["prefixe"]:
         if not re.fullmatch(re.escape(s["prefixe"]) + r"-[a-z0-9][a-z0-9-]*", i): err.append(f"identifiant invalide (attendu « {s['prefixe']}-<slug en minuscules> ») : " + i)
     elif not re.fullmatch(r"\d{6,12}", i): err.append("identifiant invalide (nombre de 6 à 12 chiffres) : " + i)
@@ -264,6 +270,7 @@ if D.get("offres_uniques") != n: err.append(f"compteurs : offres_uniques {D.get(
 NA = D.get("non_affichees", [])
 for x in NA:
     if not (x.get("alerte") and isinstance(x.get("annoncees"), int) and isinstance(x.get("lues"), int) and x["annoncees"] > x["lues"]): err.append("non_affichees : entrée incohérente (alerte, annoncees > lues) : " + str(x.get("alerte")))
+    if x.get("source") and str(x["source"]) not in SRC: err.append("non_affichees : source inconnue « " + str(x["source"]) + " » : " + str(x.get("alerte")))
 LE = D.get("liens_ecartes", [])
 if not isinstance(LE, list) or any(not (isinstance(x, dict) and x.get("lien") and x.get("motif")) for x in LE): err.append("liens_ecartes : liste d'objets {lien, motif} attendue"); LE = []
 LECT = {m["id"]: (m.get("erreur") or "").strip() for m in D.get("lectures_mail", [])}
@@ -330,7 +337,8 @@ for s in SRC.values():
     avant, e = (s.get("erreur") or "").strip(), LECT[s["id"]]
     if e and not avant: N_SRC.append({"page": s["page"], "id": s["id"], "properties": {PROP["erreur"]: f"{JFR} : {e}"}})
     elif avant and not e: N_SRC.append({"page": s["page"], "id": s["id"], "properties": {PROP["erreur"]: ""}})
-PARAM_NA = "<br>".join(f'{JFR} ; {x["alerte"]} ; {x["annoncees"]} annoncées, {x["lues"]} lues ; {x.get("lien") or "lien non relevé"}' for x in NA)
+def pl_na(x): s = SRC.get(str(x.get("source") or "")); return f' ; {s["plateforme"]}' if s and s["plateforme"] else ""
+PARAM_NA = "<br>".join(f'{JFR} ; {propre(x["alerte"])} ; {x["annoncees"]} annoncées, {x["lues"]} lues ; {x.get("lien") or "lien non relevé"}{pl_na(x)}' for x in NA)
 N_RET = [{"page": CAND[str(i)]["page"], "id": str(i), "properties": {f"date:{PROP['retiree']}:start": AUJ, f"date:{PROP['retiree']}:is_datetime": 0}} for i in RET["retirees"]]
 
 TXT_DET, NOUV, N_RETIRES = None, [], 0
@@ -374,21 +382,39 @@ if TEST:
 else:
     json.dump({"offres_a_creer": N_OFF, "sources_a_maj": N_SRC, "non_affichees": PARAM_NA, "ecartees": ECART, "retirees_a_maj": N_RET, "expediteurs_detectes": TXT_DET},
               open("notion.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+OUT = []
+def out(l): OUT.append(l); print(l)
 print(f"OK brique {VERSION_BRIQUE}, modèle {par('version')}, prénom « {par('prenom')} »" + (" ; TEST SOURCE" if TEST else ""))
-print("REGLAGES " + " ; ".join([f"contrats={'/'.join(x for x in TYPES if x in R['contrats'])}", f"temps={R['temps']}", f"modes={'/'.join(x for x in MODES if x in R['modes'])}",
+out("REGLAGES " + " ; ".join([f"contrats={'/'.join(x for x in TYPES if x in R['contrats'])}", f"temps={R['temps']}", f"modes={'/'.join(x for x in MODES if x in R['modes'])}",
       f"jours_min={R['jours'] or '-'}", f"zone={'oui' if R['zone'] else 'non'}", f"plancher={R['plancher'] or '-'}", f"messagerie={MSG}"]))
-print("SOURCES " + " ; ".join(f"{s['id']}={s['plateforme'] or '?'}/{s['gabarit'] or '?'}/{s['prefixe'] or '-'}/{s['domaine'] or '-'}" for s in SRC.values()))
-for a in avert + avert_src: print("AVERTISSEMENT", a)
-print(f'COMPTEURS mails={D.get("mails_lus", 0)} uniques={D["offres_uniques"]} doublons={D.get("doublons", 0)} deja_vues={D.get("deja_vues", 0)} doublons_plateformes={D.get("doublons_plateformes", 0)} doublons_passage={N_FUS} '
+out("SOURCES " + " ; ".join(f"{s['id']}={s['plateforme'] or '?'}/{s['gabarit'] or '?'}/{s['prefixe'] or '-'}/{s['domaine'] or '-'}" for s in SRC.values()))
+for a in avert + avert_src: out("AVERTISSEMENT " + a)
+out(f'COMPTEURS mails={D.get("mails_lus", 0)} uniques={D["offres_uniques"]} doublons={D.get("doublons", 0)} deja_vues={D.get("deja_vues", 0)} doublons_plateformes={D.get("doublons_plateformes", 0)} doublons_passage={N_FUS} '
       + " ".join(f"ecartees_{c}={v}" for c, v in CPT.items()) + f" retenues={len(N_OFF)}")
-for l in FUS: print(l)
-print("A_VERIFIER " + " ".join(f"{a.replace(' ', '_')}={sum(a in x['properties'][PROP['verif']] for x in N_OFF)}" for a in VERIF))
+for l in FUS: out(l)
+out("A_VERIFIER " + " ".join(f"{a.replace(' ', '_')}={sum(a in x['properties'][PROP['verif']] for x in N_OFF)}" for a in VERIF))
 if TEST:
-    print(f"TEST liens_ecartes={len(LE)} longueur_resultat={len(TXT_TEST)}")
-    print("NOTION test : seule écriture, la Valeur de « Dernier test de source » (dernier_test de notion.json)")
+    out(f"TEST liens_ecartes={len(LE)} longueur_resultat={len(TXT_TEST)}")
+    out("NOTION test : seule écriture, la Valeur de « Dernier test de source » (dernier_test de notion.json)")
 else:
-    print(f"RETRAITS candidats={len(CAND)} controlees={len(RET['controlees'])} retirees={len(N_RET)} erreurs={len(RET['erreurs'])}")
-    print("DETECTES " + ("non_lus" if TXT_DET is None else f"nouveaux={len(NOUV)} total={len(lignes(TXT_DET))} retires={N_RETIRES}"))
-    for e in NOUV[:5]: print(f'DETECTE {e["adresse"]} ; {propre(e["nom"])} ; {e["mails"]} mails ; {propre(e["objet"])[:120]}')
-    print("DEBRIEF " + ("non_ecrit (modèle 4)" if ANCIEN else "a_ecrire (ligne « Dernier débrief »)"))
-    print(f"NOTION offres_a_creer={len(N_OFF)} retirees_a_maj={len(N_RET)} sources_a_maj={len(N_SRC)} erreurs_sources={sum(1 for v in LECT.values() if v)} alertes_tronquees={len(NA)} offres_non_affichees={sum(x['annoncees'] - x['lues'] for x in NA)} detectes_a_ecrire={'non' if TXT_DET is None else 'oui'}")
+    out(f"RETRAITS candidats={len(CAND)} controlees={len(RET['controlees'])} retirees={len(N_RET)} erreurs={len(RET['erreurs'])}")
+    out("DETECTES " + ("non_lus" if TXT_DET is None else f"nouveaux={len(NOUV)} total={len(lignes(TXT_DET))} retires={N_RETIRES}"))
+    for e in NOUV[:5]: out(f'DETECTE {e["adresse"]} ; {propre(e["nom"])} ; {e["mails"]} mails ; {propre(e["objet"])[:120]}')
+    out("DEBRIEF " + ("non_ecrit (modèle 4)" if ANCIEN else "a_ecrire (ligne « Dernier débrief »)"))
+    out(f"NOTION offres_a_creer={len(N_OFF)} retirees_a_maj={len(N_RET)} sources_a_maj={len(N_SRC)} erreurs_sources={sum(1 for v in LECT.values() if v)} alertes_tronquees={len(NA)} offres_non_affichees={sum(x['annoncees'] - x['lues'] for x in NA)} detectes_a_ecrire={'non' if TXT_DET is None else 'oui'}")
+# ---- Débrief écrit par le script (v1.11) : debrief.txt et champ debrief de notion.json, recopiés par la tâche sans rédaction ----
+CONS = ""
+try: CONS = open("consigne.out", encoding="utf-8").read().strip()
+except OSError: CONS = "CONSIGNE non lancée (consigne.out absent)"
+if TEST:
+    s0 = next(iter(SRC.values()))
+    DEB = [f"Brique Offres {VERSION_BRIQUE} ({par('prenom')}) : test de la source {s0['id']} ({s0['gabarit']})", CONS] + [l for l in OUT if l.split(" ")[0] in ("SOURCES", "COMPTEURS", "TEST", "AVERTISSEMENT")] + lignes(TXT_TEST)
+else:
+    DEB = [f"Brique Offres {VERSION_BRIQUE} ({par('prenom')}) : <RÉSULTAT>", CONS] + [l for l in OUT if not l.startswith("FUSION ") and not l.startswith("AVERTISSEMENT ")]
+    DEB += [f'ALERTE {propre(x["alerte"])} ; {x["annoncees"]} annoncées, {x["lues"]} lues{pl_na(x)}' for x in NA]
+    DEB += [l for l in OUT if l.startswith(("AVERTISSEMENT ", "FUSION "))]
+open("debrief.txt", "w", encoding="utf-8").write("\n".join(DEB) + "\n")
+if not TEST:   # la tâche de test n'écrit jamais « Dernier débrief »
+    NJ = json.load(open("notion.json", encoding="utf-8")); NJ["debrief"] = f"{JFR} {HM}<br>" + "<br>".join(DEB)
+    json.dump(NJ, open("notion.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+print(f"RECOPIE debrief.txt ({len(DEB)} lignes) : réponse finale recopiée de ce fichier (étape 8)")

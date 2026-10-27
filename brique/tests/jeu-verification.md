@@ -1,10 +1,12 @@
-# Brique Offres 1.10 : jeu de vérification (27/10/2026)
+# Brique Offres 1.11 : jeu de vérification (27/10/2026)
 
-Script vérifié : brique/offres.py, empreinte sha256 `03735d43e8d8d70bbd161117eb213ca50a714d611f1cb2a632810efff718137b` (394 lignes).
-Version précédente : brique 1.9, empreinte `220a8a4fcbeb08583b88d4accb1d6b4e1cff0dbbc03c8acbe916642b136b0f03` (360 lignes, 121 contrôles).
-Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 27/10/2026 : 138/138 contrôles OK.
+Script vérifié : brique/offres.py, empreinte sha256 `38adcd91777d45477b2bf22ea3b39dcb484d47454442bd990f416c04ea76c7a5` (420 lignes).
+Version précédente : brique 1.10, empreinte `03735d43e8d8d70bbd161117eb213ca50a714d611f1cb2a632810efff718137b` (394 lignes, 138 contrôles).
+Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 27/10/2026 : 148/148 contrôles OK.
 
-Écarts avec la 1.9 : modèle 6 attendu, modèles 5 et 4 tolérés (le modèle 3 est refusé) ; en modèle 5, avertissement : pas de ligne « Prochain passage » ; nouveau mode `--consigne` qui décide du mode du passage (normal, sans écriture, test de source) à partir de la Valeur de « Prochain passage ». Jeu de base passé au modèle 6 ; contrôles 108, 109 et 111 réécrits (version 1.10, modèle 6), contrôles 122 à 135 ajoutés ; contrôles 136 à 138 (échappements de la lecture en mode vue) ajoutés après la mise à jour de renOdit vers v5.0-essai4.
+Écarts avec la 1.10 : modèle 7 attendu, modèles 6, 5 et 4 tolérés (modèle 6 sans avertissement) ; débrief écrit par le script dans `debrief.txt` et dans la valeur `debrief` de `notion.json` (parade contre la compaction du contexte) ; `consigne.out` écrit par `--consigne` ; gabarit collective_alerte (aucune offre, signalement dans `non_affichees` avec la plateforme). Jeu de base passé au modèle 7 ; contrôles de version réécrits ; contrôles 139 à 148 ajoutés.
+
+Écarts de la 1.10 avec la 1.9 : modèle 6 attendu, modèles 5 et 4 tolérés (le modèle 3 est refusé) ; en modèle 5, avertissement : pas de ligne « Prochain passage » ; nouveau mode `--consigne` qui décide du mode du passage (normal, sans écriture, test de source) à partir de la Valeur de « Prochain passage ». Jeu de base passé au modèle 6 ; contrôles 108, 109 et 111 réécrits (version 1.10, modèle 6), contrôles 122 à 135 ajoutés ; contrôles 136 à 138 (échappements de la lecture en mode vue) ajoutés après la mise à jour de renOdit vers v5.0-essai4.
 
 Non couvert : lecture et effacement de « Prochain passage » par l'agent, à vérifier au premier passage réel.
 
@@ -114,11 +116,11 @@ Non couvert : lecture et effacement de « Prochain passage » par l'agent, à v�
 104. TEST SOURCE : expéditeur introuvable, aucun mail : code 3, cause écrite : OK
 105. TEST SOURCE : expéditeur introuvable, mails sans offres : code 3, adresses vues listées : OK
 106. TEST SOURCE : expéditeur vide sans recherche : code 3, expéditeur invalide : OK
-107. 1.10 : modèle 3 refusé (code 2) : OK
-108. 1.10 : modèle 6, débrief à écrire, aucun avertissement de modèle : OK
+107. 1.11 : modèle 3 refusé (code 2) : OK
+108. 1.11 : modèle 7, débrief à écrire, aucun avertissement de modèle : OK
 109. 1.9 : avertissement du modèle 4 renvoie à la procédure « mettre à jour » : OK
 110. 1.9 : TEST SOURCE sans ligne DEBRIEF : OK
-111. 1.10 : gabarit inconnu cité avec la brique 1.10 : OK
+111. 1.11 : gabarit inconnu cité avec la brique 1.11 : OK
 112. Fusion : 4 offres Atos du même passage donnent une offre, premier identifiant gardé : OK
 113. Fusion : lieux distincts regroupés « Paris ; Les Clayes-sous-Bois » : OK
 114. Fusion : compteur doublons_passage=3 et retenues=1 : OK
@@ -146,3 +148,13 @@ Non couvert : lecture et effacement de « Prochain passage » par l'agent, à v�
 136. Consigne : deux-points échappés par la lecture en mode vue, acceptée : OK
 137. Consigne : demande de test échappée, recopiée sans échappement : OK
 138. Paramètres : séparateur échappé « \; » retiré, poste reconnu : OK
+139. 1.11 : modèle 6 toléré sans avertissement : OK
+140. 1.11 : source collective_alerte acceptée sans préfixe ni domaine, à côté de LinkedIn sans préfixe : OK
+141. 1.11 : ligne non_affichees Collective avec plateforme, LinkedIn inchangée : OK
+142. 1.11 : debrief.txt écrit (titre à compléter, CONSIGNE, lignes du script, alertes) : OK
+143. 1.11 : champ debrief de notion.json = date, heure puis debrief.txt en <br> : OK
+144. 1.11 : sans consigne.out, ligne CONSIGNE signalée non lancée : OK
+145. 1.11 : offre portée par une source collective_alerte refusée : OK
+146. 1.11 : non_affichees.source inconnue refusée : OK
+147. 1.11 : AVERTISSEMENT et FUSION en fin de debrief.txt : OK
+148. 1.11 : --consigne écrit consigne.out : OK

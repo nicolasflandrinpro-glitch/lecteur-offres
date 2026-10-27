@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-# Jeu de vérification de offres.py (brique Offres v1.10). Usage : python3 test_offres.py [chemin/vers/offres.py]
+# Jeu de vérification de offres.py (brique Offres v1.11). Usage : python3 test_offres.py [chemin/vers/offres.py]
 # Chaque cas : réglages (écarts par rapport à BASE), une offre (faits relevés), résultat attendu (critère d'écart, ou étiquettes À vérifier).
 import json, subprocess, sys, os, tempfile, copy, hashlib, unicodedata
 SCRIPT = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else "offres.py")
-BASE = {"Version du modèle": "6", "Prénom": "Camille", "Postes recherchés": "Product Owner; Business Analyst", "Postes proches": "Proxy PO",
+BASE = {"Version du modèle": "7", "Prénom": "Camille", "Postes recherchés": "Product Owner; Business Analyst", "Postes proches": "Proxy PO",
         "Types de collaboration acceptés": "Freelance; Portage salarial", "Temps de travail": "plein ou partiel",
         "Modes de travail acceptés": "présentiel; hybride; télétravail total", "Jours de télétravail minimum": "",
         "Zone de présentiel": "Île-de-France",
@@ -214,11 +214,11 @@ verdict("TEST SOURCE : expéditeur introuvable, mails sans offres : code 3, adre
 r, out = run(BASE, [], test_mode(src={**TS, "adresse": ""}, offres_uniques=0))
 verdict("TEST SOURCE : expéditeur vide sans recherche : code 3, expéditeur invalide", r.returncode == 3 and "invalide" in out["dernier_test"], str(out))
 # ---- Nouveaux en 1.9 ----
-r, _ = run({**BASE, "Version du modèle": "3"}, [off(500001)]); verdict("1.10 : modèle 3 refusé (code 2)", r.returncode == 2 and "attendu « 6 », « 5 » ou « 4 »" in r.stdout, r.stdout)
-r, _ = run(BASE, [off(500002)]); verdict("1.10 : modèle 6, débrief à écrire, aucun avertissement de modèle", r.returncode == 0 and "DEBRIEF a_ecrire" in r.stdout and "AVERTISSEMENT modèle" not in r.stdout and "OK brique 1.10, modèle 6" in r.stdout, r.stdout)
+r, _ = run({**BASE, "Version du modèle": "3"}, [off(500001)]); verdict("1.11 : modèle 3 refusé (code 2)", r.returncode == 2 and "attendu « 7 » (tolérés : 6, 5, 4)" in r.stdout, r.stdout)
+r, _ = run(BASE, [off(500002)]); verdict("1.11 : modèle 7, débrief à écrire, aucun avertissement de modèle", r.returncode == 0 and "DEBRIEF a_ecrire" in r.stdout and "AVERTISSEMENT modèle" not in r.stdout and "OK brique 1.11, modèle 7" in r.stdout, r.stdout)
 r, _ = run(M4, [off(500003)]); verdict("1.9 : avertissement du modèle 4 renvoie à la procédure « mettre à jour »", r.returncode == 0 and "procédure « mettre à jour »" in r.stdout and "page des mises à jour" not in r.stdout, r.stdout)
 r, _ = run(BASE, [OH], test_mode()); verdict("1.9 : TEST SOURCE sans ligne DEBRIEF", r.returncode == 0 and "DEBRIEF" not in r.stdout, r.stdout)
-r, out = run(BASE, [], test_mode(src={**TS, "gabarit": "indeed_xyz"}, offres_uniques=0)); verdict("1.10 : gabarit inconnu cité avec la brique 1.10", r.returncode == 3 and "inconnu de la brique 1.10" in out["dernier_test"], r.stdout)
+r, out = run(BASE, [], test_mode(src={**TS, "gabarit": "indeed_xyz"}, offres_uniques=0)); verdict("1.11 : gabarit inconnu cité avec la brique 1.11", r.returncode == 3 and "inconnu de la brique 1.11" in out["dernier_test"], r.stdout)
 # ---- Complément 1.9 du 25/10 : fusion dans un même passage, offres relayées comptées en doublons entre plateformes ----
 AT = dict(titre="Senior Product Manager - Open Platforms & Firmware H/F", org="Atos")
 FA = [off(4473151322, lieu="Paris", **AT), off(4473147558, lieu="Les Clayes-sous-Bois", **AT), off(4473154238, lieu="Paris", **AT), off(4473139800, lieu="Les Clayes-sous-Bois", **AT)]
@@ -245,7 +245,7 @@ verdict("Offres Free-Work relayées par LinkedIn comptées en doublons entre pla
 M5 = {**BASE, "Version du modèle": "5"}
 r, _ = run(M5, [off(530001)]); verdict("1.10 : modèle 5 toléré, débrief à écrire, avertissement « Prochain passage »", r.returncode == 0 and "DEBRIEF a_ecrire" in r.stdout and "AVERTISSEMENT modèle Notion 5 : pas de ligne « Prochain passage »" in r.stdout, r.stdout)
 def consigne(role, val, deb="2026-10-27T11:00:00+01:00"):
-    r = subprocess.run([sys.executable, SCRIPT, "--consigne", role, val, deb], capture_output=True, text=True); return r.returncode, r.stdout
+    r = subprocess.run([sys.executable, SCRIPT, "--consigne", role, val, deb], cwd=tempfile.mkdtemp(), capture_output=True, text=True); return r.returncode, r.stdout
 T = "2026-10-27T09:50:00+00:00"; DEM = "TEST SOURCE S09 GABARIT generique PLATEFORME Malt PRÉFIXE mlt DOMAINE malt.fr EXPÉDITEUR -"
 c, o = consigne("offres", ""); verdict("Consigne : vide, passage normal, rien à effacer", c == 0 and o.strip() == "CONSIGNE mode=normal effacer=non motif=aucune consigne", o)
 c, o = consigne("offres", f"{T} ; MODE SANS ÉCRITURE"); verdict("Consigne : mode sans écriture récent, appliqué et effacé", c == 0 and "mode=sans_ecriture effacer=oui" in o, o)
@@ -263,4 +263,36 @@ c, o = consigne("offres", f"{T}<br> ; MODE SANS ÉCRITURE"); verdict("Consigne :
 c, o = consigne("offres", "2026-10-27T09\\:50\\:00+00\\:00 ; MODE SANS ÉCRITURE"); verdict("Consigne : deux-points échappés par la lecture en mode vue, acceptée", c == 0 and "mode=sans_ecriture effacer=oui" in o, o)
 c, o = consigne("test", f"2026-10-27T09\\:50\\:00+00\\:00 ; TEST SOURCE S09 GABARIT generique PLATEFORME Malt PRÉFIXE mlt DOMAINE malt\\.fr EXPÉDITEUR -"); verdict("Consigne : demande de test échappée, recopiée sans échappement", c == 0 and o.strip().endswith("DEMANDE " + DEM), o)
 r, out = run({**BASE, "Postes recherchés": "Product Owner\\; Business Analyst"}, [off(540001)]); verdict("Paramètres : séparateur échappé « \\; » retiré, poste reconnu", r.returncode == 0 and len(out["offres_a_creer"]) == 1, r.stdout)
+# ---- Nouveaux en 1.11 : débrief écrit par le script, gabarit collective_alerte, modèle 7 (modèle 6 toléré sans avertissement) ----
+r, _ = run({**BASE, "Version du modèle": "6"}, [off(600001)]); verdict("1.11 : modèle 6 toléré sans avertissement", r.returncode == 0 and "AVERTISSEMENT modèle" not in r.stdout and "modèle 6" in r.stdout, r.stdout)
+def run_deb(params, offres, extra=None, args=(), cons=None):
+    d = tempfile.mkdtemp()
+    if cons: open(f"{d}/consigne.out", "w").write(cons + "\n")
+    D = {"date_iso": "2026-10-23", "debut_iso": "2026-10-23T08:45:12+02:00", "mails_lus": 1, "offres_uniques": len(offres), "doublons": 0, "deja_vues": 0, "doublons_plateformes": 0,
+         "offres": offres, "lectures_mail": [{"id": s["id"], "erreur": ""} for s in SOURCES + CA], "non_affichees": []}
+    K = {"parametres": dict(params), "ids_offres": [], "sources": copy.deepcopy(SOURCES + CA), "plateformes_offres": ["LinkedIn", "Collective", "Free-Work", "Post LinkedIn", "Malt", "Welcome"]}
+    if extra: extra(D, K)
+    json.dump(D, open(f"{d}/o.json", "w")); json.dump(K, open(f"{d}/c.json", "w"))
+    r = subprocess.run([sys.executable, SCRIPT, *args, "o.json", "c.json"], cwd=d, capture_output=True, text=True)
+    out = json.load(open(f"{d}/notion.json")) if os.path.exists(f"{d}/notion.json") else None
+    deb = open(f"{d}/debrief.txt", encoding="utf-8").read() if os.path.exists(f"{d}/debrief.txt") else None
+    return r, out, deb
+CA = [{"page": "p7", "id": "S07", "erreur": "", "gabarit": "collective_alerte", "plateforme": "Collective", "prefixe": "", "domaine": "", "adresse": "no-reply@collective.work"}]
+NAC = [{"alerte": "PO Paris", "annoncees": 4, "lues": 0, "lien": "https://app.collective.work/x", "source": "S07"}, {"alerte": "PO", "annoncees": 12, "lues": 6, "lien": "https://www.linkedin.com/jobs/a"}]
+r, out, deb = run_deb(BASE, [off(610001)], lambda D, K: D.update(non_affichees=NAC), cons="CONSIGNE mode=normal effacer=non motif=aucune consigne")
+verdict("1.11 : source collective_alerte acceptée sans préfixe ni domaine, à côté de LinkedIn sans préfixe", r.returncode == 0, r.stdout)
+verdict("1.11 : ligne non_affichees Collective avec plateforme, LinkedIn inchangée", out and out["non_affichees"] == "23/10/2026 ; PO Paris ; 4 annoncées, 0 lues ; https://app.collective.work/x ; Collective<br>23/10/2026 ; PO ; 12 annoncées, 6 lues ; https://www.linkedin.com/jobs/a", out and out["non_affichees"])
+L = (deb or "").splitlines()
+verdict("1.11 : debrief.txt écrit (titre à compléter, CONSIGNE, lignes du script, alertes)", len(L) > 5 and L[0] == "Brique Offres 1.11 (Camille) : <RÉSULTAT>" and L[1].startswith("CONSIGNE mode=normal") and any(l.startswith("COMPTEURS ") for l in L) and any(l.startswith("NOTION ") for l in L) and "ALERTE PO Paris ; 4 annoncées, 0 lues ; Collective" in L, deb)
+verdict("1.11 : champ debrief de notion.json = date, heure puis debrief.txt en <br>", out and out["debrief"] == "23/10/2026 08:45<br>" + "<br>".join(L), out and out.get("debrief"))
+r, out, deb = run_deb(BASE, [off(610002)])
+verdict("1.11 : sans consigne.out, ligne CONSIGNE signalée non lancée", r.returncode == 0 and "CONSIGNE non lancée" in (deb or ""), deb)
+r, out, deb = run_deb(BASE, [off("cw-x", source="S07")])
+verdict("1.11 : offre portée par une source collective_alerte refusée", r.returncode == 1 and "ne donne aucune offre" in r.stdout, r.stdout)
+r, out, deb = run_deb(BASE, [off(610003)], lambda D, K: D.update(non_affichees=[{"alerte": "X", "annoncees": 3, "lues": 0, "lien": "", "source": "S99"}]))
+verdict("1.11 : non_affichees.source inconnue refusée", r.returncode == 1 and "source inconnue" in r.stdout, r.stdout)
+r, out, deb = run_deb(BASE, [off(610004), off(610005)], lambda D, K: D.update(offres_uniques=2), cons="CONSIGNE mode=normal effacer=non motif=aucune consigne")
+verdict("1.11 : AVERTISSEMENT et FUSION en fin de debrief.txt", r.returncode == 0 and (deb or "").rstrip().splitlines()[-1].startswith("FUSION "), deb)
+d = tempfile.mkdtemp(); c = subprocess.run([sys.executable, SCRIPT, "--consigne", "offres", "", "2026-10-27T10:00:00+00:00"], cwd=d, capture_output=True, text=True)
+verdict("1.11 : --consigne écrit consigne.out", os.path.exists(f"{d}/consigne.out") and open(f"{d}/consigne.out").read().startswith("CONSIGNE mode=normal"), c.stdout)
 print(f"\n{nb - ko}/{nb} contrôles OK"); sys.exit(1 if ko else 0)

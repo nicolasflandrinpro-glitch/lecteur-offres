@@ -14,7 +14,7 @@ Procédure pour Claude (Cowork), version Cowork du formulaire « Ajouter une pla
 
 1. Trouve la page de configuration (titre par défaut « Lecteur d'offres : configuration » ; plusieurs pages ou aucune : carte). Lis Paramètres et Sources.
 2. Recueille : le nom de la plateforme ; son site (domaine, par exemple free-work.com) ; le préfixe d'identifiant (2 à 6 lettres minuscules, propose les 2 ou 3 premières lettres du nom, non utilisé par une autre ligne de Sources) ; l'adresse d'expéditeur des alertes, facultative (« laisse vide, le test la retrouvera »).
-3. Plateforme déjà présente dans Sources : dis-le. Ligne inactive : propose de cocher « Actif » et arrête-toi là.
+3. Plateforme déjà présente dans Sources : dis-le. Ligne inactive : propose de cocher « Actif » et arrête-toi là. Collective a deux lignes : « Collective : offres transmises » (ops@collective.work, une offre par mail) et « Collective (alertes quotidiennes) » (no-reply@collective.work, nombre d'offres annoncées par alerte, sans les offres) ; carte à choix multiples pour cocher l'une, l'autre ou les deux.
 4. Préviens : il faut avoir reçu au moins une alerte de cette plateforme dans les 7 derniers jours.
 
 ## 2. Test

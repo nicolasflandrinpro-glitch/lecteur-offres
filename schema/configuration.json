@@ -1,7 +1,7 @@
 {
   "version_schema": 1,
-  "version_modele": "6",
-  "source": "Modèle Notion 4 (page 40234f6d2f8d8163845fcb60b4c805f6), relevé le 25/10/2026, plus les lignes Paramètres « Dernier débrief » et « Version du kit » (modèle 5), puis la ligne « Prochain passage » et la description de la colonne Offres « Métier » (modèle 6, 27/10/2026).",
+  "version_modele": "7",
+  "source": "Modèle Notion 4 (page 40234f6d2f8d8163845fcb60b4c805f6), relevé le 25/10/2026, plus les lignes Paramètres « Dernier débrief » et « Version du kit » (modèle 5), puis la ligne « Prochain passage » et la description de la colonne Offres « Métier » (modèle 6, 27/10/2026), puis la ligne « Heure de passage », la ligne « Offres non affichées (alertes) » renommée, le statut de candidature « En pause » et la source « Collective (alertes quotidiennes) » (modèle 7, 27/10/2026).",
   "page": {
     "titre_defaut": "Lecteur d'offres : configuration",
     "icone": "📬",
@@ -22,7 +22,7 @@
       ],
       "vue": {"type": "table", "affichees": ["Paramètre", "Commentaire", "Dernier import", "Valeur", "À supprimer"]},
       "lignes": [
-        {"Paramètre": "Version du modèle", "Valeur": "6", "Commentaire": "Version de la structure Notion. Lue par la brique Offres, qui s'arrête sans rien écrire si elle ne correspond pas à la version attendue. Ne la modifier qu'en appliquant une mise à jour."},
+        {"Paramètre": "Version du modèle", "Valeur": "7", "Commentaire": "Version de la structure Notion. Lue par la brique Offres, qui s'arrête sans rien écrire si elle ne correspond pas à la version attendue. Ne la modifier qu'en appliquant une mise à jour."},
         {"Paramètre": "Version du kit", "Valeur": null, "Commentaire": "Version du kit installée (exemple : v5.0). Écrite par l'installeur et par la procédure de mise à jour ; lue par les skills pour télécharger leurs procédures à cette version. Ne la modifier qu'en appliquant une mise à jour."},
         {"Paramètre": "Prénom", "Valeur": null, "Commentaire": "Prénom de l'utilisateur, affiché par le lecteur et repris dans le débrief de la brique Offres."},
         {"Paramètre": "Postes recherchés", "Valeur": null, "Commentaire": "Critère « Poste », obligatoire : une offre qui n'est ni un poste recherché ni un poste proche est écartée. Postes séparés par des points-virgules (exemple : Product Owner; Business Analyst). Modifiable depuis l'écran Réglages du lecteur."},
@@ -40,10 +40,11 @@
         {"Paramètre": "Tâche Test de source", "Valeur": null, "Commentaire": "Identifiant (trig_…) de la tâche planifiée « Brique Offres : test de source », lu par le lecteur. Rempli à l'installation."},
         {"Paramètre": "Dernière exécution Offres", "Valeur": null, "Commentaire": "Écrite par la brique Offres à la fin d'une exécution réussie (date et heure). Vide : fenêtre de repli de 7 jours."},
         {"Paramètre": "Dernier débrief", "Valeur": null, "Commentaire": "Écrit par la brique Offres à la fin de chaque passage : débrief du dernier passage (date, offres lues, retenues, écartées, erreurs). Lu par l'installeur et par la skill « Lire un débrief ». Ne pas modifier."},
-        {"Paramètre": "Offres non affichées (alertes LinkedIn)", "Valeur": null, "Commentaire": "Écrite par la brique Offres : une ligne par alerte LinkedIn dont le mail annonce plus d'offres qu'il n'en affiche. Lue par le lecteur pour afficher un rappel."},
+        {"Paramètre": "Offres non affichées (alertes)", "Valeur": null, "Commentaire": "Écrite par la brique Offres : une ligne par alerte dont le mail annonce plus d'offres qu'il n'en affiche (LinkedIn) ou n'en affiche aucune (Collective). Lue par le lecteur pour afficher un rappel."},
         {"Paramètre": "Expéditeurs détectés", "Valeur": null, "Commentaire": "Écrit par la brique Offres (étape 6 ter) : expéditeurs d'offres qui ne sont pas encore des sources. Ne pas modifier."},
         {"Paramètre": "Dernier test de source", "Valeur": null, "Commentaire": "Écrit par la tâche « Brique Offres : test de source » : résultat du dernier test. Ne pas modifier."},
-        {"Paramètre": "Prochain passage", "Valeur": null, "Commentaire": "Consigne d'un passage lancé à la main (« <date et heure> ; MODE SANS ÉCRITURE » ou « <date et heure> ; TEST SOURCE … »), écrite par le lecteur ou par Claude juste avant le lancement, effacée par la brique Offres ou par la tâche de test. Valable 30 minutes. Ne pas modifier."}
+        {"Paramètre": "Prochain passage", "Valeur": null, "Commentaire": "Consigne d'un passage lancé à la main (« <date et heure> ; MODE SANS ÉCRITURE » ou « <date et heure> ; TEST SOURCE … »), écrite par le lecteur ou par Claude juste avant le lancement, effacée par la brique Offres ou par la tâche de test. Valable 30 minutes. Ne pas modifier."},
+        {"Paramètre": "Heure de passage", "Valeur": "08:45", "Commentaire": "Heure du passage quotidien de la brique Offres (HH:MM). Écrite à l'installation, puis par Claude quand tu lui demandes de la changer. Lue par le lecteur. Ne la modifie pas à la main : la tâche planifiée ne suivrait pas."}
       ]
     },
     "Sources": {
@@ -55,7 +56,7 @@
         {"nom": "Type", "type": "select", "options": [{"nom": "mail", "couleur": "blue"}]},
         {"nom": "Identifiant", "type": "text"},
         {"nom": "Plateforme", "type": "text", "description": "Valeur écrite dans la colonne Offres « Plateforme » (doit y exister). Lue par la brique Offres 1.7 et suivantes."},
-        {"nom": "Préfixe d'identifiant", "type": "text", "description": "2 à 6 lettres minuscules, devant l'identifiant des offres (fw, cw…). Vide seulement pour LinkedIn."},
+        {"nom": "Préfixe d'identifiant", "type": "text", "description": "2 à 6 lettres minuscules, devant l'identifiant des offres (fw, cw…). Vide seulement pour LinkedIn et pour les alertes quotidiennes Collective."},
         {"nom": "Domaine des offres", "type": "text", "description": "Domaine des pages d'offres (free-work.com…). Sert au contrôle des liens et à l'enrichissement."},
         {"nom": "Gabarit", "type": "text"},
         {"nom": "Remarques", "type": "text"},
@@ -66,7 +67,7 @@
       "lignes": [
         {"Nom": "Alertes emploi LinkedIn", "Type": "mail", "Adresse ou URL": "jobalerts-noreply@linkedin.com", "Actif": false, "Plateforme": "LinkedIn", "Préfixe d'identifiant": null, "Domaine des offres": "linkedin.com", "Identifiant": "S01", "Gabarit": "linkedin_digest", "Remarques": "À cocher si l'utilisateur reçoit des alertes emploi LinkedIn par mail. Une même offre peut figurer dans plusieurs alertes : la brique dédoublonne par identifiant."},
         {"Nom": "Collective : offres transmises (une offre par mail)", "Type": "mail", "Adresse ou URL": "ops@collective.work", "Actif": false, "Plateforme": "Collective", "Préfixe d'identifiant": "cw", "Domaine des offres": "collective.work", "Identifiant": "S06", "Gabarit": "collective_opportunite", "Remarques": "Objet « [<prénom> x <client>] Nouvelle opportunité ». Pas d'enrichissement : les CGU de Collective interdisent l'utilisation automatisée."},
-        {"Nom": "Free-Work : alertes emploi", "Type": "mail", "Adresse ou URL": "jobs@free-work.com", "Actif": false, "Plateforme": "Free-Work", "Préfixe d'identifiant": "fw", "Domaine des offres": "free-work.com", "Identifiant": "S08", "Gabarit": "freework_alerte", "Remarques": "Objet « N offres matchant avec vos critères ». contact@free-work.com envoie la lettre d'information, à ne pas lire."}
+        {"Nom": "Free-Work : alertes emploi", "Type": "mail", "Adresse ou URL": "jobs@free-work.com", "Actif": false, "Plateforme": "Free-Work", "Préfixe d'identifiant": "fw", "Domaine des offres": "free-work.com", "Identifiant": "S08", "Gabarit": "freework_alerte", "Remarques": "Objet « N offres matchant avec vos critères ». contact@free-work.com envoie la lettre d'information, à ne pas lire."}, {"Nom": "Collective (alertes quotidiennes)", "Type": "mail", "Adresse ou URL": "no-reply@collective.work", "Actif": false, "Plateforme": "Collective", "Préfixe d'identifiant": null, "Domaine des offres": "collective.work", "Identifiant": "S07", "Gabarit": "collective_alerte", "Remarques": "Objet « N nouvelles offres sont disponibles ». Ces mails ne contiennent aucune offre : la brique signale seulement le nombre d'offres annoncées par alerte, affiché par le lecteur avec le bouton « Voir les offres ». Le même expéditeur envoie les réponses aux candidatures, toujours lues."}
       ]
     },
     "Interdits": {
@@ -91,7 +92,7 @@
       "titre": "Titre",
       "colonnes": [
         {"nom": "Titre", "type": "title"},
-        {"nom": "Statut", "type": "select", "options": [{"nom": "À préparer", "couleur": "gray"}, {"nom": "Candidature envoyée", "couleur": "blue"}, {"nom": "Relancée", "couleur": "blue"}, {"nom": "Processus en cours", "couleur": "purple"}, {"nom": "Gagnée", "couleur": "green"}, {"nom": "Perdue", "couleur": "red"}, {"nom": "Abandonnée", "couleur": "brown"}]},
+        {"nom": "Statut", "type": "select", "options": [{"nom": "À préparer", "couleur": "gray"}, {"nom": "Candidature envoyée", "couleur": "blue"}, {"nom": "Relancée", "couleur": "blue"}, {"nom": "Processus en cours", "couleur": "purple"}, {"nom": "En pause", "couleur": "yellow"}, {"nom": "Gagnée", "couleur": "green"}, {"nom": "Perdue", "couleur": "red"}, {"nom": "Abandonnée", "couleur": "brown"}]},
         {"nom": "Origine", "type": "select", "options": [{"nom": "Offre d'emploi", "couleur": "blue"}, {"nom": "Signal de veille", "couleur": "purple"}, {"nom": "Prospection directe", "couleur": "green"}, {"nom": "Autre", "couleur": "gray"}]},
         {"nom": "Date", "type": "date"},
         {"nom": "Date de relance", "type": "date"},
@@ -99,7 +100,7 @@
         {"nom": "Prochaine action", "type": "text"},
         {"nom": "Commentaire", "type": "text"},
         {"nom": "Relance prévue", "type": "formula", "description": "Date de relance si elle est renseignée, sinon Date + 15 jours.", "formule": "if(empty(prop(\"Date de relance\")), dateAdd(prop(\"Date\"), 15, \"days\"), prop(\"Date de relance\"))"},
-        {"nom": "À relancer", "type": "formula", "description": "Coché si la relance prévue est atteinte et la candidature encore en cours.", "formule": "if(empty(prop(\"Relance prévue\")), false, prop(\"Relance prévue\") <= today() and not includes([\"Gagnée\", \"Perdue\", \"Abandonnée\"], prop(\"Statut\")))"}
+        {"nom": "À relancer", "type": "formula", "description": "Coché si la relance prévue est atteinte et la candidature encore en cours (ni close, ni en pause).", "formule": "if(empty(prop(\"Relance prévue\")), false, prop(\"Relance prévue\") <= today() and not includes([\"Gagnée\", \"Perdue\", \"Abandonnée\", \"En pause\"], prop(\"Statut\")))"}
       ],
       "vue": {"type": "table", "affichees": ["Titre", "Commentaire", "Date", "Date de relance", "Lien", "Offre", "Origine", "Prochaine action", "Relance prévue", "Statut", "À relancer"]},
       "lignes": []

@@ -25,7 +25,7 @@ Explique en français courant, dans cet ordre, sans recopier les lignes brutes :
 5. FUSION : chaque fusion du passage (offres regroupées).
 6. A_VERIFIER : nombre d'offres retenues avec un point à vérifier (lieu, temps de travail, contrat…).
 7. RETRAITS : offres contrôlées en ligne, retirées, et contrôles sans conclusion.
-8. DETECTES et DETECTE : nouveaux expéditeurs d'offres qui ne sont pas des sources.
+8. DETECTES et DETECTE : nouveaux expéditeurs d'offres qui ne sont pas des sources. ALERTE : alertes dont le mail annonce plus d'offres qu'il n'en affiche (LinkedIn), ou n'en affiche aucune (Collective, alertes quotidiennes) ; le lecteur les montre avec un bouton vers la plateforme.
 9. DEBRIEF et NOTION : ce que la brique a écrit ou prévoit d'écrire.
 10. CANDIDATURES : mails de réponse lus, candidatures mises à jour, notes, mails non rattachés, gabarits inconnus. MESSAGERIE (Outlook ou Fastmail) : remarques sur la lecture de la boîte.
 11. Anomalies : chaque ligne, avec ce qu'elle signifie.
