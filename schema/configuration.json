@@ -1,7 +1,7 @@
 {
   "version_schema": 1,
-  "version_modele": "5",
-  "source": "Modèle Notion 4 (page 40234f6d2f8d8163845fcb60b4c805f6), relevé le 25/10/2026, plus les lignes Paramètres « Dernier débrief » et « Version du kit » et la version 5.",
+  "version_modele": "6",
+  "source": "Modèle Notion 4 (page 40234f6d2f8d8163845fcb60b4c805f6), relevé le 25/10/2026, plus les lignes Paramètres « Dernier débrief » et « Version du kit » (modèle 5), puis la ligne « Prochain passage » et la description de la colonne Offres « Métier » (modèle 6, 27/10/2026).",
   "page": {
     "titre_defaut": "Lecteur d'offres : configuration",
     "icone": "📬",
@@ -22,7 +22,7 @@
       ],
       "vue": {"type": "table", "affichees": ["Paramètre", "Commentaire", "Dernier import", "Valeur", "À supprimer"]},
       "lignes": [
-        {"Paramètre": "Version du modèle", "Valeur": "5", "Commentaire": "Version de la structure Notion. Lue par la brique Offres, qui s'arrête sans rien écrire si elle ne correspond pas à la version attendue. Ne la modifier qu'en appliquant une mise à jour."},
+        {"Paramètre": "Version du modèle", "Valeur": "6", "Commentaire": "Version de la structure Notion. Lue par la brique Offres, qui s'arrête sans rien écrire si elle ne correspond pas à la version attendue. Ne la modifier qu'en appliquant une mise à jour."},
         {"Paramètre": "Version du kit", "Valeur": null, "Commentaire": "Version du kit installée (exemple : v5.0). Écrite par l'installeur et par la procédure de mise à jour ; lue par les skills pour télécharger leurs procédures à cette version. Ne la modifier qu'en appliquant une mise à jour."},
         {"Paramètre": "Prénom", "Valeur": null, "Commentaire": "Prénom de l'utilisateur, affiché par le lecteur et repris dans le débrief de la brique Offres."},
         {"Paramètre": "Postes recherchés", "Valeur": null, "Commentaire": "Critère « Poste », obligatoire : une offre qui n'est ni un poste recherché ni un poste proche est écartée. Postes séparés par des points-virgules (exemple : Product Owner; Business Analyst). Modifiable depuis l'écran Réglages du lecteur."},
@@ -42,7 +42,8 @@
         {"Paramètre": "Dernier débrief", "Valeur": null, "Commentaire": "Écrit par la brique Offres à la fin de chaque passage : débrief du dernier passage (date, offres lues, retenues, écartées, erreurs). Lu par l'installeur et par la skill « Lire un débrief ». Ne pas modifier."},
         {"Paramètre": "Offres non affichées (alertes LinkedIn)", "Valeur": null, "Commentaire": "Écrite par la brique Offres : une ligne par alerte LinkedIn dont le mail annonce plus d'offres qu'il n'en affiche. Lue par le lecteur pour afficher un rappel."},
         {"Paramètre": "Expéditeurs détectés", "Valeur": null, "Commentaire": "Écrit par la brique Offres (étape 6 ter) : expéditeurs d'offres qui ne sont pas encore des sources. Ne pas modifier."},
-        {"Paramètre": "Dernier test de source", "Valeur": null, "Commentaire": "Écrit par la tâche « Brique Offres : test de source » : résultat du dernier test. Ne pas modifier."}
+        {"Paramètre": "Dernier test de source", "Valeur": null, "Commentaire": "Écrit par la tâche « Brique Offres : test de source » : résultat du dernier test. Ne pas modifier."},
+        {"Paramètre": "Prochain passage", "Valeur": null, "Commentaire": "Consigne d'un passage lancé à la main (« <date et heure> ; MODE SANS ÉCRITURE » ou « <date et heure> ; TEST SOURCE … »), écrite par le lecteur ou par Claude juste avant le lancement, effacée par la brique Offres ou par la tâche de test. Valable 30 minutes. Ne pas modifier."}
       ]
     },
     "Sources": {
@@ -114,7 +115,7 @@
         {"nom": "Lien", "type": "url"},
         {"nom": "TJM", "type": "number"},
         {"nom": "Contrat", "type": "multi_select", "options": [{"nom": "Freelance", "couleur": "green"}, {"nom": "Portage salarial", "couleur": "blue"}, {"nom": "CDI", "couleur": "gray"}, {"nom": "CDD", "couleur": "gray"}]},
-        {"nom": "Métier", "type": "select", "options": [{"nom": "Métier proche", "couleur": "gray"}]},
+        {"nom": "Métier", "type": "select", "description": "Options : chaque libellé de la ligne Paramètres « Postes recherchés », plus « Métier proche ». Créées par l'installeur après l'écriture des critères, ajoutées par « régler mes critères » à chaque nouveau poste : sans l'option, Notion refuse l'écriture de l'offre.", "options": [{"nom": "Métier proche", "couleur": "gray"}]},
         {"nom": "À vérifier", "type": "multi_select", "options": [{"nom": "Poste", "couleur": "orange"}, {"nom": "Contrat", "couleur": "orange"}, {"nom": "Lieu", "couleur": "orange"}, {"nom": "Temps de travail", "couleur": "orange"}, {"nom": "Télétravail", "couleur": "orange"}]},
         {"nom": "Date de détection", "type": "date"},
         {"nom": "Vue le", "type": "date"},

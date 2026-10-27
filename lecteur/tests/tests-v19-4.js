@@ -1,6 +1,7 @@
 // Tests jsdom du lecteur 19.4 : titre de configuration toléré, lien retenu, modèles 5 et 4, renvois vers la page d'accueil,
 // accès à Notion absent (roue dentée masquée, état de la permission « mcp »), réglages robustes à des paramètres incomplets.
 // Usage : node lecteur/tests/tests-v19-4.js (lecteur/lecteur.html = page de l'artefact sans la ligne d'enveloppe)
+// 27/10/2026 : seul changement pour la 19.5, le contrôle du pied de page (v19.5, modèles 6, 5 et 4).
 const fs = require("fs"); const { JSDOM, VirtualConsole } = require("jsdom");
 const html = fs.readFileSync(__dirname + "/../lecteur.html", "utf8");
 const wait = ms => new Promise(r => setTimeout(r, ms));
@@ -67,7 +68,7 @@ const sansMcp = perm => async k => k === "mcp" ? null : k === "permissions" ? pe
     check("lancement suivant : champ prérempli avec le lien retenu", p.$("cfgUrl").value === "https://app.notion.com/p/" + "f".repeat(32), p.$("cfgUrl").value);
   }
   // ---- 2. Modèles acceptés ----
-  for (const [m, attendu] of [["5", "Lecteur v19.4 (modèles 5 et 4). "], ["4", "Lecteur v19.4 (modèles 5 et 4). "], ["3", "Lecteur v19.4 (modèles 5 et 4, Notion en modèle 3 : mise à jour à appliquer). "]]) {
+  for (const [m, attendu] of [["5", "Lecteur v19.5 (modèles 6, 5 et 4). "], ["4", "Lecteur v19.5 (modèles 6, 5 et 4). "], ["3", "Lecteur v19.5 (modèles 6, 5 et 4, Notion en modèle 3 : mise à jour à appliquer). "]]) {
     const par = [P("Postes recherchés", "Product Owner", 1), P("Version du modèle", m, 2), P("Dernière exécution Offres", new Date().toISOString(), 3)];
     const p = ouvrir({use: async k => k === "mcp" ? vuesNotion(par) : null, stockage: {"lecteur-config": JSON.stringify(CFG)}});
     await wait(300);

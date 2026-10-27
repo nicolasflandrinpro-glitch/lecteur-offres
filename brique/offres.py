@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-# Brique Offres v1.9 générique : lit offres.json (faits relevés) et config.json (Paramètres et Sources recopiés), applique les critères, écrit notion.json.
-# Usage : python3 offres.py offres.json config.json ; avant le dédoublonnage : python3 offres.py --empreintes offres.json config.json (identifiants generique_suivi)
+# Brique Offres v1.10 générique : lit offres.json (faits relevés) et config.json (Paramètres et Sources recopiés), applique les critères, écrit notion.json.
+# Usage : python3 offres.py offres.json config.json ; avant le dédoublonnage : python3 offres.py --empreintes offres.json config.json (identifiants generique_suivi) ;
+#         au début du passage : python3 offres.py --consigne <offres|test> "<Valeur de « Prochain passage »>" <debut_iso>
 # Évolution : un critère = une fonction c_<nom> + une entrée dans CRITERES + un gabarit à l'étape 5 du prompt ; un gabarit de mail = une entrée dans GABARITS + une section à l'étape 4.
 import json, sys, re, unicodedata, hashlib, datetime
 from urllib.parse import urlsplit, parse_qsl
 
-VERSION_BRIQUE, MODELE_ATTENDU, MODELE_TOLERE = "1.9", "5", "4"   # modèle N-1 toléré : nouveautés du modèle N sautées, avec avertissement
+VERSION_BRIQUE, MODELE_ATTENDU, MODELES_TOLERES = "1.10", "6", ("5", "4")   # modèles antérieurs tolérés : nouveautés sautées, avec avertissement
 # v1.9 : script écrit à la fin du prompt de la tâche (amorce), jamais téléchargé ; modèle 5 = modèle 4 + ligne Paramètres « Dernier débrief » ; modèle 4 : débrief non écrit
 # v1.9 (complément du 25/10) : fusion des offres de même entreprise et de même titre dans un même passage (compteur doublons_passage, lignes FUSION)
+# v1.10 : modèle 6 = modèle 5 + ligne Paramètres « Prochain passage » (consigne du passage lancé à la main : mode sans écriture ou test de source) ; mode --consigne ; modèles 5 et 4 tolérés
 
 # ---- Table de correspondance (seul endroit où figurent les noms Notion utilisés par le script) ----
 PARAM = {"version": "Version du modèle", "prenom": "Prénom", "postes": "Postes recherchés", "proches": "Postes proches",
@@ -55,6 +57,36 @@ def jfr(d): return "/".join(reversed(str(d).split("-")))
 def propre(s): return " ".join(re.sub(r"<br\s*/?>|;", ",", str(s or "")).split())
 
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
+
+# ---- Mode --consigne (v1.10) : décide du mode du passage à partir de la Valeur de « Prochain passage » (« <date ISO> ; <demande> ») ----
+# Consigne valable : écrite entre 5 minutes après et 30 minutes avant debut_iso. Rôle offres : « MODE SANS ÉCRITURE ». Rôle test : « TEST SOURCE … ».
+# Sortie : une ligne CONSIGNE mode=normal|sans_ecriture|test effacer=oui|non motif=<texte>, puis, en mode test, une ligne DEMANDE <demande>.
+if "--consigne" in sys.argv:
+    role, val, deb = (ARGS + ["", "", ""])[:3]
+    def iso(x):
+        try: d = datetime.datetime.fromisoformat(str(x).strip().replace("Z", "+00:00"))
+        except ValueError: return None
+        return d if d.tzinfo else None
+    def sortie(mode, eff, motif, dem=""):
+        print(f"CONSIGNE mode={mode} effacer={eff} motif={motif}")
+        if dem: print("DEMANDE " + dem)
+        sys.exit(0)
+    if role not in ("offres", "test"): print("ERREURS rôle inconnu : offres ou test"); sys.exit(1)
+    t0 = iso(deb)
+    if not t0: print(f"ERREURS debut_iso illisible : « {deb} »"); sys.exit(1)
+    v = " ".join(re.sub(r"<br\s*/?>", " ", str(val or "")).split())
+    if not v: sortie("normal", "non", "aucune consigne")
+    quand, _, dem = v.partition(";"); t, dem = iso(quand), dem.strip()
+    if not t or not dem: sortie("normal", "oui", "consigne illisible")
+    age = (t0 - t).total_seconds() / 60
+    if age > 30 or age < -5: sortie("normal", "oui", f"consigne périmée ({round(age)} min)")
+    nd = norm(dem)
+    if nd == "mode sans ecriture":
+        sortie("sans_ecriture", "oui", "mode sans écriture demandé") if role == "offres" else sortie("normal", "non", "consigne destinée à la brique Offres")
+    if nd.startswith("test source "):
+        sortie("test", "oui", "test de source demandé", dem) if role == "test" else sortie("normal", "non", "consigne destinée au test de source")
+    sortie("normal", "oui", "consigne inconnue")
+
 D = json.load(open(ARGS[0], encoding="utf-8")); K = json.load(open(ARGS[1], encoding="utf-8"))
 
 # ---- Mode --empreintes (v1.8) : identifiant <préfixe>-<12 caractères de l'empreinte titre, entreprise, lieu> des offres generique_suivi ----
@@ -79,10 +111,11 @@ def par(cle):
 AUJ = str(D.get("date_iso", "")); JFR = jfr(AUJ); HM = str(D.get("debut_iso", ""))[11:16]
 
 # ---- Lecture des réglages (valeur absente ou illisible : critère inactif, avertissement) ----
-if par("version") not in (MODELE_ATTENDU, MODELE_TOLERE):
-    print(f"MODELE : « {PARAM['version']} » vaut « {par('version')} », attendu « {MODELE_ATTENDU} » ou « {MODELE_TOLERE} » (brique {VERSION_BRIQUE})"); sys.exit(2)
-ANCIEN = par("version") == MODELE_TOLERE
-if ANCIEN: avert.append(f"modèle Notion {MODELE_TOLERE} : « Dernier débrief » non écrit ; passez au modèle {MODELE_ATTENDU} (procédure « mettre à jour » du dépôt lecteur-offres)")
+if par("version") not in (MODELE_ATTENDU,) + MODELES_TOLERES:
+    print(f"MODELE : « {PARAM['version']} » vaut « {par('version')} », attendu « {MODELE_ATTENDU} », « {MODELES_TOLERES[0]} » ou « {MODELES_TOLERES[1]} » (brique {VERSION_BRIQUE})"); sys.exit(2)
+ANCIEN = par("version") == "4"
+if ANCIEN: avert.append(f"modèle Notion 4 : « Dernier débrief » non écrit ; passez au modèle {MODELE_ATTENDU} (procédure « mettre à jour » du dépôt lecteur-offres)")
+elif par("version") != MODELE_ATTENDU: avert.append(f"modèle Notion {par('version')} : pas de ligne « Prochain passage », le mode sans écriture et le test de source dépendent du message ajouté au lancement ; passez au modèle {MODELE_ATTENDU} (procédure « mettre à jour » du dépôt lecteur-offres)")
 MESSAGERIES = {"gmail": "Gmail", "outlook": "Outlook", "fastmail": "Fastmail"}
 MSG = MESSAGERIES.get(norm(par("messagerie")))
 if not MSG: err.append(f"ligne Paramètres « {PARAM['messagerie']} » vide ou inconnue (« {par('messagerie')} ») : Gmail, Outlook ou Fastmail")
@@ -356,5 +389,5 @@ else:
     print(f"RETRAITS candidats={len(CAND)} controlees={len(RET['controlees'])} retirees={len(N_RET)} erreurs={len(RET['erreurs'])}")
     print("DETECTES " + ("non_lus" if TXT_DET is None else f"nouveaux={len(NOUV)} total={len(lignes(TXT_DET))} retires={N_RETIRES}"))
     for e in NOUV[:5]: print(f'DETECTE {e["adresse"]} ; {propre(e["nom"])} ; {e["mails"]} mails ; {propre(e["objet"])[:120]}')
-    print("DEBRIEF " + (f"non_ecrit (modèle {MODELE_TOLERE})" if ANCIEN else "a_ecrire (ligne « Dernier débrief »)"))
+    print("DEBRIEF " + ("non_ecrit (modèle 4)" if ANCIEN else "a_ecrire (ligne « Dernier débrief »)"))
     print(f"NOTION offres_a_creer={len(N_OFF)} retirees_a_maj={len(N_RET)} sources_a_maj={len(N_SRC)} erreurs_sources={sum(1 for v in LECT.values() if v)} alertes_tronquees={len(NA)} offres_non_affichees={sum(x['annoncees'] - x['lues'] for x in NA)} detectes_a_ecrire={'non' if TXT_DET is None else 'oui'}")

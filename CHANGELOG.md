@@ -11,3 +11,9 @@
 - Skills (skills/) : cinq skills qui téléchargent leur procédure à la version du kit installée (ligne Paramètres « Version du kit ») et l'appliquent ; proposées par l'installeur.
 - Extension Chrome 0.6 (extension/) : code inchangé, archive identique à celle du kit 4.
 - Page d'accueil (docs/index.html, publiée par GitHub Pages) : ce que fait le kit, prérequis, prompt d'installation à coller dans Cowork, questions fréquentes.
+- Correctifs de l'essai réel (27/10/2026) :
+  - Modèle Notion 6 : ligne Paramètres « Prochain passage ». Avant de lancer un passage sans écriture ou un test de source, le lecteur et Claude y écrivent la demande ; la tâche la lit puis l'efface (valable 30 minutes). Le mode ne dépend plus du texte ajouté au lancement, qui n'arrivait pas toujours.
+  - Brique Offres 1.10 : mode `--consigne` du script ; une écriture refusée par Notion ne se contourne plus (passage en échec partiel, date du dernier passage inchangée) ; lignes du script recopiées telles quelles dans le débrief ; « opportunité » ajouté à la recherche des expéditeurs non suivis ; modèles 5 et 4 tolérés.
+  - Colonne Offres « Métier » : une option par poste recherché, créée à l'installation et ajoutée par « régler mes critères » (sans elle, Notion refusait les offres).
+  - Procédures et skills : bases Notion lues seulement par leur vue, en mode vue (le mode SQL épuise un quota de l'espace Notion) ; « ajouter une plateforme » propose de relire les alertes des 7 derniers jours ; le bilan de la mise à jour résume les nouveautés ; l'installeur ne contrôle plus le texte des formules, que le connecteur Notion ne rend pas.
+  - Lecteur 19.5 : écrit la demande de test dans « Prochain passage » avant le lancement ; modèles 6, 5 et 4 acceptés.

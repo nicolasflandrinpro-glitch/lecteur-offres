@@ -1,14 +1,12 @@
-# Brique Offres 1.9 : jeu de vérification (25/10/2026)
+# Brique Offres 1.10 : jeu de vérification (27/10/2026)
 
-Script vérifié : brique/offres.py, empreinte sha256 `15f7c496799cdfb690dca30c7f38865aa8fd9bd8ccc60de39ca88af16f82c4bc` (360 lignes).
-Version précédente : brique 1.8, empreinte `10e6acea77a5a7b6c65b0397b3b89fd368cd20b90c0e6173630ee889fd7150bd` (338 lignes, 106 contrôles).
-Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 25/10/2026 : 121/121 contrôles OK.
+Script vérifié : brique/offres.py, empreinte sha256 `8e2b72adb8fbd94cc5d0998ab1f8875a2ef038709249fd99cfd1242407227772` (393 lignes).
+Version précédente : brique 1.9, empreinte `220a8a4fcbeb08583b88d4accb1d6b4e1cff0dbbc03c8acbe916642b136b0f03` (360 lignes, 121 contrôles).
+Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 27/10/2026 : 135/135 contrôles OK.
 
-Écarts avec la 1.8 : modèle 5 attendu et modèle 4 toléré (le modèle 3 est refusé) ; en modèle 4, expéditeurs détectés et test de source restent écrits, seul le débrief n'est pas écrit (ligne « Dernier débrief » absente) ; plus de repli Gmail sans ligne Messagerie ; nouvelle ligne DEBRIEF ; avertissement qui renvoie à la procédure « mettre à jour ». Contrôles 94 à 96 et 101 réécrits pour le modèle 4, contrôles 107 à 111 ajoutés.
+Écarts avec la 1.9 : modèle 6 attendu, modèles 5 et 4 tolérés (le modèle 3 est refusé) ; en modèle 5, avertissement : pas de ligne « Prochain passage » ; nouveau mode `--consigne` qui décide du mode du passage (normal, sans écriture, test de source) à partir de la Valeur de « Prochain passage ». Jeu de base passé au modèle 6 ; contrôles 108, 109 et 111 réécrits (version 1.10, modèle 6), contrôles 122 à 135 ajoutés.
 
-Complément du 25/10 (constats du passage du 25/10) : fusion des offres de même entreprise et de même titre dans un même passage (première lue gardée, lieux regroupés « ; », compteur doublons_passage, lignes FUSION ; entreprise vide jamais fusionnée) ; offres d'une plateforme suivie en direct relayées par LinkedIn comptées en doublons entre plateformes (règle du manuel, identité vérifiée par le script). Contrôle 83 : titres rendus distincts (sinon fusionnés). Contrôles 112 à 121 ajoutés.
-
-Non couvert : téléchargement du script et écriture du débrief (comportement de l'agent), à vérifier au premier passage réel.
+Non couvert : lecture et effacement de « Prochain passage » par l'agent, à vérifier au premier passage réel.
 
 1. Poste recherché, freelance, dans la zone : OK
 2. Poste proche gardé en Métier proche : OK
@@ -116,11 +114,11 @@ Non couvert : téléchargement du script et écriture du débrief (comportement 
 104. TEST SOURCE : expéditeur introuvable, aucun mail : code 3, cause écrite : OK
 105. TEST SOURCE : expéditeur introuvable, mails sans offres : code 3, adresses vues listées : OK
 106. TEST SOURCE : expéditeur vide sans recherche : code 3, expéditeur invalide : OK
-107. 1.9 : modèle 3 refusé (code 2) : OK
-108. 1.9 : modèle 5, débrief à écrire, aucun avertissement de modèle : OK
+107. 1.10 : modèle 3 refusé (code 2) : OK
+108. 1.10 : modèle 6, débrief à écrire, aucun avertissement de modèle : OK
 109. 1.9 : avertissement du modèle 4 renvoie à la procédure « mettre à jour » : OK
 110. 1.9 : TEST SOURCE sans ligne DEBRIEF : OK
-111. 1.9 : gabarit inconnu cité avec la brique 1.9 : OK
+111. 1.10 : gabarit inconnu cité avec la brique 1.10 : OK
 112. Fusion : 4 offres Atos du même passage donnent une offre, premier identifiant gardé : OK
 113. Fusion : lieux distincts regroupés « Paris ; Les Clayes-sous-Bois » : OK
 114. Fusion : compteur doublons_passage=3 et retenues=1 : OK
@@ -131,3 +129,17 @@ Non couvert : téléchargement du script et écriture du débrief (comportement 
 119. Fusion : lieu répété ou vide non ajouté : OK
 120. Fusion : faits de la première lue gardés (groupe écarté une seule fois) : OK
 121. Offres Free-Work relayées par LinkedIn comptées en doublons entre plateformes : identité respectée : OK
+122. 1.10 : modèle 5 toléré, débrief à écrire, avertissement « Prochain passage » : OK
+123. Consigne : vide, passage normal, rien à effacer : OK
+124. Consigne : mode sans écriture récent, appliqué et effacé : OK
+125. Consigne : casse et accents ignorés : OK
+126. Consigne : plus de 30 minutes, périmée, effacée : OK
+127. Consigne : datée de plus de 5 minutes après le début, périmée : OK
+128. Consigne : test de source vu par la brique Offres, gardé pour la tâche de test : OK
+129. Consigne : test de source appliqué, effacé, demande recopiée : OK
+130. Consigne : mode sans écriture vu par la tâche de test, gardé : OK
+131. Consigne : illisible, effacée : OK
+132. Consigne : date sans fuseau, illisible : OK
+133. Consigne : demande inconnue, passage normal, effacée : OK
+134. Consigne : debut_iso illisible, erreur : OK
+135. Consigne : balise <br> tolérée : OK

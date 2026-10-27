@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-# Jeu de vérification de offres.py (brique Offres v1.9). Usage : python3 test_offres.py [chemin/vers/offres.py]
+# Jeu de vérification de offres.py (brique Offres v1.10). Usage : python3 test_offres.py [chemin/vers/offres.py]
 # Chaque cas : réglages (écarts par rapport à BASE), une offre (faits relevés), résultat attendu (critère d'écart, ou étiquettes À vérifier).
 import json, subprocess, sys, os, tempfile, copy, hashlib, unicodedata
 SCRIPT = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else "offres.py")
-BASE = {"Version du modèle": "5", "Prénom": "Camille", "Postes recherchés": "Product Owner; Business Analyst", "Postes proches": "Proxy PO",
+BASE = {"Version du modèle": "6", "Prénom": "Camille", "Postes recherchés": "Product Owner; Business Analyst", "Postes proches": "Proxy PO",
         "Types de collaboration acceptés": "Freelance; Portage salarial", "Temps de travail": "plein ou partiel",
         "Modes de travail acceptés": "présentiel; hybride; télétravail total", "Jours de télétravail minimum": "",
         "Zone de présentiel": "Île-de-France",
@@ -214,11 +214,11 @@ verdict("TEST SOURCE : expéditeur introuvable, mails sans offres : code 3, adre
 r, out = run(BASE, [], test_mode(src={**TS, "adresse": ""}, offres_uniques=0))
 verdict("TEST SOURCE : expéditeur vide sans recherche : code 3, expéditeur invalide", r.returncode == 3 and "invalide" in out["dernier_test"], str(out))
 # ---- Nouveaux en 1.9 ----
-r, _ = run({**BASE, "Version du modèle": "3"}, [off(500001)]); verdict("1.9 : modèle 3 refusé (code 2)", r.returncode == 2 and "attendu « 5 » ou « 4 »" in r.stdout, r.stdout)
-r, _ = run(BASE, [off(500002)]); verdict("1.9 : modèle 5, débrief à écrire, aucun avertissement de modèle", r.returncode == 0 and "DEBRIEF a_ecrire" in r.stdout and "AVERTISSEMENT modèle" not in r.stdout and "OK brique 1.9, modèle 5" in r.stdout, r.stdout)
+r, _ = run({**BASE, "Version du modèle": "3"}, [off(500001)]); verdict("1.10 : modèle 3 refusé (code 2)", r.returncode == 2 and "attendu « 6 », « 5 » ou « 4 »" in r.stdout, r.stdout)
+r, _ = run(BASE, [off(500002)]); verdict("1.10 : modèle 6, débrief à écrire, aucun avertissement de modèle", r.returncode == 0 and "DEBRIEF a_ecrire" in r.stdout and "AVERTISSEMENT modèle" not in r.stdout and "OK brique 1.10, modèle 6" in r.stdout, r.stdout)
 r, _ = run(M4, [off(500003)]); verdict("1.9 : avertissement du modèle 4 renvoie à la procédure « mettre à jour »", r.returncode == 0 and "procédure « mettre à jour »" in r.stdout and "page des mises à jour" not in r.stdout, r.stdout)
 r, _ = run(BASE, [OH], test_mode()); verdict("1.9 : TEST SOURCE sans ligne DEBRIEF", r.returncode == 0 and "DEBRIEF" not in r.stdout, r.stdout)
-r, out = run(BASE, [], test_mode(src={**TS, "gabarit": "indeed_xyz"}, offres_uniques=0)); verdict("1.9 : gabarit inconnu cité avec la brique 1.9", r.returncode == 3 and "inconnu de la brique 1.9" in out["dernier_test"], r.stdout)
+r, out = run(BASE, [], test_mode(src={**TS, "gabarit": "indeed_xyz"}, offres_uniques=0)); verdict("1.10 : gabarit inconnu cité avec la brique 1.10", r.returncode == 3 and "inconnu de la brique 1.10" in out["dernier_test"], r.stdout)
 # ---- Complément 1.9 du 25/10 : fusion dans un même passage, offres relayées comptées en doublons entre plateformes ----
 AT = dict(titre="Senior Product Manager - Open Platforms & Firmware H/F", org="Atos")
 FA = [off(4473151322, lieu="Paris", **AT), off(4473147558, lieu="Les Clayes-sous-Bois", **AT), off(4473154238, lieu="Paris", **AT), off(4473139800, lieu="Les Clayes-sous-Bois", **AT)]
@@ -241,4 +241,23 @@ verdict("Fusion : faits de la première lue gardés (groupe écarté une seule f
 def relais(D, K): D["offres_uniques"], D["doublons_plateformes"] = 10, 4
 r, out = run(BASE, [off(520000 + k, titre=f"PO {k}") for k in range(6)], relais)
 verdict("Offres Free-Work relayées par LinkedIn comptées en doublons entre plateformes : identité respectée", r.returncode == 0 and "uniques=10 doublons=0 deja_vues=0 doublons_plateformes=4 doublons_passage=0 " in r.stdout, r.stdout)
+# ---- Nouveaux en 1.10 : modèle 6, modèle 5 toléré, consigne « Prochain passage » ----
+M5 = {**BASE, "Version du modèle": "5"}
+r, _ = run(M5, [off(530001)]); verdict("1.10 : modèle 5 toléré, débrief à écrire, avertissement « Prochain passage »", r.returncode == 0 and "DEBRIEF a_ecrire" in r.stdout and "AVERTISSEMENT modèle Notion 5 : pas de ligne « Prochain passage »" in r.stdout, r.stdout)
+def consigne(role, val, deb="2026-10-27T11:00:00+01:00"):
+    r = subprocess.run([sys.executable, SCRIPT, "--consigne", role, val, deb], capture_output=True, text=True); return r.returncode, r.stdout
+T = "2026-10-27T09:50:00+00:00"; DEM = "TEST SOURCE S09 GABARIT generique PLATEFORME Malt PRÉFIXE mlt DOMAINE malt.fr EXPÉDITEUR -"
+c, o = consigne("offres", ""); verdict("Consigne : vide, passage normal, rien à effacer", c == 0 and o.strip() == "CONSIGNE mode=normal effacer=non motif=aucune consigne", o)
+c, o = consigne("offres", f"{T} ; MODE SANS ÉCRITURE"); verdict("Consigne : mode sans écriture récent, appliqué et effacé", c == 0 and "mode=sans_ecriture effacer=oui" in o, o)
+c, o = consigne("offres", f"{T} ; mode sans ecriture"); verdict("Consigne : casse et accents ignorés", c == 0 and "mode=sans_ecriture" in o, o)
+c, o = consigne("offres", f"2026-10-27T08:00:00+00:00 ; MODE SANS ÉCRITURE"); verdict("Consigne : plus de 30 minutes, périmée, effacée", c == 0 and "mode=normal effacer=oui motif=consigne périmée (120 min)" in o, o)
+c, o = consigne("offres", f"2026-10-27T10:20:00+00:00 ; MODE SANS ÉCRITURE"); verdict("Consigne : datée de plus de 5 minutes après le début, périmée", c == 0 and "mode=normal effacer=oui" in o, o)
+c, o = consigne("offres", f"{T} ; {DEM}"); verdict("Consigne : test de source vu par la brique Offres, gardé pour la tâche de test", c == 0 and "mode=normal effacer=non" in o and "DEMANDE" not in o, o)
+c, o = consigne("test", f"{T} ; {DEM}"); verdict("Consigne : test de source appliqué, effacé, demande recopiée", c == 0 and "mode=test effacer=oui" in o and o.strip().endswith("DEMANDE " + DEM), o)
+c, o = consigne("test", f"{T} ; MODE SANS ÉCRITURE"); verdict("Consigne : mode sans écriture vu par la tâche de test, gardé", c == 0 and "mode=normal effacer=non" in o, o)
+c, o = consigne("offres", "n'importe quoi"); verdict("Consigne : illisible, effacée", c == 0 and "mode=normal effacer=oui motif=consigne illisible" in o, o)
+c, o = consigne("offres", "2026-10-27T09:50:00 ; MODE SANS ÉCRITURE"); verdict("Consigne : date sans fuseau, illisible", c == 0 and "consigne illisible" in o, o)
+c, o = consigne("offres", f"{T} ; ARRÊTE TOUT"); verdict("Consigne : demande inconnue, passage normal, effacée", c == 0 and "mode=normal effacer=oui motif=consigne inconnue" in o, o)
+c, o = consigne("offres", f"{T} ; MODE SANS ÉCRITURE", "hier"); verdict("Consigne : debut_iso illisible, erreur", c == 1 and "ERREURS" in o, o)
+c, o = consigne("offres", f"{T}<br> ; MODE SANS ÉCRITURE"); verdict("Consigne : balise <br> tolérée", c == 0 and "mode=sans_ecriture" in o, o)
 print(f"\n{nb - ko}/{nb} contrôles OK"); sys.exit(1 if ko else 0)

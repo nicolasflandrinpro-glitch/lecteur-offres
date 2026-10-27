@@ -2,6 +2,7 @@
 // Usage : node lecteur/tests/tests-jsdom-v19.js (lecteur/lecteur.html = page de l'artefact sans la ligne d'enveloppe)
 // 24/10/2026 : seul changement pour la 19.2, le contrôle du pied de page (v19.2, modèle 4).
 // 25/10/2026 : seul changement pour la 19.4, le contrôle du pied de page (v19.4, modèles 5 et 4) et le chemin du lecteur.
+// 27/10/2026 : seul changement pour la 19.5, le contrôle du pied de page (v19.5, modèles 6, 5 et 4).
 const fs = require("fs");
 const { JSDOM } = require("jsdom");
 const html = fs.readFileSync(__dirname + "/../lecteur.html", "utf8");
@@ -94,7 +95,7 @@ function choisir(sel, v){ sel.value = v; sel.dispatchEvent(new w.Event("change")
   $("next").dispatchEvent(new w.MouseEvent("click")); await wait(20);
   check("méta : repli sur Contrat (v1.4)", /· Freelance ·/.test($("rmeta").textContent), $("rmeta").textContent);
   $("back").click(); await wait(20);
-  check("pied de page : version et modèle", /^Lecteur v19\.4 \(modèles 5 et 4, Notion en modèle 2 : mise à jour à appliquer\)\./.test($("foot").textContent), $("foot").textContent);
+  check("pied de page : version et modèle", /^Lecteur v19\.5 \(modèles 6, 5 et 4, Notion en modèle 2 : mise à jour à appliquer\)\./.test($("foot").textContent), $("foot").textContent);
 
   // ---- v18 : réglages ----
   $("reglBtn").click(); await wait(20);
