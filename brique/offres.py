@@ -9,7 +9,7 @@ from urllib.parse import urlsplit, parse_qsl
 VERSION_BRIQUE, MODELE_ATTENDU, MODELES_TOLERES = "1.10", "6", ("5", "4")   # modèles antérieurs tolérés : nouveautés sautées, avec avertissement
 # v1.9 : script écrit à la fin du prompt de la tâche (amorce), jamais téléchargé ; modèle 5 = modèle 4 + ligne Paramètres « Dernier débrief » ; modèle 4 : débrief non écrit
 # v1.9 (complément du 25/10) : fusion des offres de même entreprise et de même titre dans un même passage (compteur doublons_passage, lignes FUSION)
-# v1.10 : modèle 6 = modèle 5 + ligne Paramètres « Prochain passage » (consigne du passage lancé à la main : mode sans écriture ou test de source) ; mode --consigne ; modèles 5 et 4 tolérés
+# v1.10 : échappements Markdown de la lecture en mode vue retirés des valeurs de Paramètres et de la consigne ; modèle 6 = modèle 5 + ligne Paramètres « Prochain passage » (consigne du passage lancé à la main : mode sans écriture ou test de source) ; mode --consigne ; modèles 5 et 4 tolérés
 
 # ---- Table de correspondance (seul endroit où figurent les noms Notion utilisés par le script) ----
 PARAM = {"version": "Version du modèle", "prenom": "Prénom", "postes": "Postes recherchés", "proches": "Postes proches",
@@ -55,6 +55,7 @@ def lien_service(lien):
 def empreinte(o): return hashlib.sha256("|".join(norm(o.get(k)) for k in ("titre", "org", "lieu")).encode("utf-8")).hexdigest()[:12]
 def jfr(d): return "/".join(reversed(str(d).split("-")))
 def propre(s): return " ".join(re.sub(r"<br\s*/?>|;", ",", str(s or "")).split())
+def desechappe(s): return re.sub(r"\\([^\w\s])", r"\1", str(s or ""))   # v1.10 : la lecture Notion en mode vue échappe la ponctuation (« 20:15\:04 »)
 
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 
@@ -74,7 +75,7 @@ if "--consigne" in sys.argv:
     if role not in ("offres", "test"): print("ERREURS rôle inconnu : offres ou test"); sys.exit(1)
     t0 = iso(deb)
     if not t0: print(f"ERREURS debut_iso illisible : « {deb} »"); sys.exit(1)
-    v = " ".join(re.sub(r"<br\s*/?>", " ", str(val or "")).split())
+    v = " ".join(re.sub(r"<br\s*/?>", " ", desechappe(val)).split())
     if not v: sortie("normal", "non", "aucune consigne")
     quand, _, dem = v.partition(";"); t, dem = iso(quand), dem.strip()
     if not t or not dem: sortie("normal", "oui", "consigne illisible")
@@ -102,7 +103,7 @@ if "--empreintes" in sys.argv:
 
 err, errc, avert, avert_src = [], [], [], []
 TEST = bool(K.get("test"))
-RAW = {norm(k): v for k, v in K.get("parametres", {}).items()}
+RAW = {norm(k): desechappe(v) for k, v in K.get("parametres", {}).items()}
 def par(cle):
     p = norm(PARAM[cle])
     for k, v in RAW.items():

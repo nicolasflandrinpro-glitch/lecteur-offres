@@ -260,4 +260,7 @@ c, o = consigne("offres", "2026-10-27T09:50:00 ; MODE SANS ÉCRITURE"); verdict(
 c, o = consigne("offres", f"{T} ; ARRÊTE TOUT"); verdict("Consigne : demande inconnue, passage normal, effacée", c == 0 and "mode=normal effacer=oui motif=consigne inconnue" in o, o)
 c, o = consigne("offres", f"{T} ; MODE SANS ÉCRITURE", "hier"); verdict("Consigne : debut_iso illisible, erreur", c == 1 and "ERREURS" in o, o)
 c, o = consigne("offres", f"{T}<br> ; MODE SANS ÉCRITURE"); verdict("Consigne : balise <br> tolérée", c == 0 and "mode=sans_ecriture" in o, o)
+c, o = consigne("offres", "2026-10-27T09\\:50\\:00+00\\:00 ; MODE SANS ÉCRITURE"); verdict("Consigne : deux-points échappés par la lecture en mode vue, acceptée", c == 0 and "mode=sans_ecriture effacer=oui" in o, o)
+c, o = consigne("test", f"2026-10-27T09\\:50\\:00+00\\:00 ; TEST SOURCE S09 GABARIT generique PLATEFORME Malt PRÉFIXE mlt DOMAINE malt\\.fr EXPÉDITEUR -"); verdict("Consigne : demande de test échappée, recopiée sans échappement", c == 0 and o.strip().endswith("DEMANDE " + DEM), o)
+r, out = run({**BASE, "Postes recherchés": "Product Owner\\; Business Analyst"}, [off(540001)]); verdict("Paramètres : séparateur échappé « \\; » retiré, poste reconnu", r.returncode == 0 and len(out["offres_a_creer"]) == 1, r.stdout)
 print(f"\n{nb - ko}/{nb} contrôles OK"); sys.exit(1 if ko else 0)

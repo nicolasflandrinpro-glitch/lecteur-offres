@@ -10,7 +10,7 @@ Tu alimentes la base Offres d'un freelance à partir de ses alertes emploi reçu
 
 CONFIGURATION = <adresse de la page Notion de configuration>
 MANUEL = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.0/brique/manuel.md
-EMPREINTE MANUEL = 3e2a57c5e2995dee89d40f9713ba0d4643f91a5bb0b8cd41cbd6748c81fb4846
+EMPREINTE MANUEL = 731fce0488e67fc6e54f793d6d5032e686ae06a1d6786325fbc6d6614ce7f94c
 
 Règles permanentes. Elles priment sur le manuel ; en cas de conflit, applique-les et signale l'écart dans ta réponse.
 - Tu n'envoies aucun mail. Tu ne supprimes, n'archives, ne transfères ni ne modifies aucun mail ni aucun fichier Drive.

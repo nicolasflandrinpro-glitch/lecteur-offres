@@ -1,6 +1,6 @@
 # Journal des versions du kit lecteur d'offres
 
-## 5.0 (en préparation)
+## 5.0 (27/10/2026)
 
 - Contenu commun publié sur ce dépôt GitHub, en version figée par tag ; Notion ne garde que la configuration de chaque utilisateur.
 - Modèle Notion 5 : modèle 4 plus les lignes Paramètres « Dernier débrief » et « Version du kit ». Créé par l'installeur à partir de schema/configuration.json (plus de modèle à dupliquer).
@@ -17,3 +17,4 @@
   - Colonne Offres « Métier » : une option par poste recherché, créée à l'installation et ajoutée par « régler mes critères » (sans elle, Notion refusait les offres).
   - Procédures et skills : bases Notion lues seulement par leur vue, en mode vue (le mode SQL épuise un quota de l'espace Notion) ; « ajouter une plateforme » propose de relire les alertes des 7 derniers jours ; le bilan de la mise à jour résume les nouveautés ; l'installeur ne contrôle plus le texte des formules, que le connecteur Notion ne rend pas.
   - Lecteur 19.5 : écrit la demande de test dans « Prochain passage » avant le lancement ; modèles 6, 5 et 4 acceptés.
+  - Brique 1.10 : échappements de la lecture Notion en mode vue (« 20:15\:04 ») retirés des valeurs de Paramètres et de la consigne (constat de la mise à jour de renOdit vers v5.0-essai4).

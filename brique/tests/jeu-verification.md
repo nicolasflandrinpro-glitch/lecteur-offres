@@ -1,10 +1,10 @@
 # Brique Offres 1.10 : jeu de vérification (27/10/2026)
 
-Script vérifié : brique/offres.py, empreinte sha256 `8e2b72adb8fbd94cc5d0998ab1f8875a2ef038709249fd99cfd1242407227772` (393 lignes).
+Script vérifié : brique/offres.py, empreinte sha256 `03735d43e8d8d70bbd161117eb213ca50a714d611f1cb2a632810efff718137b` (394 lignes).
 Version précédente : brique 1.9, empreinte `220a8a4fcbeb08583b88d4accb1d6b4e1cff0dbbc03c8acbe916642b136b0f03` (360 lignes, 121 contrôles).
-Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 27/10/2026 : 135/135 contrôles OK.
+Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 27/10/2026 : 138/138 contrôles OK.
 
-Écarts avec la 1.9 : modèle 6 attendu, modèles 5 et 4 tolérés (le modèle 3 est refusé) ; en modèle 5, avertissement : pas de ligne « Prochain passage » ; nouveau mode `--consigne` qui décide du mode du passage (normal, sans écriture, test de source) à partir de la Valeur de « Prochain passage ». Jeu de base passé au modèle 6 ; contrôles 108, 109 et 111 réécrits (version 1.10, modèle 6), contrôles 122 à 135 ajoutés.
+Écarts avec la 1.9 : modèle 6 attendu, modèles 5 et 4 tolérés (le modèle 3 est refusé) ; en modèle 5, avertissement : pas de ligne « Prochain passage » ; nouveau mode `--consigne` qui décide du mode du passage (normal, sans écriture, test de source) à partir de la Valeur de « Prochain passage ». Jeu de base passé au modèle 6 ; contrôles 108, 109 et 111 réécrits (version 1.10, modèle 6), contrôles 122 à 135 ajoutés ; contrôles 136 à 138 (échappements de la lecture en mode vue) ajoutés après la mise à jour de renOdit vers v5.0-essai4.
 
 Non couvert : lecture et effacement de « Prochain passage » par l'agent, à vérifier au premier passage réel.
 
@@ -143,3 +143,6 @@ Non couvert : lecture et effacement de « Prochain passage » par l'agent, à v�
 133. Consigne : demande inconnue, passage normal, effacée : OK
 134. Consigne : debut_iso illisible, erreur : OK
 135. Consigne : balise <br> tolérée : OK
+136. Consigne : deux-points échappés par la lecture en mode vue, acceptée : OK
+137. Consigne : demande de test échappée, recopiée sans échappement : OK
+138. Paramètres : séparateur échappé « \; » retiré, poste reconnu : OK

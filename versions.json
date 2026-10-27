@@ -1,7 +1,7 @@
 {
   "kit": "5.0",
   "tag": "v5.0",
-  "etat": "en préparation : tag non encore créé",
+  "etat": "publié le 27/10/2026",
   "brique": "1.10",
   "modele_notion": "6",
   "modele_notion_tolere": "5, 4",
@@ -12,13 +12,13 @@
   "extension_archive": "extension/lecteur-offres-extension-0.6.zip",
   "fichiers": {
     "schema/configuration.json": "bef34f6fafb8c6ab69f32a9bc87faaceb197d4981d88ad13cfa3af2c940f674e",
-    "brique/manuel.md": "3e2a57c5e2995dee89d40f9713ba0d4643f91a5bb0b8cd41cbd6748c81fb4846",
+    "brique/manuel.md": "731fce0488e67fc6e54f793d6d5032e686ae06a1d6786325fbc6d6614ce7f94c",
     "brique/test-source.md": "2029d11ebc144f88e21a1055b82b9ce51cb80eb235c4dfb6bf0c8eec994d6a23",
-    "brique/offres.py": "8e2b72adb8fbd94cc5d0998ab1f8875a2ef038709249fd99cfd1242407227772",
-    "brique/amorce-offres.md": "8fd4de1a3a93940e64beb3cad6a9da94270e0494633681539b1c9b2b289c06c2",
-    "brique/amorce-test-source.md": "589994e088fae75e89b7377b57efa089fb9fbedd550f4be9aaf69ec2d3b1aa8d",
-    "brique/tests/test_offres.py": "49571bf19d61f2eba1467985dd2d3d017e6179d2540cf54661e320c0df72baf3",
-    "brique/tests/jeu-verification.md": "87685bdbedf62635c7a2838aeac74da1c6b0b84c56584957afe3490342bd4c03",
+    "brique/offres.py": "03735d43e8d8d70bbd161117eb213ca50a714d611f1cb2a632810efff718137b",
+    "brique/amorce-offres.md": "04ee9f628fa397dbdefc8fd958216e5df71af1f79cc6cec929d4c97bc4a2a7a5",
+    "brique/amorce-test-source.md": "670a8a427dd7cc9e4d34702e85bfb9a1c839fc33431e4f8b425f808b9239a9a2",
+    "brique/tests/test_offres.py": "d876cb24109adb054705a50f140c726a688fa5d069851fe24860ff960110c1c1",
+    "brique/tests/jeu-verification.md": "8ab373c8d8d3b191b2a1f48e7b245a6dc6a0d4909ce2af3d879775f6fef1d14a",
     "lecteur/lecteur.html": "818bd4093192060cfda6c23596b60ae42d237a4936834924f9d32dbb32760506",
     "lecteur/tests/tests-config-v19.js": "a5ba5e11404c2ce13021e15fa723b65e30f13940411052a422f44c764d857ae9",
     "lecteur/tests/tests-jsdom-v19.js": "215019a3fd02c0fdac8533736efd3ce989dc8697dae709a7a94b8abcb29807d8",
@@ -48,6 +48,6 @@
     "extension/popup.html": "2d414f1ea41aaaa0d70f3c771919c3d5dc3dee78d61d6d2ff01e26979386843d",
     "extension/popup.js": "5ea60440253c5f6d0aaea8c4712f73f02131912f2a0419a582fcc89ae181fedc",
     "extension/reglages.js": "a48308bd4679093a73ed410d3a5690533d2ee98d0a5211e6593302a577791c91",
-    "docs/index.html": "7ca556538612f3fc0b833743c1df725c7ca2c338fca4bb867d2056398768b8e0"
+    "docs/index.html": "3e3c14fd44c62ec764899460214d98ac971f2bccde3afbde1ca4b875d8135b38"
   }
 }
