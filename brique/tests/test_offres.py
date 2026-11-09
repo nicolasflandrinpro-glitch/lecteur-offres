@@ -316,4 +316,19 @@ CAS2 = [("2j/semaine dans le titre : hybride, hors zone écartée", off(700001, 
 r, out = run(BASE, [CAS2[0][1]]); verdict("1.12 : " + CAS2[0][0], r.returncode == 0 and not out["offres_a_creer"] and any("hors de la zone" in e for e in out["ecartees"]), str(out and out["ecartees"]))
 r, out = run({**BASE, "Modes de travail acceptés": "présentiel"}, [CAS2[1][1]]); verdict("1.12 : " + CAS2[1][0], r.returncode == 0 and not out["offres_a_creer"] and any("mode hybride" in e for e in out["ecartees"]), str(out and out["ecartees"]))
 r, out = run({**BASE, "Modes de travail acceptés": "présentiel"}, [CAS2[2][1]]); verdict("1.12 : " + CAS2[2][0], r.returncode == 0 and len(out["offres_a_creer"]) == 1, str(out and out["ecartees"]))
+# ---- v1.12 (lot 1) : script allégé, code du test de source dans offres_test_source.py ----
+import shutil
+def run_seul(test):
+    d = tempfile.mkdtemp(); shutil.copy(SCRIPT, f"{d}/offres.py")
+    D = {"date_iso": "2026-10-23", "debut_iso": "2026-10-23T08:45:12+02:00", "mails_lus": 1, "offres_uniques": 1, "offres": [off(800001)], "lectures_mail": [{"id": "S01", "erreur": ""}], "non_affichees": []}
+    K = {"parametres": dict(BASE), "ids_offres": [], "sources": copy.deepcopy(SOURCES[:1]), "plateformes_offres": ["LinkedIn"]}
+    if test: K["test"] = True
+    json.dump(D, open(f"{d}/o.json", "w")); json.dump(K, open(f"{d}/c.json", "w"))
+    return subprocess.run([sys.executable, "offres.py", "o.json", "c.json"], cwd=d, capture_output=True, text=True)
+r = run_seul(False); verdict("lot 1 : passage normal sans offres_test_source.py", r.returncode == 0 and "RECOPIE debrief.txt" in r.stdout, r.stdout[-300:] + r.stderr[-300:])
+r = run_seul(True); verdict("lot 1 : mode test sans offres_test_source.py : arrêt, fichier nommé", r.returncode == 1 and "offres_test_source.py absent" in r.stdout, r.stdout[-300:] + r.stderr[-300:])
+CM = [l for l in open(SCRIPT, encoding="utf-8") if l.lstrip().startswith("#")]
+verdict("lot 1 : offres.py sans commentaires d'historique (en-tête de 6 lignes seulement)", len(CM) <= 6 and not any(l.lstrip().startswith("# v1.") for l in CM), f"{len(CM)} lignes de commentaire")
+T2 = os.path.join(os.path.dirname(SCRIPT), "offres_test_source.py")
+verdict("lot 1 : offres_test_source.py présent à côté du script", os.path.isfile(T2), T2)
 print(f"\n{nb - ko}/{nb} contrôles OK"); sys.exit(1 if ko else 0)

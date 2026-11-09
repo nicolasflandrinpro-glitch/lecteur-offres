@@ -19,7 +19,7 @@ TAG est la version du kit donnée par le message qui t'a demandé l'installation
 BASE = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/TAG/
 
 1. Télécharge `versions.json` : `curl -fsSL -o versions.json BASE/versions.json`. Lis-le en entier. Son champ « tag » doit valoir TAG ; sinon, arrête-toi.
-2. Pour chaque fichier dont tu as besoin (schema/configuration.json, brique/amorce-offres.md, brique/amorce-test-source.md, brique/offres.py, lecteur/lecteur.html, skills/…/SKILL.md, extension) : `curl -fsSL -o <nom> BASE/<chemin>`, puis `sha256sum <nom>`. Le résultat doit être l'empreinte du fichier dans `versions.json`. Empreinte différente ou téléchargement en échec : recommence une fois, puis arrête-toi.
+2. Pour chaque fichier dont tu as besoin (schema/configuration.json, brique/amorce-offres.md, brique/amorce-test-source.md, brique/offres.py, brique/offres_test_source.py, lecteur/lecteur.html, skills/…/SKILL.md, extension) : `curl -fsSL -o <nom> BASE/<chemin>`, puis `sha256sum <nom>`. Le résultat doit être l'empreinte du fichier dans `versions.json`. Empreinte différente ou téléchargement en échec : recommence une fois, puis arrête-toi.
 
 ## 1. Connecteurs
 
@@ -60,7 +60,7 @@ BASE = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offre
 
 ## 5. Tâches planifiées
 
-1. Prépare les deux prompts : dans `brique/amorce-offres.md` et `brique/amorce-test-source.md`, garde tout ce qui suit la ligne `---`, remplace la valeur de CONFIGURATION par l'adresse de l'étape 2 et la ligne `<contenu exact de brique/offres.py>` par le contenu de `brique/offres.py` (téléchargé et contrôlé par son empreinte). Ne change rien d'autre.
+1. Prépare les deux prompts : dans `brique/amorce-offres.md` et `brique/amorce-test-source.md`, garde tout ce qui suit la ligne `---`, remplace la valeur de CONFIGURATION par l'adresse de l'étape 2, la ligne `<contenu exact de brique/offres.py>` par le contenu de `brique/offres.py` et, dans le prompt du test de source, la ligne `<contenu exact de brique/offres_test_source.py>` par le contenu de `brique/offres_test_source.py` (fichiers téléchargés et contrôlés par leur empreinte). Ne change rien d'autre.
 2. Demande le fuseau horaire de l'utilisateur s'il n'est pas connu (carte, Europe/Paris recommandé).
 3. Carte « À quelle heure la brique Offres doit-elle passer chaque jour ? » avec « 8 h 45 (recommandé) », « 7 h 45 », « 9 h 45 » (l'utilisateur peut aussi donner une autre heure). Crée la tâche « Brique Offres » : chaque jour à cette heure (`CRON_TZ=<fuseau> <minute> <heure> * * *`, par exemple `CRON_TZ=Europe/Paris 45 8 * * *`), prompt de la brique. Écris l'heure au format HH:MM (par exemple 08:45) dans la Valeur de « Heure de passage », puis relis-la. Crée la tâche « Brique Offres : test de source », sans planning, prompt du test de source.
 4. Carte « Faire tourner les deux tâches sur <modele_taches> (recommandé) ? » avec « Oui » et « Garder le modèle par défaut ». Sur « Oui » seulement, fixe le modèle de chaque tâche sur la valeur « modele_taches » de `versions.json` (update_trigger, champ model). Relis ensuite les deux tâches (list_triggers) : nom, planning, modèle. Modèle refusé : dis-le, garde le modèle par défaut et note-le pour le bilan.
@@ -82,8 +82,8 @@ BASE = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offre
 
 ## 8. Skills
 
-1. Télécharge et contrôle les cinq fichiers `skills/<nom>/SKILL.md` : lecteur-offres-installer, lecteur-offres-mettre-a-jour, lecteur-offres-ajouter-plateforme, lecteur-offres-regler-criteres, lecteur-offres-lire-debrief.
-2. Propose-les avec l'outil propose_skills, sans rien y modifier : un premier appel avec les trois premières, un second avec les deux dernières. L'utilisateur les enregistre depuis les cartes.
+1. Télécharge et contrôle les six fichiers `skills/<nom>/SKILL.md` : lecteur-offres-installer, lecteur-offres-mettre-a-jour, lecteur-offres-ajouter-plateforme, lecteur-offres-regler-criteres, lecteur-offres-lire-debrief, lecteur-offres-installer-extension.
+2. Propose-les avec l'outil propose_skills, sans rien y modifier : un premier appel avec les trois premières, un second avec les trois dernières. L'utilisateur les enregistre depuis les cartes.
 3. Outil indisponible : dis-le, donne l'adresse de chaque fichier SKILL.md (BASE/skills/<nom>/SKILL.md) et passe à la suite.
 
 ## 9. Extension Chrome (facultative)

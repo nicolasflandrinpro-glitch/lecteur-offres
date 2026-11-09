@@ -1,8 +1,10 @@
 # Brique Offres 1.12 : jeu de vérification (09/11/2026)
 
-Script vérifié : brique/offres.py, empreinte sha256 `9067099ef324188cdb19d2832011ca42dfb5ccde48d6f67d6dcafada5775dcdd` (443 lignes).
+Script vérifié : brique/offres.py, empreinte sha256 `3d56079374fdf32d93ead74157f8d07ac7affc7ebee1de4d588f2a28ae536ebb` (391 lignes).
 Version précédente : brique 1.11, empreinte `38adcd91777d45477b2bf22ea3b39dcb484d47454442bd990f416c04ea76c7a5` (420 lignes, 148 contrôles).
-Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 09/11/2026 : 155/155 contrôles OK.
+Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 09/11/2026 : 159/159 contrôles OK.
+
+Écarts du lot 1 (09/11/2026) : commentaires retirés du script, code du test de source dans offres_test_source.py (empreinte `c426db844a8138fc2dab579ffe338a5205a7e0b977f22e1abc2ee903ba3d1abb`), 4 contrôles ajoutés.
 
 Écarts avec la 1.11 : modèle 8 attendu (ligne Paramètres « Version disponible », écrite par l'agent à l'étape 7, point 8, d'après le versions.json de main), modèles 7, 6, 5 et 4 tolérés (modèle 7 sans avertissement) ; mode `--candidatures` (filtre de l'étape 6 bis appliqué par le script, sortie candidatures.out, ligne CANDIDATURES_FILTRE) ; expéditeurs détectés filtrés aussi par domaine des sources et par mot-clé d'objet ; « N j/semaine » dans le titre ou le lieu : mode hybride ; « 1 mail » au singulier dans « Expéditeurs détectés ».
 
@@ -169,3 +171,7 @@ Non couvert (1.12) : lecture de versions.json et écriture de « Version disponi
 153. 1.12 : 2j/semaine dans le titre : hybride, hors zone écartée : OK
 154. 1.12 : 3 jours / sem dans le lieu : hybride, présentiel seul accepté écarté : OK
 155. 1.12 : sans mention : mode inconnu, gardé : OK
+156. lot 1 : passage normal sans offres_test_source.py : OK
+157. lot 1 : mode test sans offres_test_source.py : arrêt, fichier nommé : OK
+158. lot 1 : offres.py sans commentaires d'historique (en-tête de 6 lignes seulement) : OK
+159. lot 1 : offres_test_source.py présent à côté du script : OK

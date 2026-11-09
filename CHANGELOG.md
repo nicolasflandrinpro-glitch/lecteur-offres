@@ -1,5 +1,13 @@
 # Journal des versions du kit lecteur d'offres
 
+## 5.2 (09/11/2026)
+
+- Modèle Notion 8 : lignes Paramètres « Tâche Brique Offres » (identifiant de la tâche, écrit à l'installation) et « Version disponible » (dernière version publiée, écrite par la brique). Migration depuis le modèle 7 par « mets à jour le lecteur d'offres ».
+- Lecteur 20 : bandeau d'actions en haut du lecteur (dernier et prochain passage, version du kit, « Lancer un passage maintenant », « Mettre à jour » quand une version est disponible, dernier débrief) ; réglages refondus (sections, textes d'aide qui distinguent ce que Claude interprète de ce que le script écarte, heure de passage modifiable, plateformes désactivées ou réactivées à l'enregistrement, « Proposer des postes proches », aide pour l'adresse d'une recherche LinkedIn, bouton « Enregistrer » fixé, confirmation à la fermeture) ; rubrique « Que demander à Claude » retirée ; carte des nouveaux expéditeurs corrigée.
+- Brique Offres 1.12 : « Version disponible » écrite à chaque passage ; exclusions des recherches de réponses et d'expéditeurs appliquées par le script, quelle que soit la messagerie ; « 2j/semaine » lu comme hybride ; lien d'alerte tronquée sans paramètres de suivi ; débrief tronqué sans couper les lignes du script ; adresses des pages Notion copiées, jamais retapées.
+- Brique Offres 1.12, contexte allégé : script sans commentaires d'historique (offres.py passe de 38 à 31 Ko) ; code du test de source dans un second script, offres_test_source.py, écrit seulement par la tâche de test ; manuel lu étape par étape au moment de l'appliquer, et à l'étape 4 seulement les gabarits des sources actives.
+- Procédures et skills : procédure et skill « installer l'extension Chrome » pour une installation existante ; l'installeur écrit « Tâche Brique Offres » et donne au lecteur le droit de changer l'heure de la tâche.
+
 ## 5.1 (27/10/2026)
 
 - Modèle Notion 7 : ligne Paramètres « Heure de passage » (heure du passage quotidien, choisie à l'installation, changée par Claude) ; ligne « Offres non affichées (alertes LinkedIn) » renommée « Offres non affichées (alertes) » ; statut de candidature « En pause », exclu de « À relancer » ; source « Collective (alertes quotidiennes) » (inactive par défaut). Migration depuis le modèle 6 par « mets à jour le lecteur d'offres ».

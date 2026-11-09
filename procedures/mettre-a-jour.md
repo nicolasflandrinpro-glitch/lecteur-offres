@@ -29,7 +29,7 @@ Procédure pour Claude (Cowork). Suis-la seulement quand l'utilisateur te le dem
 1. Configuration Notion : si la « Version du modèle » est inférieure à « modele_notion » de `versions.json`, applique les migrations de la section 3.
 2. Tâches : toujours, parce que les amorces contiennent le tag.
 3. Lecteur : si l'empreinte de `lecteur/lecteur.html` a changé (ou ANCIEN = kit 4).
-4. Skills : celles dont l'empreinte de `skills/<nom>/SKILL.md` a changé (ou toutes si ANCIEN = kit 4).
+4. Skills : celles dont l'empreinte de `skills/<nom>/SKILL.md` a changé ou qui n'existaient pas dans la version ANCIEN (ou toutes si ANCIEN = kit 4).
 5. Extension : si l'empreinte de l'archive a changé et que l'utilisateur a l'extension (carte « Utilises-tu l'extension Chrome ? »).
 6. Version du kit : écrite en dernier.
 

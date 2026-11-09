@@ -1,21 +1,14 @@
-#!/usr/bin/env python3
 # Brique Offres v1.12 générique : lit offres.json (faits relevés) et config.json (Paramètres et Sources recopiés), applique les critères, écrit notion.json.
 # Usage : python3 offres.py offres.json config.json ; avant le dédoublonnage : python3 offres.py --empreintes offres.json config.json (identifiants generique_suivi) ;
 #         au début du passage : python3 offres.py --consigne <offres|test> "<Valeur de « Prochain passage »>" <debut_iso>
-#         étape 6 bis : python3 offres.py --candidatures mails_candidatures.json config.json (sortie : candidatures.out, v1.12)
-# Sorties : notion.json (écritures), debrief.txt (débrief à recopier, v1.11), consigne.out (ligne CONSIGNE, v1.11)
-# Évolution : un critère = une fonction c_<nom> + une entrée dans CRITERES + un gabarit à l'étape 5 du prompt ; un gabarit de mail = une entrée dans GABARITS + une section à l'étape 4.
+#         étape 6 bis : python3 offres.py --candidatures mails_candidatures.json config.json (sortie : candidatures.out)
+# Sorties : notion.json (écritures), debrief.txt (débrief à recopier), consigne.out (ligne CONSIGNE). Test de source : code dans offres_test_source.py.
+# Historique : CHANGELOG.md du dépôt.
 import json, sys, re, unicodedata, hashlib, datetime
 from urllib.parse import urlsplit, parse_qsl
 
-VERSION_BRIQUE, MODELE_ATTENDU, MODELES_TOLERES = "1.12", "8", ("7", "6", "5", "4")   # modèles antérieurs tolérés : nouveautés sautées, avec avertissement
-# v1.9 : script écrit à la fin du prompt de la tâche (amorce), jamais téléchargé ; modèle 5 = modèle 4 + ligne Paramètres « Dernier débrief » ; modèle 4 : débrief non écrit
-# v1.9 (complément du 25/10) : fusion des offres de même entreprise et de même titre dans un même passage (compteur doublons_passage, lignes FUSION)
-# v1.11 : débrief écrit par le script (debrief.txt et champ debrief de notion.json), parade contre la compaction du contexte ; gabarit collective_alerte (alertes quotidiennes Collective : aucune offre, signalement dans non_affichees) ; non_affichees.source facultatif (plateforme ajoutée à la ligne) ; modèle 7 = modèle 6 + ligne Paramètres « Heure de passage », ligne « Offres non affichées (alertes) » renommée, statut de candidature « En pause » ; modèles 6, 5 et 4 tolérés
-# v1.12 : modèle 8 (ligne « Version disponible », écrite par la tâche) ; mode --candidatures (filtre de l'étape 6 bis appliqué par le script, quelle que soit la messagerie) ; expéditeurs détectés filtrés aussi par domaine des sources et par mot-clé d'objet ; « N j/semaine » dans le titre ou le lieu : mode hybride
-# v1.10 : échappements Markdown de la lecture en mode vue retirés des valeurs de Paramètres et de la consigne ; modèle 6 = modèle 5 + ligne Paramètres « Prochain passage » (consigne du passage lancé à la main : mode sans écriture ou test de source) ; mode --consigne ; modèles 5 et 4 tolérés
+VERSION_BRIQUE, MODELE_ATTENDU, MODELES_TOLERES = "1.12", "8", ("7", "6", "5", "4")
 
-# ---- Table de correspondance (seul endroit où figurent les noms Notion utilisés par le script) ----
 PARAM = {"version": "Version du modèle", "prenom": "Prénom", "postes": "Postes recherchés", "proches": "Postes proches",
          "contrats": "Types de collaboration acceptés", "temps": "Temps de travail", "modes": "Modes de travail acceptés",
          "jours": "Jours de télétravail minimum", "zone": "Zone de présentiel", "plancher": "TJM plancher",
@@ -23,19 +16,17 @@ PARAM = {"version": "Version du modèle", "prenom": "Prénom", "postes": "Postes
 PROP = {"titre": "Titre", "id": "Identifiant", "org": "Entreprise", "plateforme": "Plateforme", "lien": "Lien", "lieu": "Lieu",
         "contrat": "Contrat", "verif": "À vérifier", "date": "Date de détection", "com": "Commentaire", "metier": "Métier",
         "proche": "Métier proche", "tjm": "TJM", "erreur": "Dernière erreur", "retiree": "Retirée le"}
-# ---- Catalogue des gabarits de mail (v1.8) : préfixe vide permis, entreprise facultative, poste « inconnu » permis, lien reconstruit, lien de suivi ----
 GABARITS = {"linkedin_digest":        {"sans_prefixe": True,  "org_facultative": False, "inconnu": True,  "suivi": False, "lien": lambda i, s: f"https://www.linkedin.com/jobs/view/{i}/"},
             "collective_opportunite": {"sans_prefixe": False, "org_facultative": False, "inconnu": False, "suivi": False, "lien": None},
             "collective_alerte":      {"sans_prefixe": True,  "org_facultative": False, "inconnu": False, "suivi": False, "lien": None, "annonce": True},
             "freework_alerte":        {"sans_prefixe": False, "org_facultative": True,  "inconnu": False, "suivi": False, "lien": None},
             "generique":              {"sans_prefixe": False, "org_facultative": True,  "inconnu": False, "suivi": False, "lien": None},
             "generique_suivi":        {"sans_prefixe": False, "org_facultative": True,  "inconnu": False, "suivi": True,  "lien": None}}
-TYPES = ["Freelance", "Portage salarial", "CDI", "CDD"]          # types de collaboration paramétrables
-EXCLUS = ["Intérim", "Alternance", "Stage"]                     # toujours écartés
+TYPES = ["Freelance", "Portage salarial", "CDI", "CDD"]
+EXCLUS = ["Intérim", "Alternance", "Stage"]
 MODES = ["présentiel", "hybride", "télétravail total"]
 VERIF = {"Poste": "intitulé illisible", "Contrat": "type de collaboration non indiqué", "Lieu": "lieu non indiqué ou hors zone sans mode de travail",
          "Temps de travail": "temps de travail non indiqué", "Télétravail": "télétravail non précisé"}
-# ---- Liens de service (v1.8, règle 1) : mot entier dans le domaine et les segments du chemin, premier mot seulement du dernier segment (slug de l'offre) ----
 MOTS_SERVICE = ("unsubscribe", "desabonn", "disable", "notification", "alert", "account", "login", "help", "aide", "search", "recherche")
 SUFFIXES = ("", "s", "e", "es", "er", "ement", "ements", "ing", "ings")
 PARAMS_SERVICE = ("signature", "token")
@@ -60,17 +51,14 @@ def lien_service(lien):
 def empreinte(o): return hashlib.sha256("|".join(norm(o.get(k)) for k in ("titre", "org", "lieu")).encode("utf-8")).hexdigest()[:12]
 def jfr(d): return "/".join(reversed(str(d).split("-")))
 def propre(s): return " ".join(re.sub(r"<br\s*/?>|;", ",", str(s or "")).split())
-def dom_racine(a):   # v1.12 : domaine d'une adresse ramené à sa racine (jobs.hiway.fr et hiway.fr donnent hiway.fr)
+def dom_racine(a):
     p = str(a or "").strip().lower().rsplit("@", 1)[-1].split(".")
     return ".".join(p[-3:] if len(p) > 2 and p[-2] in ("co", "com", "org", "net", "gouv") else p[-2:])
-MOTS_OBJET = re.compile(r"\b(offres?|opportunites?|missions?|jobs?|emploi|alerte)\b")   # v1.12 : mots de la recherche de l'étape 6 ter
-def desechappe(s): return re.sub(r"\\([^\w\s])", r"\1", str(s or ""))   # v1.10 : la lecture Notion en mode vue échappe la ponctuation (« 20:15\:04 »)
+MOTS_OBJET = re.compile(r"\b(offres?|opportunites?|missions?|jobs?|emploi|alerte)\b")
+def desechappe(s): return re.sub(r"\\([^\w\s])", r"\1", str(s or ""))
 
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 
-# ---- Mode --consigne (v1.10) : décide du mode du passage à partir de la Valeur de « Prochain passage » (« <date ISO> ; <demande> ») ----
-# Consigne valable : écrite entre 5 minutes après et 30 minutes avant debut_iso. Rôle offres : « MODE SANS ÉCRITURE ». Rôle test : « TEST SOURCE … ».
-# Sortie : une ligne CONSIGNE mode=normal|sans_ecriture|test effacer=oui|non motif=<texte>, puis, en mode test, une ligne DEMANDE <demande>.
 if "--consigne" in sys.argv:
     role, val, deb = (ARGS + ["", "", ""])[:3]
     def iso(x):
@@ -100,7 +88,6 @@ if "--consigne" in sys.argv:
 
 D = json.load(open(ARGS[0], encoding="utf-8")); K = json.load(open(ARGS[1], encoding="utf-8"))
 
-# ---- Mode --empreintes (v1.8) : identifiant <préfixe>-<12 caractères de l'empreinte titre, entreprise, lieu> des offres generique_suivi ----
 if "--empreintes" in sys.argv:
     G_SRC = {str(s.get("id") or ""): s for s in K.get("sources", [])}; CONNUS = set(str(i) for i in K.get("ids_offres", [])); n = 0
     for o in D.get("offres", []):
@@ -111,9 +98,6 @@ if "--empreintes" in sys.argv:
     json.dump(D, open(ARGS[0], "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(f"EMPREINTES calculees={n}"); sys.exit(0)
 
-# ---- Mode --candidatures (v1.12) : filtre de l'étape 6 bis appliqué par le script, quelle que soit la messagerie ----
-# Entrée : liste [{"id", "de", "objet"}] (ou {"mails": [...]}) ; gardé : domaine d'une source active, adresse qui n'est pas celle d'une source
-# (sauf gabarit collective_alerte, qui envoie aussi les réponses), objet sans « nouvelles offres ». Sortie : candidatures.out, un identifiant par ligne.
 if "--candidatures" in sys.argv:
     srcs = [x for x in K.get("sources", []) if "@" in str(x.get("adresse") or "")]
     doms = {dom_racine(x.get("adresse")) for x in srcs}
@@ -125,6 +109,9 @@ if "--candidatures" in sys.argv:
 
 err, errc, avert, avert_src = [], [], [], []
 TEST = bool(K.get("test"))
+if TEST:
+    try: import offres_test_source as T
+    except ImportError: print("ERREURS mode test : offres_test_source.py absent (écrit à l'étape 0 bis de test-source.md)"); sys.exit(1)
 RAW = {norm(k): desechappe(v) for k, v in K.get("parametres", {}).items()}
 def par(cle):
     p = norm(PARAM[cle])
@@ -133,7 +120,6 @@ def par(cle):
     return ""
 AUJ = str(D.get("date_iso", "")); JFR = jfr(AUJ); HM = str(D.get("debut_iso", ""))[11:16]
 
-# ---- Lecture des réglages (valeur absente ou illisible : critère inactif, avertissement) ----
 if par("version") not in (MODELE_ATTENDU,) + MODELES_TOLERES:
     print(f"MODELE : « {PARAM['version']} » vaut « {par('version')} », attendu « {MODELE_ATTENDU} » (tolérés : {', '.join(MODELES_TOLERES)}) (brique {VERSION_BRIQUE})"); sys.exit(2)
 ANCIEN = par("version") == "4"
@@ -167,25 +153,16 @@ if not R["zone"]: avert.append("zone de présentiel vide : aucune offre écarté
 p = par("plancher"); R["plancher"] = int(p) if re.fullmatch(r"\d{2,5}", p) else None
 if p and R["plancher"] is None: avert.append(f"TJM plancher illisible (« {p} ») : critère inactif")
 
-# ---- Sources mail actives : plateforme, préfixe d'identifiant et domaine des offres lus dans Sources (mode test : la seule source testée) ----
 SRC, OPTS = {}, set(K.get("plateformes_offres") or [])
 if not OPTS: err.append("plateformes_offres absent de config.json (valeurs de la colonne Offres « Plateforme »)")
 for s in K.get("sources", []):
     i, g = str(s.get("id") or ""), str(s.get("gabarit") or "").strip()
     pl, px, dm = str(s.get("plateforme") or "").strip(), str(s.get("prefixe") or "").strip().lower(), domaine(s.get("domaine"))
     s.update(id=i, gabarit=g, plateforme=pl, prefixe=px, domaine=dm, lisible=g in GABARITS and (pl in OPTS or TEST)); SRC[i] = s
-    if TEST:
-        if not re.fullmatch(r"[A-Za-z0-9_-]{1,20}", i): errc.append(f"identifiant de source « {i} » invalide (1 à 20 lettres, chiffres, tirets)")
-        a, rech = str(s.get("adresse") or "").strip(), s.get("recherche_expediteur")   # v1.8 (24/10) : « EXPÉDITEUR - » permis, expéditeur retrouvé par la tâche
-        if not a and isinstance(rech, dict):
-            nv = len([x for x in rech.get("vus") or [] if str(x).strip()])
-            errc.append(f"expéditeur introuvable : aucun mail portant des offres parmi {nv} expéditeurs vus sur 7 jours" if nv else f"expéditeur introuvable : aucun mail de « {dm or '-'} » ou « {pl or '-'} » sur 7 jours")
-        elif "@" not in a: errc.append(f"expéditeur « {a} » invalide (adresse attendue)")
-        if g not in GABARITS: errc.append(f"gabarit « {g} » inconnu de la brique {VERSION_BRIQUE} (connus : {', '.join(GABARITS)})"); continue
-        if pl and pl not in OPTS: avert_src.append(f"plateforme « {pl} » absente des valeurs de la colonne Offres « {PROP['plateforme']} » : à ajouter avant d'activer la source")
-    if g not in GABARITS: continue                     # gabarit inconnu : source non lue (étape 4), erreur de lecture attendue
+    if TEST and not T.source(globals(), s, i, g, pl, dm): continue
+    if g not in GABARITS: continue
     if not pl: errc.append(f"source {i} : colonne Plateforme vide"); continue
-    if GABARITS[g].get("annonce"): continue            # v1.11 : gabarit d'annonce (aucune offre) : ni préfixe ni domaine exigés
+    if GABARITS[g].get("annonce"): continue
     if px and not re.fullmatch(r"[a-z]{2,6}", px): errc.append(f"source {i} : préfixe d'identifiant « {px} » invalide (2 à 6 lettres minuscules)")
     if not px and not GABARITS[g]["sans_prefixe"]: errc.append(f"source {i} : préfixe d'identifiant obligatoire pour le gabarit {g}")
     if not dm and GABARITS[g]["lien"] is None and not GABARITS[g]["suivi"]: errc.append(f"source {i} : domaine des offres obligatoire pour le gabarit {g}")
@@ -199,14 +176,9 @@ def lignes_exp(s):
     a, r = str(s.get("adresse") or "").strip().lower(), s.get("recherche_expediteur")
     vus = [] if not isinstance(r, dict) else [x for x in dict.fromkeys(str(v).strip().lower() for v in r.get("vus") or []) if x and x != a]
     return ([f"expéditeur ; {a} ; {'retrouvé' if isinstance(r, dict) else 'fourni'}"] if "@" in a else []) + (["autres expéditeurs vus ; " + ", ".join(vus[:5])] if vus else [])
-if TEST and errc:
-    s0 = next(iter(SRC.values()), {})
-    txt = "<br>".join([f"{JFR} {HM} ; {s0.get('id', '?')} ; {s0.get('gabarit', '?')} ; erreur"] + lignes_exp(s0) + ["erreur : " + propre(e) for e in errc])[:LIM_TEXTE]
-    json.dump({"dernier_test": txt}, open("notion.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    print("TEST_ERREUR :"); [print(" -", e) for e in errc]; sys.exit(3)
+if TEST and errc: T.erreur(globals())
 err += errc
 
-# ---- Critères : chaque fonction renvoie ("ok" | "ecarte", motif) et ajoute les étiquettes À vérifier dans av ----
 def c_poste(o, av):
     p = norm(o.get("poste"))
     if p == "inconnu": av.append("Poste"); return "ok", ""
@@ -249,10 +221,9 @@ def c_tjm(o, av):
     return "ok", ""
 CRITERES = [("poste", c_poste), ("contrat", c_contrat), ("temps", c_temps), ("localisation", c_localisation), ("tjm", c_tjm)]
 
-# ---- Contrôles de forme des faits relevés ----
 ENUM = {"temps": ("plein", "partiel"), "mode": tuple(MODES), "zone": ("dans", "hors")}
 O = D.get("offres", [])
-for o in O:   # v1.12 : « 2j/semaine », « 3 jours / sem » dans le titre ou le lieu : mode hybride si la session ne l'a pas relevé
+for o in O:
     if o.get("mode") is None and re.search(r"\d\s*j(ours?)?\s*/\s*sem(aine)?\b", norm(f'{o.get("titre") or ""} {o.get("lieu") or ""}')): o["mode"] = "hybride"
 CONNUS = set(str(i) for i in K.get("ids_offres", []))
 if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", AUJ): err.append("date_iso invalide (AAAA-MM-JJ)")
@@ -299,7 +270,6 @@ for s in SRC.values():
     if s["id"] not in LECT: err.append("source mail active sans compte rendu de lecture : " + s["id"])
     elif s["gabarit"] not in GABARITS and not LECT[s["id"]]: err.append(f"source {s['id']} : gabarit « {s['gabarit']} » inconnu, erreur de lecture attendue")
     elif s["plateforme"] and s["gabarit"] in GABARITS and not s["lisible"] and not LECT[s["id"]]: err.append(f"source {s['id']} : plateforme « {s['plateforme']} » absente des valeurs de la colonne Offres « {PROP['plateforme']} », erreur de lecture attendue")
-# ---- Offres retirées (v1.6) : contrôlées à l'étape 5 ter, seulement parmi les candidats listés dans config.json ----
 CAND = {str(c.get("id")): c for c in ([] if TEST else K.get("candidats_retrait", []))}
 RET = D.get("retrait", {"controlees": [], "retirees": [], "erreurs": []})
 for k in ("controlees", "retirees", "erreurs"):
@@ -310,7 +280,6 @@ if not err:
     for i in RET["retirees"]:
         if str(i) not in [str(x) for x in RET["controlees"]]: err.append("retrait : offre retirée non contrôlée : " + str(i))
     if len(RET["controlees"]) + len(RET["erreurs"]) > 40: err.append("retrait : 40 offres contrôlées au plus par passage")
-# ---- Expéditeurs détectés (v1.8, étape 6 ter) : liste cumulée, sans les sources ni les expéditeurs ignorés, 30 jours, 20 au plus ----
 DET = D.get("expediteurs_detectes")
 if DET is not None and not TEST:
     if not isinstance(DET, list) or any(not (isinstance(x, dict) and "@" in str(x.get("adresse") or "") and isinstance(x.get("mails"), int) and x["mails"] >= 1
@@ -318,7 +287,6 @@ if DET is not None and not TEST:
         err.append("expediteurs_detectes : liste d'objets {adresse, nom, mails (entier ≥ 1), objet, dernier (AAAA-MM-JJ)} attendue")
 if err: print("ERREURS :"); [print(" -", e) for e in err]; sys.exit(1)
 
-# ---- Fusion dans un même passage (v1.9) : même entreprise et même titre normalisés ; entreprise vide : jamais fusionnées ; première lue gardée avec ses faits ----
 VUS, O2, FUS = {}, [], []
 for o in O:
     k = (norm(o.get("org")), norm(o.get("titre")))
@@ -336,7 +304,6 @@ for o in O:
         o["lieu"] = " ; ".join(o["_lieux"])
         FUS.append(f'FUSION {propre(o["titre"])} ; {propre(o.get("org"))} ; {", ".join([str(o["id"])] + o["_fus"])}')
 
-# ---- Décision ----
 CPT = {c: 0 for c, _ in CRITERES}; N_OFF, ECART, ECART_T = [], [], []
 for o in O:
     av, verdict = [], None
@@ -375,7 +342,7 @@ if DET is not None and not TEST:
     DOMS = {dom_racine(s.get("adresse")) for s in SRC.values() if "@" in str(s.get("adresse") or "")}
     for x in DET:
         a = str(x["adresse"]).strip().lower(); e = det.get(a)
-        if not e and not MOTS_OBJET.search(norm(x.get("objet"))): continue   # v1.12 : objet sans mot de la recherche (messagerie sans filtre d'objet)
+        if not e and not MOTS_OBJET.search(norm(x.get("objet"))): continue
         if e: e.update(mails=e["mails"] + x["mails"], dernier=max(e["dernier"], x["dernier"]), nom=x.get("nom") or e["nom"], objet=x.get("objet") or e["objet"])
         else: det[a] = {"adresse": a, "nom": x.get("nom") or "", "mails": x["mails"], "dernier": x["dernier"], "objet": x.get("objet") or ""}
     IGN = [re.sub(r"^@", "", norm(e).replace(" ", "")) for e in re.split(r"[;,\n]|<br\s*/?>", par("ignores")) if e.strip()]
@@ -387,21 +354,7 @@ if DET is not None and not TEST:
     NOUV = [e for e in garde if e["adresse"] not in anciens]; N_RETIRES = len(anciens) - (len(garde) - len(NOUV))
 
 TXT_TEST = None
-if TEST:
-    s0 = next(iter(SRC.values()))
-    res = "concluant" if N_OFF or ECART else "aucune offre"
-    L = [f"{JFR} {HM} ; {s0['id']} ; {s0['gabarit']} ; {res}" + (" ; suggestion : generique_suivi" if not O and s0["gabarit"] == "generique" and D.get("suivi_detecte") else ""),
-         f"mails={D.get('mails_lus', 0)} offres={len(O)} gardées={len(N_OFF)} écartées={len(ECART)} déjà vues={D.get('deja_vues', 0)} liens écartés={len(LE)}"]
-    L += lignes_exp(s0) + ["attention : " + propre(a) for a in avert_src]
-    L += [f'offre ; {propre(x["properties"][PROP["titre"]])} ; {propre(x["properties"][PROP["org"]])} ; gardée ; {x["properties"][PROP["lien"]]}' for x in N_OFF]
-    L += [f'offre ; {propre(o["titre"])} ; {propre(o.get("org"))} ; écartée : {propre(mo)} ; {o["lien"]}' for o, mo in ECART_T]
-    L += [f'lien écarté ; {propre(x["motif"])} ; {x["lien"]}' for x in LE]
-    TXT_TEST = ""
-    for k, l in enumerate(L):
-        cand = (TXT_TEST + "<br>" if TXT_TEST else "") + l
-        if len(cand) > LIM_TEXTE - 20: TXT_TEST += f"<br>… ({len(L) - k} lignes tronquées)"; break
-        TXT_TEST = cand
-    json.dump({"dernier_test": TXT_TEST, "ecartees": ECART}, open("notion.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+if TEST: TXT_TEST = T.resultat(globals())
 else:
     json.dump({"offres_a_creer": N_OFF, "sources_a_maj": N_SRC, "non_affichees": PARAM_NA, "ecartees": ECART, "retirees_a_maj": N_RET, "expediteurs_detectes": TXT_DET},
               open("notion.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
@@ -416,28 +369,23 @@ out(f'COMPTEURS mails={D.get("mails_lus", 0)} uniques={D["offres_uniques"]} doub
       + " ".join(f"ecartees_{c}={v}" for c, v in CPT.items()) + f" retenues={len(N_OFF)}")
 for l in FUS: out(l)
 out("A_VERIFIER " + " ".join(f"{a.replace(' ', '_')}={sum(a in x['properties'][PROP['verif']] for x in N_OFF)}" for a in VERIF))
-if TEST:
-    out(f"TEST liens_ecartes={len(LE)} longueur_resultat={len(TXT_TEST)}")
-    out("NOTION test : seule écriture, la Valeur de « Dernier test de source » (dernier_test de notion.json)")
+if TEST: T.sortie(globals())
 else:
     out(f"RETRAITS candidats={len(CAND)} controlees={len(RET['controlees'])} retirees={len(N_RET)} erreurs={len(RET['erreurs'])}")
     out("DETECTES " + ("non_lus" if TXT_DET is None else f"nouveaux={len(NOUV)} total={len(lignes(TXT_DET))} retires={N_RETIRES}"))
     for e in NOUV[:5]: out(f'DETECTE {e["adresse"]} ; {propre(e["nom"])} ; {e["mails"]} mails ; {propre(e["objet"])[:120]}')
     out("DEBRIEF " + ("non_ecrit (modèle 4)" if ANCIEN else "a_ecrire (ligne « Dernier débrief »)"))
     out(f"NOTION offres_a_creer={len(N_OFF)} retirees_a_maj={len(N_RET)} sources_a_maj={len(N_SRC)} erreurs_sources={sum(1 for v in LECT.values() if v)} alertes_tronquees={len(NA)} offres_non_affichees={sum(x['annoncees'] - x['lues'] for x in NA)} detectes_a_ecrire={'non' if TXT_DET is None else 'oui'}")
-# ---- Débrief écrit par le script (v1.11) : debrief.txt et champ debrief de notion.json, recopiés par la tâche sans rédaction ----
 CONS = ""
 try: CONS = open("consigne.out", encoding="utf-8").read().strip()
 except OSError: CONS = "CONSIGNE non lancée (consigne.out absent)"
-if TEST:
-    s0 = next(iter(SRC.values()))
-    DEB = [f"Brique Offres {VERSION_BRIQUE} ({par('prenom')}) : test de la source {s0['id']} ({s0['gabarit']})", CONS] + [l for l in OUT if l.split(" ")[0] in ("SOURCES", "COMPTEURS", "TEST", "AVERTISSEMENT")] + lignes(TXT_TEST)
+if TEST: DEB = T.debrief(globals())
 else:
     DEB = [f"Brique Offres {VERSION_BRIQUE} ({par('prenom')}) : <RÉSULTAT>", CONS] + [l for l in OUT if not l.startswith("FUSION ") and not l.startswith("AVERTISSEMENT ")]
     DEB += [f'ALERTE {propre(x["alerte"])} ; {x["annoncees"]} annoncées, {x["lues"]} lues{pl_na(x)}' for x in NA]
     DEB += [l for l in OUT if l.startswith(("AVERTISSEMENT ", "FUSION "))]
 open("debrief.txt", "w", encoding="utf-8").write("\n".join(DEB) + "\n")
-if not TEST:   # la tâche de test n'écrit jamais « Dernier débrief »
+if not TEST:
     NJ = json.load(open("notion.json", encoding="utf-8")); NJ["debrief"] = f"{JFR} {HM}<br>" + "<br>".join(DEB)
     json.dump(NJ, open("notion.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print(f"RECOPIE debrief.txt ({len(DEB)} lignes) : réponse finale recopiée de ce fichier (étape 8)")
