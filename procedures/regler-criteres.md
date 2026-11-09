@@ -14,7 +14,7 @@ Procédure pour Claude (Cowork). Suis-la seulement quand l'utilisateur te le dem
 
 1. Trouve la page de configuration (titre par défaut « Lecteur d'offres : configuration » ; plusieurs pages ou aucune : carte). Lis Paramètres, en ignorant les lignes dont « À supprimer » est coché.
 2. Montre les critères avec leur valeur actuelle : Prénom, Postes recherchés, Postes proches, Zone de présentiel, Types de collaboration acceptés, Temps de travail, Modes de travail acceptés, Jours de télétravail minimum, TJM plancher (euros par jour), Messagerie, Plateformes suivies en direct, Expéditeurs ignorés, Heure de passage.
-3. Les lignes « Version du modèle », « Version du kit », « Tâche Test de source », « Dernière exécution Offres », « Dernier débrief », « Offres non affichées (alertes) », « Expéditeurs détectés », « Dernier test de source » et « Prochain passage » ne sont jamais modifiées par cette procédure, sauf « Prochain passage » au point 2 de l'étape 3. « Heure de passage » ne se modifie qu'à l'étape 4.
+3. Les lignes « Version du modèle », « Version du kit », « Tâche Test de source », « Tâche Brique Offres », « Version disponible », « Dernière exécution Offres », « Dernier débrief », « Offres non affichées (alertes) », « Expéditeurs détectés », « Dernier test de source » et « Prochain passage » ne sont jamais modifiées par cette procédure, sauf « Prochain passage » au point 2 de l'étape 3. « Heure de passage » ne se modifie qu'à l'étape 4.
 
 ## 2. Changements
 

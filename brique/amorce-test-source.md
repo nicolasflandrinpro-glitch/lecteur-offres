@@ -1,5 +1,5 @@
 <!-- Hors prompt.
-Amorce de la tâche « Brique Offres : test de source » (sans planning, déclenchée par le lecteur, modèle des tâches donné par versions.json), kit version 5.1, brique 1.11.
+Amorce de la tâche « Brique Offres : test de source » (sans planning, déclenchée par le lecteur, modèle des tâches donné par versions.json), kit version 5.2, brique 1.12.
 L'installeur recopie dans la tâche tout ce qui suit la ligne ---, en remplaçant seulement la valeur de CONFIGURATION par l'adresse de la page de configuration de l'utilisateur, et la ligne <contenu exact de brique/offres.py> par le contenu de brique/offres.py.
 -->
 
@@ -8,10 +8,10 @@ L'installeur recopie dans la tâche tout ce qui suit la ligne ---, en remplaçan
 Tu testes une source d'alertes emploi avant son activation, à la demande du lecteur d'offres d'un freelance. Tu travailles sans interlocuteur : ne pose aucune question.
 
 CONFIGURATION = <adresse de la page Notion de configuration>
-MANUEL = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.1/brique/manuel.md
-EMPREINTE MANUEL = fc0e690ef5de0e1cbc27543dfaacbfffee95b4aa7bf41cf2c6d27904f96589c9
-TEST = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.1/brique/test-source.md
-EMPREINTE TEST = 05f8f40cd2a6b6bdea333121ce7b18123568dddfee40155bf09312f817d1403c
+MANUEL = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.2/brique/manuel.md
+EMPREINTE MANUEL = 69145bf63554e2991ba64bea3763137dbf888bdd26b009d01e0f8d906f591b8a
+TEST = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.2/brique/test-source.md
+EMPREINTE TEST = 00877466c22d3d199566fdaa1ded3cfbd85939eb86e8c8eca1f2d14a99e876b5
 
 Règles permanentes. Elles priment sur le manuel ; en cas de conflit, applique-les et signale l'écart dans ta réponse.
 - Tu n'envoies aucun mail. Tu ne supprimes, n'archives, ne transfères ni ne modifies aucun mail ni aucun fichier Drive.

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-# Jeu de vérification de offres.py (brique Offres v1.11). Usage : python3 test_offres.py [chemin/vers/offres.py]
+# Jeu de vérification de offres.py (brique Offres v1.12). Usage : python3 test_offres.py [chemin/vers/offres.py]
 # Chaque cas : réglages (écarts par rapport à BASE), une offre (faits relevés), résultat attendu (critère d'écart, ou étiquettes À vérifier).
 import json, subprocess, sys, os, tempfile, copy, hashlib, unicodedata
 SCRIPT = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else "offres.py")
-BASE = {"Version du modèle": "7", "Prénom": "Camille", "Postes recherchés": "Product Owner; Business Analyst", "Postes proches": "Proxy PO",
+BASE = {"Version du modèle": "8", "Prénom": "Camille", "Postes recherchés": "Product Owner; Business Analyst", "Postes proches": "Proxy PO",
         "Types de collaboration acceptés": "Freelance; Portage salarial", "Temps de travail": "plein ou partiel",
         "Modes de travail acceptés": "présentiel; hybride; télétravail total", "Jours de télétravail minimum": "",
         "Zone de présentiel": "Île-de-France",
@@ -164,6 +164,7 @@ r, out = run(BASE, [], test_mode(offres_uniques=0, suivi_detecte=True))
 verdict("TEST SOURCE : aucune offre et liens de suivi, suggestion generique_suivi", r.returncode == 0 and out["dernier_test"].split("<br>")[0].endswith("aucune offre ; suggestion : generique_suivi"), str(out))
 r, out = run(BASE, [], test_mode(src={**TS, "prefixe": "H1"}, offres_uniques=0))
 verdict("TEST SOURCE : préfixe invalide, code 3 et résultat « erreur » écrit", r.returncode == 3 and " ; erreur" in out["dernier_test"] and "préfixe" in out["dernier_test"], r.stdout)
+r, _ = run({**BASE, "Version du modèle": "7"}, [off(500003)]); verdict("1.12 : modèle 7 toléré sans avertissement", r.returncode == 0 and "AVERTISSEMENT modèle" not in r.stdout and "OK brique 1.12, modèle 7" in r.stdout, r.stdout)
 r, out = run(BASE, [], test_mode(src={**TS, "gabarit": "indeed_xyz"}, offres_uniques=0))
 verdict("TEST SOURCE : gabarit inconnu, code 3", r.returncode == 3 and "inconnu" in out["dernier_test"], r.stdout)
 r, out = run(BASE, [], test_mode(src={**TS, "adresse": "hiway"}, offres_uniques=0))
@@ -214,11 +215,11 @@ verdict("TEST SOURCE : expéditeur introuvable, mails sans offres : code 3, adre
 r, out = run(BASE, [], test_mode(src={**TS, "adresse": ""}, offres_uniques=0))
 verdict("TEST SOURCE : expéditeur vide sans recherche : code 3, expéditeur invalide", r.returncode == 3 and "invalide" in out["dernier_test"], str(out))
 # ---- Nouveaux en 1.9 ----
-r, _ = run({**BASE, "Version du modèle": "3"}, [off(500001)]); verdict("1.11 : modèle 3 refusé (code 2)", r.returncode == 2 and "attendu « 7 » (tolérés : 6, 5, 4)" in r.stdout, r.stdout)
-r, _ = run(BASE, [off(500002)]); verdict("1.11 : modèle 7, débrief à écrire, aucun avertissement de modèle", r.returncode == 0 and "DEBRIEF a_ecrire" in r.stdout and "AVERTISSEMENT modèle" not in r.stdout and "OK brique 1.11, modèle 7" in r.stdout, r.stdout)
+r, _ = run({**BASE, "Version du modèle": "3"}, [off(500001)]); verdict("1.11 : modèle 3 refusé (code 2)", r.returncode == 2 and "attendu « 8 » (tolérés : 7, 6, 5, 4)" in r.stdout, r.stdout)
+r, _ = run(BASE, [off(500002)]); verdict("1.12 : modèle 8, débrief à écrire, aucun avertissement de modèle", r.returncode == 0 and "DEBRIEF a_ecrire" in r.stdout and "AVERTISSEMENT modèle" not in r.stdout and "OK brique 1.12, modèle 8" in r.stdout, r.stdout)
 r, _ = run(M4, [off(500003)]); verdict("1.9 : avertissement du modèle 4 renvoie à la procédure « mettre à jour »", r.returncode == 0 and "procédure « mettre à jour »" in r.stdout and "page des mises à jour" not in r.stdout, r.stdout)
 r, _ = run(BASE, [OH], test_mode()); verdict("1.9 : TEST SOURCE sans ligne DEBRIEF", r.returncode == 0 and "DEBRIEF" not in r.stdout, r.stdout)
-r, out = run(BASE, [], test_mode(src={**TS, "gabarit": "indeed_xyz"}, offres_uniques=0)); verdict("1.11 : gabarit inconnu cité avec la brique 1.11", r.returncode == 3 and "inconnu de la brique 1.11" in out["dernier_test"], r.stdout)
+r, out = run(BASE, [], test_mode(src={**TS, "gabarit": "indeed_xyz"}, offres_uniques=0)); verdict("1.12 : gabarit inconnu cité avec la brique 1.12", r.returncode == 3 and "inconnu de la brique 1.12" in out["dernier_test"], r.stdout)
 # ---- Complément 1.9 du 25/10 : fusion dans un même passage, offres relayées comptées en doublons entre plateformes ----
 AT = dict(titre="Senior Product Manager - Open Platforms & Firmware H/F", org="Atos")
 FA = [off(4473151322, lieu="Paris", **AT), off(4473147558, lieu="Les Clayes-sous-Bois", **AT), off(4473154238, lieu="Paris", **AT), off(4473139800, lieu="Les Clayes-sous-Bois", **AT)]
@@ -283,7 +284,7 @@ r, out, deb = run_deb(BASE, [off(610001)], lambda D, K: D.update(non_affichees=N
 verdict("1.11 : source collective_alerte acceptée sans préfixe ni domaine, à côté de LinkedIn sans préfixe", r.returncode == 0, r.stdout)
 verdict("1.11 : ligne non_affichees Collective avec plateforme, LinkedIn inchangée", out and out["non_affichees"] == "23/10/2026 ; PO Paris ; 4 annoncées, 0 lues ; https://app.collective.work/x ; Collective<br>23/10/2026 ; PO ; 12 annoncées, 6 lues ; https://www.linkedin.com/jobs/a", out and out["non_affichees"])
 L = (deb or "").splitlines()
-verdict("1.11 : debrief.txt écrit (titre à compléter, CONSIGNE, lignes du script, alertes)", len(L) > 5 and L[0] == "Brique Offres 1.11 (Camille) : <RÉSULTAT>" and L[1].startswith("CONSIGNE mode=normal") and any(l.startswith("COMPTEURS ") for l in L) and any(l.startswith("NOTION ") for l in L) and "ALERTE PO Paris ; 4 annoncées, 0 lues ; Collective" in L, deb)
+verdict("1.11 : debrief.txt écrit (titre à compléter, CONSIGNE, lignes du script, alertes)", len(L) > 5 and L[0] == "Brique Offres 1.12 (Camille) : <RÉSULTAT>" and L[1].startswith("CONSIGNE mode=normal") and any(l.startswith("COMPTEURS ") for l in L) and any(l.startswith("NOTION ") for l in L) and "ALERTE PO Paris ; 4 annoncées, 0 lues ; Collective" in L, deb)
 verdict("1.11 : champ debrief de notion.json = date, heure puis debrief.txt en <br>", out and out["debrief"] == "23/10/2026 08:45<br>" + "<br>".join(L), out and out.get("debrief"))
 r, out, deb = run_deb(BASE, [off(610002)])
 verdict("1.11 : sans consigne.out, ligne CONSIGNE signalée non lancée", r.returncode == 0 and "CONSIGNE non lancée" in (deb or ""), deb)

@@ -3,6 +3,7 @@
 // 24/10/2026 : seul changement pour la 19.2, le contrôle du pied de page (v19.2, modèle 4).
 // 25/10/2026 : seul changement pour la 19.4, le contrôle du pied de page (v19.4, modèles 5 et 4) et le chemin du lecteur.
 // 27/10/2026 : 19.6 (modèle 7), pied de page seulement. Avant : seul changement pour la 19.5, le contrôle du pied de page (v19.5, modèles 6, 5 et 4).
+// 09/11/2026 : 20 (modèle 8) : pied de page, réglages v20 (bouton Enregistrer grisé sans modification, plateformes écrites à l'enregistrement, titres de section, rubrique « Que demander à Claude » retirée).
 const fs = require("fs");
 const { JSDOM } = require("jsdom");
 const html = fs.readFileSync(__dirname + "/../lecteur.html", "utf8");
@@ -95,7 +96,7 @@ function choisir(sel, v){ sel.value = v; sel.dispatchEvent(new w.Event("change")
   $("next").dispatchEvent(new w.MouseEvent("click")); await wait(20);
   check("méta : repli sur Contrat (v1.4)", /· Freelance ·/.test($("rmeta").textContent), $("rmeta").textContent);
   $("back").click(); await wait(20);
-  check("pied de page : version et modèle", /^Lecteur v19\.6 \(modèles 7, 6, 5 et 4, Notion en modèle 2 : mise à jour à appliquer\)\./.test($("foot").textContent), $("foot").textContent);
+  check("pied de page : version et modèle", /^Lecteur v20 \(modèles 8, 7, 6, 5 et 4, Notion en modèle 2 : mise à jour à appliquer\)\./.test($("foot").textContent), $("foot").textContent);
 
   // ---- v18 : réglages ----
   $("reglBtn").click(); await wait(20);
@@ -122,7 +123,7 @@ function choisir(sel, v){ sel.value = v; sel.dispatchEvent(new w.Event("change")
   $("reglSave").click(); await wait(50);
   check("au moins un mode exigé", /au moins un mode/.test($("reglMsg").textContent), $("reglMsg").textContent);
   // ---- v18.1 : une création qui échoue n'est pas relancée d'office ----
-  $("reglFermer").click(); await wait(20);
+  $("reglFermer").click(); await wait(20); $("quitSans").click(); await wait(20);
   const bc = [...$("list").querySelectorAll("button")].find(b => b.textContent === "Créer la candidature");
   bc.click(); await wait(100);
   check("création non relancée d'office après une erreur", creations.length === 1, String(creations.length));

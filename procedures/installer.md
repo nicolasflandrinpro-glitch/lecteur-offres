@@ -43,7 +43,7 @@ BASE = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offre
 
 ## 3. Critères (Paramètres)
 
-1. Pose une carte par ligne de Paramètres, dans l'ordre de la base, sauf les lignes « Version du modèle », « Version du kit », « Tâche Test de source », « Dernière exécution Offres », « Dernier débrief », « Offres non affichées (alertes) », « Expéditeurs détectés », « Dernier test de source », « Prochain passage », « Domaines autorisés pour l'enrichissement » et « Expéditeurs ignorés ». « Plateformes suivies en direct » est traitée à l'étape 4, « Heure de passage » à l'étape 5.
+1. Pose une carte par ligne de Paramètres, dans l'ordre de la base, sauf les lignes « Version du modèle », « Version du kit », « Tâche Test de source », « Tâche Brique Offres », « Version disponible », « Dernière exécution Offres », « Dernier débrief », « Offres non affichées (alertes) », « Expéditeurs détectés », « Dernier test de source », « Prochain passage », « Domaines autorisés pour l'enrichissement » et « Expéditeurs ignorés ». « Plateformes suivies en direct » est traitée à l'étape 4, « Heure de passage » à l'étape 5.
 2. Tire le texte et les choix de chaque carte de la colonne Commentaire de la ligne (format attendu, valeurs possibles, valeur par défaut). Pour une liste, propose une carte à choix multiples.
 3. Ligne facultative sans réponse : n'écris rien et dis ce que la brique fera (aucun filtre, ou valeur par défaut).
 4. Écris dans « Messagerie » la messagerie choisie à l'étape 1, point 2. Écris dans « Version du kit » la valeur TAG.
@@ -65,7 +65,7 @@ BASE = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offre
 3. Carte « À quelle heure la brique Offres doit-elle passer chaque jour ? » avec « 8 h 45 (recommandé) », « 7 h 45 », « 9 h 45 » (l'utilisateur peut aussi donner une autre heure). Crée la tâche « Brique Offres » : chaque jour à cette heure (`CRON_TZ=<fuseau> <minute> <heure> * * *`, par exemple `CRON_TZ=Europe/Paris 45 8 * * *`), prompt de la brique. Écris l'heure au format HH:MM (par exemple 08:45) dans la Valeur de « Heure de passage », puis relis-la. Crée la tâche « Brique Offres : test de source », sans planning, prompt du test de source.
 4. Carte « Faire tourner les deux tâches sur <modele_taches> (recommandé) ? » avec « Oui » et « Garder le modèle par défaut ». Sur « Oui » seulement, fixe le modèle de chaque tâche sur la valeur « modele_taches » de `versions.json` (update_trigger, champ model). Relis ensuite les deux tâches (list_triggers) : nom, planning, modèle. Modèle refusé : dis-le, garde le modèle par défaut et note-le pour le bilan.
 5. Dis à l'utilisateur quel réglage d'approbation chaque tâche a reçu. Si ses passages demandent une approbation, explique que la brique tourne sans personne et qu'il peut activer « Automatically approve » dans les réglages de la tâche, si son organisation le permet.
-6. Écris l'identifiant de la tâche de test (trig_…) dans la Valeur de « Tâche Test de source », puis relis-la.
+6. Écris l'identifiant de la tâche de test (trig_…) dans la Valeur de « Tâche Test de source » et celui de la tâche « Brique Offres » (trig_…) dans la Valeur de « Tâche Brique Offres », puis relis-les.
 
 ## 6. Passage sans écriture
 
@@ -76,7 +76,7 @@ BASE = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offre
 
 ## 7. Lecteur
 
-1. Charge la skill artifact-capabilities pour la forme exacte des capacités, puis publie `lecteur/lecteur.html` comme page d'artefact claude.ai, sans rien y modifier, avec les capacités : mcp sur le connecteur Notion (notion-query-data-sources, notion-update-page, notion-create-pages, notion-fetch, notion-search, notion-update-data-source), mcp sur le connecteur des tâches planifiées (fire_trigger), et sample ; contrat « latest ».
+1. Charge la skill artifact-capabilities pour la forme exacte des capacités, puis publie `lecteur/lecteur.html` comme page d'artefact claude.ai, sans rien y modifier, avec les capacités : mcp sur le connecteur Notion (notion-query-data-sources, notion-update-page, notion-create-pages, notion-fetch, notion-search, notion-update-data-source), mcp sur le connecteur des tâches planifiées (fire_trigger, update_trigger), et sample ; contrat « latest ».
 2. Ouvre la page pour l'utilisateur. Le lecteur cherche seul la page de configuration ; s'il ne la trouve pas, l'utilisateur colle l'adresse de l'étape 2 dans le champ « Colle le lien de ta page de configuration ». Si le lecteur demande l'accès à Notion, l'utilisateur clique sur « Autoriser ».
 3. Rappelle que chacun publie sa propre copie du lecteur : une copie partagée par quelqu'un d'autre ne peut pas appeler les connecteurs de l'utilisateur.
 

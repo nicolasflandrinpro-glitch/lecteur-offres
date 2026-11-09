@@ -1,14 +1,18 @@
-# Brique Offres 1.11 : jeu de vérification (27/10/2026)
+# Brique Offres 1.12 : jeu de vérification (09/11/2026)
 
-Script vérifié : brique/offres.py, empreinte sha256 `38adcd91777d45477b2bf22ea3b39dcb484d47454442bd990f416c04ea76c7a5` (420 lignes).
-Version précédente : brique 1.10, empreinte `03735d43e8d8d70bbd161117eb213ca50a714d611f1cb2a632810efff718137b` (394 lignes, 138 contrôles).
-Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 27/10/2026 : 148/148 contrôles OK.
+Script vérifié : brique/offres.py, empreinte sha256 `2d40295d01967ffd5a6e704648ae6efc35e79515ca02e2fc545b0c3221d5c721` (420 lignes).
+Version précédente : brique 1.11, empreinte `38adcd91777d45477b2bf22ea3b39dcb484d47454442bd990f416c04ea76c7a5` (420 lignes, 148 contrôles).
+Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 09/11/2026 : 149/149 contrôles OK.
 
-Écarts avec la 1.10 : modèle 7 attendu, modèles 6, 5 et 4 tolérés (modèle 6 sans avertissement) ; débrief écrit par le script dans `debrief.txt` et dans la valeur `debrief` de `notion.json` (parade contre la compaction du contexte) ; `consigne.out` écrit par `--consigne` ; gabarit collective_alerte (aucune offre, signalement dans `non_affichees` avec la plateforme). Jeu de base passé au modèle 7 ; contrôles de version réécrits ; contrôles 139 à 148 ajoutés.
+Écarts avec la 1.11 : modèle 8 attendu (ligne Paramètres « Version disponible », écrite par l'agent à l'étape 7, point 8, d'après le versions.json de main), modèles 7, 6, 5 et 4 tolérés (modèle 7 sans avertissement).
+
+Écarts de la 1.11 avec la 1.10 : modèle 7 attendu, modèles 6, 5 et 4 tolérés (modèle 6 sans avertissement) ; débrief écrit par le script dans `debrief.txt` et dans la valeur `debrief` de `notion.json` (parade contre la compaction du contexte) ; `consigne.out` écrit par `--consigne` ; gabarit collective_alerte (aucune offre, signalement dans `non_affichees` avec la plateforme). Jeu de base passé au modèle 7 ; contrôles de version réécrits ; contrôles 139 à 148 ajoutés.
 
 Écarts de la 1.10 avec la 1.9 : modèle 6 attendu, modèles 5 et 4 tolérés (le modèle 3 est refusé) ; en modèle 5, avertissement : pas de ligne « Prochain passage » ; nouveau mode `--consigne` qui décide du mode du passage (normal, sans écriture, test de source) à partir de la Valeur de « Prochain passage ». Jeu de base passé au modèle 6 ; contrôles 108, 109 et 111 réécrits (version 1.10, modèle 6), contrôles 122 à 135 ajoutés ; contrôles 136 à 138 (échappements de la lecture en mode vue) ajoutés après la mise à jour de renOdit vers v5.0-essai4.
 
 Non couvert : lecture et effacement de « Prochain passage » par l'agent, à vérifier au premier passage réel.
+
+Non couvert (1.12) : lecture de versions.json et écriture de « Version disponible » par l'agent, à vérifier au premier passage réel.
 
 1. Poste recherché, freelance, dans la zone : OK
 2. Poste proche gardé en Métier proche : OK
@@ -90,71 +94,72 @@ Non couvert : lecture et effacement de « Prochain passage » par l'agent, à v�
 78. TEST SOURCE : offre écartée listée avec son motif : OK
 79. TEST SOURCE : aucune offre et liens de suivi, suggestion generique_suivi : OK
 80. TEST SOURCE : préfixe invalide, code 3 et résultat « erreur » écrit : OK
-81. TEST SOURCE : gabarit inconnu, code 3 : OK
-82. TEST SOURCE : expéditeur sans @, code 3 : OK
-83. TEST SOURCE : résultat tronqué sous 1900 caractères : OK
-84. Expéditeur détecté ajouté (adresse en minuscules, « ; » de l'objet remplacé) : OK
-85. Fusion avec la liste existante : compteur cumulé, date et objet mis à jour : OK
-86. Expéditeur ignoré par domaine : retiré : OK
-87. Adresse d'une source active : retirée : OK
-88. Adresse d'une source inactive (adresses_sources) : retirée : OK
-89. Expéditeur sans mail depuis plus de 30 jours : retiré : OK
-90. Au plus 20 expéditeurs, les plus récents gardés : OK
-91. Étape 6 ter non faite : rien à écrire : OK
-92. Expéditeur détecté mal formé : erreur : OK
-93. TEST SOURCE : expéditeurs détectés ignorés : OK
-94. Modèle 4 : passage OK, offre créée, expéditeurs détectés écrits, avertissement, débrief non écrit : OK
-95. Modèle 4 : TEST SOURCE, résultat écrit : OK
-96. Modèle 4 : TEST SOURCE mal réglé, code 3 et résultat « erreur » écrit : OK
-97. Messagerie vide en modèle 5 : erreur : OK
-98. Messagerie inconnue : erreur : OK
-99. Messagerie Outlook (casse libre) : acceptée : OK
-100. Messagerie Fastmail : acceptée : OK
-101. Modèle 4 sans ligne Messagerie : erreur (plus de repli Gmail) : OK
-102. TEST SOURCE : expéditeur fourni, ligne « expéditeur ; <adresse> ; fourni » : OK
-103. TEST SOURCE : expéditeur retrouvé, ligne « retrouvé » et autres expéditeurs vus sans doublon : OK
-104. TEST SOURCE : expéditeur introuvable, aucun mail : code 3, cause écrite : OK
-105. TEST SOURCE : expéditeur introuvable, mails sans offres : code 3, adresses vues listées : OK
-106. TEST SOURCE : expéditeur vide sans recherche : code 3, expéditeur invalide : OK
-107. 1.11 : modèle 3 refusé (code 2) : OK
-108. 1.11 : modèle 7, débrief à écrire, aucun avertissement de modèle : OK
-109. 1.9 : avertissement du modèle 4 renvoie à la procédure « mettre à jour » : OK
-110. 1.9 : TEST SOURCE sans ligne DEBRIEF : OK
-111. 1.11 : gabarit inconnu cité avec la brique 1.11 : OK
-112. Fusion : 4 offres Atos du même passage donnent une offre, premier identifiant gardé : OK
-113. Fusion : lieux distincts regroupés « Paris ; Les Clayes-sous-Bois » : OK
-114. Fusion : compteur doublons_passage=3 et retenues=1 : OK
-115. Fusion : ligne FUSION avec les quatre identifiants : OK
-116. Fusion : casse, accents et espaces ignorés : OK
-117. Fusion : même titre, entreprises différentes : deux offres : OK
-118. Fusion : entreprise vide (Free-Work) jamais fusionnée : OK
-119. Fusion : lieu répété ou vide non ajouté : OK
-120. Fusion : faits de la première lue gardés (groupe écarté une seule fois) : OK
-121. Offres Free-Work relayées par LinkedIn comptées en doublons entre plateformes : identité respectée : OK
-122. 1.10 : modèle 5 toléré, débrief à écrire, avertissement « Prochain passage » : OK
-123. Consigne : vide, passage normal, rien à effacer : OK
-124. Consigne : mode sans écriture récent, appliqué et effacé : OK
-125. Consigne : casse et accents ignorés : OK
-126. Consigne : plus de 30 minutes, périmée, effacée : OK
-127. Consigne : datée de plus de 5 minutes après le début, périmée : OK
-128. Consigne : test de source vu par la brique Offres, gardé pour la tâche de test : OK
-129. Consigne : test de source appliqué, effacé, demande recopiée : OK
-130. Consigne : mode sans écriture vu par la tâche de test, gardé : OK
-131. Consigne : illisible, effacée : OK
-132. Consigne : date sans fuseau, illisible : OK
-133. Consigne : demande inconnue, passage normal, effacée : OK
-134. Consigne : debut_iso illisible, erreur : OK
-135. Consigne : balise <br> tolérée : OK
-136. Consigne : deux-points échappés par la lecture en mode vue, acceptée : OK
-137. Consigne : demande de test échappée, recopiée sans échappement : OK
-138. Paramètres : séparateur échappé « \; » retiré, poste reconnu : OK
-139. 1.11 : modèle 6 toléré sans avertissement : OK
-140. 1.11 : source collective_alerte acceptée sans préfixe ni domaine, à côté de LinkedIn sans préfixe : OK
-141. 1.11 : ligne non_affichees Collective avec plateforme, LinkedIn inchangée : OK
-142. 1.11 : debrief.txt écrit (titre à compléter, CONSIGNE, lignes du script, alertes) : OK
-143. 1.11 : champ debrief de notion.json = date, heure puis debrief.txt en <br> : OK
-144. 1.11 : sans consigne.out, ligne CONSIGNE signalée non lancée : OK
-145. 1.11 : offre portée par une source collective_alerte refusée : OK
-146. 1.11 : non_affichees.source inconnue refusée : OK
-147. 1.11 : AVERTISSEMENT et FUSION en fin de debrief.txt : OK
-148. 1.11 : --consigne écrit consigne.out : OK
+81. 1.12 : modèle 7 toléré sans avertissement : OK
+82. TEST SOURCE : gabarit inconnu, code 3 : OK
+83. TEST SOURCE : expéditeur sans @, code 3 : OK
+84. TEST SOURCE : résultat tronqué sous 1900 caractères : OK
+85. Expéditeur détecté ajouté (adresse en minuscules, « ; » de l'objet remplacé) : OK
+86. Fusion avec la liste existante : compteur cumulé, date et objet mis à jour : OK
+87. Expéditeur ignoré par domaine : retiré : OK
+88. Adresse d'une source active : retirée : OK
+89. Adresse d'une source inactive (adresses_sources) : retirée : OK
+90. Expéditeur sans mail depuis plus de 30 jours : retiré : OK
+91. Au plus 20 expéditeurs, les plus récents gardés : OK
+92. Étape 6 ter non faite : rien à écrire : OK
+93. Expéditeur détecté mal formé : erreur : OK
+94. TEST SOURCE : expéditeurs détectés ignorés : OK
+95. Modèle 4 : passage OK, offre créée, expéditeurs détectés écrits, avertissement, débrief non écrit : OK
+96. Modèle 4 : TEST SOURCE, résultat écrit : OK
+97. Modèle 4 : TEST SOURCE mal réglé, code 3 et résultat « erreur » écrit : OK
+98. Messagerie vide en modèle 5 : erreur : OK
+99. Messagerie inconnue : erreur : OK
+100. Messagerie Outlook (casse libre) : acceptée : OK
+101. Messagerie Fastmail : acceptée : OK
+102. Modèle 4 sans ligne Messagerie : erreur (plus de repli Gmail) : OK
+103. TEST SOURCE : expéditeur fourni, ligne « expéditeur ; <adresse> ; fourni » : OK
+104. TEST SOURCE : expéditeur retrouvé, ligne « retrouvé » et autres expéditeurs vus sans doublon : OK
+105. TEST SOURCE : expéditeur introuvable, aucun mail : code 3, cause écrite : OK
+106. TEST SOURCE : expéditeur introuvable, mails sans offres : code 3, adresses vues listées : OK
+107. TEST SOURCE : expéditeur vide sans recherche : code 3, expéditeur invalide : OK
+108. 1.11 : modèle 3 refusé (code 2) : OK
+109. 1.12 : modèle 8, débrief à écrire, aucun avertissement de modèle : OK
+110. 1.9 : avertissement du modèle 4 renvoie à la procédure « mettre à jour » : OK
+111. 1.9 : TEST SOURCE sans ligne DEBRIEF : OK
+112. 1.12 : gabarit inconnu cité avec la brique 1.12 : OK
+113. Fusion : 4 offres Atos du même passage donnent une offre, premier identifiant gardé : OK
+114. Fusion : lieux distincts regroupés « Paris ; Les Clayes-sous-Bois » : OK
+115. Fusion : compteur doublons_passage=3 et retenues=1 : OK
+116. Fusion : ligne FUSION avec les quatre identifiants : OK
+117. Fusion : casse, accents et espaces ignorés : OK
+118. Fusion : même titre, entreprises différentes : deux offres : OK
+119. Fusion : entreprise vide (Free-Work) jamais fusionnée : OK
+120. Fusion : lieu répété ou vide non ajouté : OK
+121. Fusion : faits de la première lue gardés (groupe écarté une seule fois) : OK
+122. Offres Free-Work relayées par LinkedIn comptées en doublons entre plateformes : identité respectée : OK
+123. 1.10 : modèle 5 toléré, débrief à écrire, avertissement « Prochain passage » : OK
+124. Consigne : vide, passage normal, rien à effacer : OK
+125. Consigne : mode sans écriture récent, appliqué et effacé : OK
+126. Consigne : casse et accents ignorés : OK
+127. Consigne : plus de 30 minutes, périmée, effacée : OK
+128. Consigne : datée de plus de 5 minutes après le début, périmée : OK
+129. Consigne : test de source vu par la brique Offres, gardé pour la tâche de test : OK
+130. Consigne : test de source appliqué, effacé, demande recopiée : OK
+131. Consigne : mode sans écriture vu par la tâche de test, gardé : OK
+132. Consigne : illisible, effacée : OK
+133. Consigne : date sans fuseau, illisible : OK
+134. Consigne : demande inconnue, passage normal, effacée : OK
+135. Consigne : debut_iso illisible, erreur : OK
+136. Consigne : balise <br> tolérée : OK
+137. Consigne : deux-points échappés par la lecture en mode vue, acceptée : OK
+138. Consigne : demande de test échappée, recopiée sans échappement : OK
+139. Paramètres : séparateur échappé « \; » retiré, poste reconnu : OK
+140. 1.11 : modèle 6 toléré sans avertissement : OK
+141. 1.11 : source collective_alerte acceptée sans préfixe ni domaine, à côté de LinkedIn sans préfixe : OK
+142. 1.11 : ligne non_affichees Collective avec plateforme, LinkedIn inchangée : OK
+143. 1.11 : debrief.txt écrit (titre à compléter, CONSIGNE, lignes du script, alertes) : OK
+144. 1.11 : champ debrief de notion.json = date, heure puis debrief.txt en <br> : OK
+145. 1.11 : sans consigne.out, ligne CONSIGNE signalée non lancée : OK
+146. 1.11 : offre portée par une source collective_alerte refusée : OK
+147. 1.11 : non_affichees.source inconnue refusée : OK
+148. 1.11 : AVERTISSEMENT et FUSION en fin de debrief.txt : OK
+149. 1.11 : --consigne écrit consigne.out : OK

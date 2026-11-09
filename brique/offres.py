@@ -7,7 +7,7 @@
 import json, sys, re, unicodedata, hashlib, datetime
 from urllib.parse import urlsplit, parse_qsl
 
-VERSION_BRIQUE, MODELE_ATTENDU, MODELES_TOLERES = "1.11", "7", ("6", "5", "4")   # modèles antérieurs tolérés : nouveautés sautées, avec avertissement
+VERSION_BRIQUE, MODELE_ATTENDU, MODELES_TOLERES = "1.12", "8", ("7", "6", "5", "4")   # modèles antérieurs tolérés : nouveautés sautées, avec avertissement
 # v1.9 : script écrit à la fin du prompt de la tâche (amorce), jamais téléchargé ; modèle 5 = modèle 4 + ligne Paramètres « Dernier débrief » ; modèle 4 : débrief non écrit
 # v1.9 (complément du 25/10) : fusion des offres de même entreprise et de même titre dans un même passage (compteur doublons_passage, lignes FUSION)
 # v1.11 : débrief écrit par le script (debrief.txt et champ debrief de notion.json), parade contre la compaction du contexte ; gabarit collective_alerte (alertes quotidiennes Collective : aucune offre, signalement dans non_affichees) ; non_affichees.source facultatif (plateforme ajoutée à la ligne) ; modèle 7 = modèle 6 + ligne Paramètres « Heure de passage », ligne « Offres non affichées (alertes) » renommée, statut de candidature « En pause » ; modèles 6, 5 et 4 tolérés

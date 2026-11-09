@@ -1,7 +1,7 @@
 {
   "version_schema": 1,
-  "version_modele": "7",
-  "source": "Modèle Notion 4 (page 40234f6d2f8d8163845fcb60b4c805f6), relevé le 25/10/2026, plus les lignes Paramètres « Dernier débrief » et « Version du kit » (modèle 5), puis la ligne « Prochain passage » et la description de la colonne Offres « Métier » (modèle 6, 27/10/2026), puis la ligne « Heure de passage », la ligne « Offres non affichées (alertes) » renommée, le statut de candidature « En pause » et la source « Collective (alertes quotidiennes) » (modèle 7, 27/10/2026).",
+  "version_modele": "8",
+  "source": "Modèle Notion 4 (page 40234f6d2f8d8163845fcb60b4c805f6), relevé le 25/10/2026, plus les lignes Paramètres « Dernier débrief » et « Version du kit » (modèle 5), puis la ligne « Prochain passage » et la description de la colonne Offres « Métier » (modèle 6, 27/10/2026), puis la ligne « Heure de passage », la ligne « Offres non affichées (alertes) » renommée, le statut de candidature « En pause » et la source « Collective (alertes quotidiennes) » (modèle 7, 27/10/2026), puis les lignes « Tâche Brique Offres » et « Version disponible » (modèle 8, 09/11/2026).",
   "page": {
     "titre_defaut": "Lecteur d'offres : configuration",
     "icone": "📬",
@@ -22,7 +22,7 @@
       ],
       "vue": {"type": "table", "affichees": ["Paramètre", "Commentaire", "Dernier import", "Valeur", "À supprimer"]},
       "lignes": [
-        {"Paramètre": "Version du modèle", "Valeur": "7", "Commentaire": "Version de la structure Notion. Lue par la brique Offres, qui s'arrête sans rien écrire si elle ne correspond pas à la version attendue. Ne la modifier qu'en appliquant une mise à jour."},
+        {"Paramètre": "Version du modèle", "Valeur": "8", "Commentaire": "Version de la structure Notion. Lue par la brique Offres, qui s'arrête sans rien écrire si elle ne correspond pas à la version attendue. Ne la modifier qu'en appliquant une mise à jour."},
         {"Paramètre": "Version du kit", "Valeur": null, "Commentaire": "Version du kit installée (exemple : v5.0). Écrite par l'installeur et par la procédure de mise à jour ; lue par les skills pour télécharger leurs procédures à cette version. Ne la modifier qu'en appliquant une mise à jour."},
         {"Paramètre": "Prénom", "Valeur": null, "Commentaire": "Prénom de l'utilisateur, affiché par le lecteur et repris dans le débrief de la brique Offres."},
         {"Paramètre": "Postes recherchés", "Valeur": null, "Commentaire": "Critère « Poste », obligatoire : une offre qui n'est ni un poste recherché ni un poste proche est écartée. Postes séparés par des points-virgules (exemple : Product Owner; Business Analyst). Modifiable depuis l'écran Réglages du lecteur."},
@@ -44,7 +44,9 @@
         {"Paramètre": "Expéditeurs détectés", "Valeur": null, "Commentaire": "Écrit par la brique Offres (étape 6 ter) : expéditeurs d'offres qui ne sont pas encore des sources. Ne pas modifier."},
         {"Paramètre": "Dernier test de source", "Valeur": null, "Commentaire": "Écrit par la tâche « Brique Offres : test de source » : résultat du dernier test. Ne pas modifier."},
         {"Paramètre": "Prochain passage", "Valeur": null, "Commentaire": "Consigne d'un passage lancé à la main (« <date et heure> ; MODE SANS ÉCRITURE » ou « <date et heure> ; TEST SOURCE … »), écrite par le lecteur ou par Claude juste avant le lancement, effacée par la brique Offres ou par la tâche de test. Valable 30 minutes. Ne pas modifier."},
-        {"Paramètre": "Heure de passage", "Valeur": "08:45", "Commentaire": "Heure du passage quotidien de la brique Offres (HH:MM). Écrite à l'installation, puis par Claude quand tu lui demandes de la changer. Lue par le lecteur. Ne la modifie pas à la main : la tâche planifiée ne suivrait pas."}
+        {"Paramètre": "Heure de passage", "Valeur": "08:45", "Commentaire": "Heure du passage quotidien de la brique Offres (HH:MM). Écrite à l'installation, puis par Claude quand tu lui demandes de la changer. Lue par le lecteur. Ne la modifie pas à la main : la tâche planifiée ne suivrait pas."},
+        {"Paramètre": "Tâche Brique Offres", "Valeur": null, "Commentaire": "Identifiant (trig_…) de la tâche planifiée « Brique Offres », lu par le lecteur pour lancer un passage et changer l'heure de passage. Rempli à l'installation. Ne pas modifier."},
+        {"Paramètre": "Version disponible", "Valeur": null, "Commentaire": "Dernière version publiée du kit (exemple : v5.3), écrite par la brique Offres à chaque passage. Lue par le lecteur, qui propose « Mettre à jour » si elle est plus récente que « Version du kit ». Ne pas modifier."}
       ]
     },
     "Sources": {

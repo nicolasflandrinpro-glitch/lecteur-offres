@@ -2,7 +2,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-/* v19.6 (27/10/2026) : kit version 5.1, modèle Notion 7 : heure de passage lue dans la ligne Paramètres « Heure de passage » (bandeau et message des réglages, 8 h 45 si la ligne manque) ; statut de candidature « En pause » (groupe « En pause (n) » plié en bas des Candidatures, hors du compte, « Mettre en pause » dans le menu « ⋯ », « Reprendre ▾ ») ; alertes Collective sans offres affichées dans « Alertes incomplètes » (« Collective : N offres annoncées par l'alerte X », bouton « Voir les offres ») ; rubrique « Que demander à Claude » dans les réglages (phrases à copier) ; modèles 7, 6, 5 et 4 acceptés. v19.5 (27/10/2026) : kit version 5.0, modèle Notion 6 : avant de lancer un test de source, le lecteur écrit la demande dans la ligne Paramètres « Prochain passage » (« <date et heure UTC> ; TEST SOURCE … »), lue puis effacée par la tâche de test ; la demande reste aussi passée en texte au lancement (modèles 5 et 4, sans cette ligne) ; modèles Notion 6, 5 et 4 acceptés.
+/* v20 (09/11/2026) : kit version 5.2, modèle Notion 8 : bandeau d'actions en haut du lecteur (afficheur : dernier passage, prochain passage, version du kit, mise à jour disponible lue dans la ligne Paramètres « Version disponible » ; « Lancer un passage maintenant » par fire_trigger sur la ligne « Tâche Brique Offres », relecture de Notion à l'heure estimée d'après la durée du dernier passage planifié puis chaque minute, abandon à 30 minutes ; « Mettre à jour » vers claude.ai/new ; dernier débrief replié) ; réglages refondus (sections, conditions sur deux colonnes en paysage, textes d'aide, heure de passage modifiable par update_trigger, plateformes désactivées ou réactivées à l'enregistrement, « Proposer des postes proches » par sample, aide aux recherches LinkedIn, « Enregistrer » fixé et grisé sans modification, barre de confirmation à la fermeture) ; rubrique « Que demander à Claude » retirée ; modèles 8 à 4 acceptés. v19.6 (27/10/2026) : kit version 5.1, modèle Notion 7 : heure de passage lue dans la ligne Paramètres « Heure de passage » (bandeau et message des réglages, 8 h 45 si la ligne manque) ; statut de candidature « En pause » (groupe « En pause (n) » plié en bas des Candidatures, hors du compte, « Mettre en pause » dans le menu « ⋯ », « Reprendre ▾ ») ; alertes Collective sans offres affichées dans « Alertes incomplètes » (« Collective : N offres annoncées par l'alerte X », bouton « Voir les offres ») ; rubrique « Que demander à Claude » dans les réglages (phrases à copier) ; modèles 7, 6, 5 et 4 acceptés. v19.5 (27/10/2026) : kit version 5.0, modèle Notion 6 : avant de lancer un test de source, le lecteur écrit la demande dans la ligne Paramètres « Prochain passage » (« <date et heure UTC> ; TEST SOURCE … »), lue puis effacée par la tâche de test ; la demande reste aussi passée en texte au lancement (modèles 5 et 4, sans cette ligne) ; modèles Notion 6, 5 et 4 acceptés.
    v19.4 (25/10/2026) : kit version 5 : page de configuration trouvée malgré une apostrophe typographique, du gras ou des espaces dans son titre ; champ « Colle le lien de ta page de configuration », lien retenu dans le navigateur ; modèles Notion 5 et 4 acceptés ; renvois vers la page d'accueil du kit (GitHub) au lieu du modèle Notion à dupliquer ; sans accès à Notion, roue dentée masquée et état de la permission lu (bouton « Autoriser l'accès à Notion », accès refusé, accès indisponible) ; réglages robustes à des paramètres incomplets. v19.3 (25/10/2026) : valeurs lues par les vues Notion débarrassées de l'échappement Markdown (« 08:46\:37 », « trig\_… »), qui faisait afficher à tort le bandeau « brique pas encore passée » et refusait la tâche de test ; liste des offres et zone Candidatures pliables (offres pliées à l'ouverture, ligne de résumé par jour ; candidatures dépliées). v19.2 (24/10/2026) : modèle Notion 4. Réglages : liste « Plateformes suivies » (base Sources, désactiver ou réactiver), formulaire « Ajouter une plateforme », test de la source par la tâche « Brique Offres : test de source » (connecteur Claude Code Remote, résultat relu dans « Dernier test de source »), activation (valeur ajoutée à la colonne Offres « Plateforme », ligne Sources créée). Encart « Nouveaux expéditeurs d'offres » (ligne « Expéditeurs détectés ») avec « Créer » et « Ignorer ». v19.1 (23/10/2026) : modèle Notion 2 (colonne Offres « Retirée le »). v19 (23/10/2026) : lecteur générique. Plus aucune adresse Notion en dur : au premier lancement, recherche de la page « Lecteur d'offres : configuration » (ou adresse saisie), détection des bases et de leurs vues « Lecteur : ne pas modifier », bilan base par base et état de l'extension, configuration gardée dans le navigateur et modifiable depuis les réglages. Offres Free-Work retirées lues dans la colonne Offres « Retirée le » (écrite par la brique Offres) au lieu de l'extension. Recherches de posts LinkedIn masquées sans extension, bouton « Générer les recherches ». v18.1 (23/10/2026) : garde-fou contre les posts importés en double (Offres relue juste avant l'écriture, création jamais relancée d'office). v18 (23/10/2026) : schéma Notion modèle 1 (brique Offres 1.5) : vues « Lecteur : ne pas modifier », Contrat en liste multiple (repli sur « Contrat (v1.4) »), étiquettes À vérifier Contrat, Temps de travail et Télétravail (ancienne étiquette Freelance lue comme Contrat), réglages types de collaboration, temps de travail, modes de travail et jours de télétravail minimum, prénom lu dans Paramètres, import des posts aligné (types de collaboration, séniorité retirée), versions en pied de page. v17 (16/10/2026) : statuts de candidature simplifiés (À préparer, Candidature envoyée, Relancée, Processus en cours, Gagnée, Perdue, Abandonnée), zone Candidatures refondue en trois groupes (À envoyer, En attente de réponse, Processus en cours) avec boutons par groupe, ligne d'échéance, pastille plateforme, liens Annonce et Fiche, Prochaine action modifiable sur place et menu « ⋯ » ; clôture automatique étendue à Relancée. v16 (13/10/2026) : offres non vues des 7 derniers jours groupées par jour, bandeau si la brique Offres n'est pas encore passée, lien du post LinkedIn (identifiant du post, sinon activité de l'auteur d'origine), écran récapitulatif en fin de lecture, clôture automatique en Perdue des candidatures « Offre d'emploi » sans réponse depuis 14 jours, rapprochement des candidatures saisies à la main (bouton Relier), état « vue » enregistré dans Notion (colonne Offres « Vue le »), offres vues toujours masquées, texte des posts affiché d'office et mis en forme, barre d'actions fixée en haut de la lecture, mode lecture épuré (en-tête, messages et import masqués). v15 (01/10/2026) : modèle à trois critères (étiquettes « à vérifier », plus de note ni de compétences), rappel des alertes LinkedIn incomplètes, écran Réglages. v14 : rappel des recherches importées (colonne Paramètres « Dernier import »), bouton « restantes » ou « Réimporter », offres Free-Work retirées masquées. v13 : plusieurs recherches de posts, lien de l'offre citée, bascule « Masquer les offres vues », clic sur une offre, offres des posts ajoutées en fin de parcours. v12.1 : sonde de l'import toutes les 4 s pendant l'attente. v12 : suivi des candidatures (À relancer, En cours), import et qualification des posts LinkedIn, pastille « Post LinkedIn ». */
 :root{
   --bg:#f3f5f4; --surface:#ffffff; --ink:#18231f; --muted:#5b6b64; --line:#d7dfdb;
@@ -242,9 +242,58 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
 .offh{margin:0;padding:10px 14px;font-size:1rem;font-weight:700}
 .offh .resume{font-weight:500;color:var(--muted);font-size:.88rem}
 #list{border-top:1px solid var(--line)}
+[hidden]{display:none!important}
+/* v20 : bandeau d'actions façon Winamp, fixé en haut ; la barre de la liste se place sous lui (--bh). */
+.winamp{position:sticky;top:env(safe-area-inset-top,0px);z-index:7;display:flex;flex-direction:column;gap:8px;padding:8px 0;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{top:calc(env(safe-area-inset-top,0px) + var(--bh,0px))}
+.afficheur{background:#0d1310;color:#7ee0a8;font:500 .82rem/1.5 var(--mono);letter-spacing:.04em;border-radius:8px;padding:8px 12px;border:1px solid #24352c;box-shadow:inset 0 0 0 1px #000}
+.affl{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 16px;white-space:pre-wrap}
+.afficheur .majdispo{color:#ffcf5a}
+.bacts{display:flex;flex-wrap:wrap;gap:6px}
+.bacts .btn{min-height:36px;padding:0 12px;font-size:.88rem}
+.bmsg{font-size:.88rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.bmsg .btn{min-height:32px;padding:0 10px;font-size:.82rem}
+.bmsg.ok{color:var(--accent)} .bmsg.ko{color:var(--err)}
+.debrief h3{font-size:.9rem;margin:0 0 4px}
+.debrief pre{margin:0;font:.8rem/1.45 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;max-height:40vh;overflow:auto}
+body.lecture .winamp, body.lecture #debView{display:none!important}
+/* v20 : réglages en sections, conditions sur deux colonnes en paysage, pied fixé. */
+body.regl .wrap{max-width:960px}
+.rsec{margin:14px 0 0;padding-top:10px;border-top:2px solid var(--line);font-size:.78rem;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.rsec+.champ,.rsec+div>.champ:first-child{border-top:0}
+.rsec:first-child{margin-top:0;border-top:0;padding-top:0}
+.rintro{color:var(--muted);font-size:.85rem;margin:4px 0 0}
+.cols{display:grid;grid-template-columns:minmax(0,1fr);gap:0 24px}
+@media (min-width:900px) and (orientation:landscape){.cols{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.cols>div>.champ:first-child{border-top:0}
+.reglpied{position:sticky;bottom:0;z-index:4;background:var(--surface);border-top:1px solid var(--line);margin:12px -16px -14px;padding:10px 16px;border-radius:0 0 10px 10px}
+.reglbas .cres{flex:1 1 240px}
+.reglquit{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font-weight:600}
+.etat-plat{font-size:.85rem;font-weight:600}
+.etat-plat.actif{color:var(--accent)} .etat-plat.inactif{color:var(--muted)} .etat-plat.change{color:var(--warn)}
+.plat-tete{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.propos{display:flex;flex-direction:column;gap:6px}
+.propos .puce{cursor:pointer;border:0;font:inherit}
+.aidepli summary{cursor:pointer;color:var(--accent);font-size:.88rem}
+.aidepli ol{margin:6px 0 0;padding-left:20px;font-size:.85rem;color:var(--muted)}
+.aidepli p{margin:6px 0 0;font-size:.85rem;color:var(--muted)}
+.champ input[type="time"]{max-width:9rem}
 </style>
 
 <div class="wrap">
+  <section class="winamp" id="bandeau" hidden aria-label="État de la veille">
+    <div class="afficheur" id="aff">
+      <div class="affl"><span id="affDernier"></span><span id="affProchain"></span></div>
+      <div class="affl"><span id="affKit"></span><span id="affMaj"></span></div>
+    </div>
+    <div class="bacts">
+      <button class="btn" id="passBtn" type="button">▶ Lancer un passage maintenant</button>
+      <a class="btn" id="majBtn" target="_blank" rel="noopener" hidden>⟳ Mettre à jour</a>
+      <button class="btn" id="debTog" type="button" aria-expanded="false" aria-controls="debView">▸ Dernier débrief</button>
+    </div>
+    <div class="bmsg" id="passZone" role="status" aria-live="polite" hidden></div>
+  </section>
+  <div class="debrief" id="debView" hidden></div>
   <header class="head">
     <div class="titres">
       <h1 id="h1">Offres du jour</h1>
@@ -256,8 +305,12 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
   <section class="panel bloc" id="reglView" hidden aria-labelledby="reglH">
     <div class="trow" style="justify-content:space-between"><h2 id="reglH">Réglages de la veille</h2><button class="btn" id="reglFermer" type="button" style="min-height:36px">Fermer</button></div>
     <div id="reglBody"></div>
-    <div class="reglbas"><button class="btn primary" id="reglSave" type="button">Enregistrer</button></div>
-    <p class="cres" id="reglMsg" role="status" aria-live="polite"></p>
+    <div class="reglpied" id="reglPied">
+      <div class="reglbas" id="reglBas"><button class="btn primary" id="reglSave" type="button" disabled title="Aucune modification">Enregistrer</button>
+        <p class="cres" id="reglMsg" role="status" aria-live="polite"></p></div>
+      <div class="reglquit" id="reglQuit" hidden><span>Tu as des modifications non enregistrées.</span>
+        <span class="cbtns"><button class="btn primary" id="quitSave" type="button">Enregistrer et fermer</button><button class="btn" id="quitSans" type="button">Fermer sans enregistrer</button><button class="btn" id="quitRetour" type="button">Revenir aux réglages</button></span></div>
+    </div>
   </section>
   <section class="panel bloc" id="cfgView" hidden aria-labelledby="cfgH">
     <h2 id="cfgH">Configuration du lecteur</h2>
@@ -339,7 +392,7 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
   // ===================== Réglages =====================
   var SERVER = "Notion";
   var Q_TOOL = "notion-query-data-sources", UPDATE_TOOL = "notion-update-page", CREATE_TOOL = "notion-create-pages", FETCH_TOOL = "notion-fetch";
-  var VERSION = "19.6", MODELES = ["7", "6", "5", "4"];
+  var VERSION = "20", MODELES = ["8", "7", "6", "5", "4"];
   // v19 : adresses lues dans la configuration de ce navigateur (clé « lecteur-config »), trouvée au premier lancement.
   var TITRE_CFG = "Lecteur d'offres : configuration", VUE_LECTEUR = "Lecteur : ne pas modifier", CFG_KEY = "lecteur-config";
   var BASES = ["Paramètres", "Sources", "Offres", "Candidatures", "Interdits"], BASES_LECTEUR = ["Paramètres", "Offres", "Candidatures"];
@@ -593,7 +646,8 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
   function lireParams(list){
     var p = {recherches: [], postes: [], proches: [], zone: [], pages: {}, plancher: null, nonAffichees: "", derniereOffres: "",
       prenom: "", modele: "", contrats: TYPES.slice(), temps: "plein ou partiel", modes: MODES.slice(), jours: null,
-      dernierTest: "", tacheTest: "", detectes: "", ignores: "", heure: "08:45"};
+      dernierTest: "", tacheTest: "", detectes: "", ignores: "", heure: "08:45",
+      tacheOffres: "", versionKit: "", versionDispo: "", debrief: ""};
     list.forEach(function(r){
       if (r["À supprimer"] === "__YES__") return;
       var nom = String(r["Paramètre"] || ""), v = String(r.Valeur || "");
@@ -617,7 +671,11 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
       else if (/^Dernier test de source/i.test(nom)) { p.pages.dernierTest = r.url; p.dernierTest = v.trim(); }
       else if (/^T[âa]che Test de source/i.test(nom)) p.tacheTest = v.trim();
       else if (/^Prochain passage/i.test(nom)) p.pages.prochain = r.url;
-      else if (/^Heure de passage/i.test(nom)) { var hm = v.trim().match(/^(\d{1,2})\D(\d{2})$/); if (hm && +hm[1] < 24 && +hm[2] < 60) p.heure = ("0" + +hm[1]).slice(-2) + ":" + hm[2]; }
+      else if (/^T[âa]che Brique Offres/i.test(nom)) p.tacheOffres = v.trim();
+      else if (/^Version du kit/i.test(nom)) p.versionKit = v.trim();
+      else if (/^Version disponible/i.test(nom)) { p.pages.versionDispo = r.url; p.versionDispo = v.trim(); }
+      else if (/^Dernier d[ée]brief/i.test(nom)) p.debrief = v.trim();
+      else if (/^Heure de passage/i.test(nom)) { p.pages.heure = r.url; var hm = v.trim().match(/^(\d{1,2})\D(\d{2})$/); if (hm && +hm[1] < 24 && +hm[2] < 60) p.heure = ("0" + +hm[1]).slice(-2) + ":" + hm[2]; }
       else if (/^Exp[ée]diteurs d[ée]tect/i.test(nom)) { p.pages.detectes = r.url; p.detectes = v.trim(); }
       else if (/^Exp[ée]diteurs ignor/i.test(nom)) { p.pages.ignores = r.url; p.ignores = v.trim(); }
     });
@@ -853,7 +911,7 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
     $("readView").hidden = mode !== "read";
     $("finView").hidden = mode !== "fin";
     document.body.classList.toggle("lecture", mode === "read");
-    $("reglView").hidden = true;
+    $("reglView").hidden = true; document.body.classList.remove("regl");
     renderAlertes();
     renderDetectes();
     renderCands();
@@ -1715,27 +1773,73 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
   }
 
   // ===================== Réglages (v15) =====================
-  // Écran ⚙ : postes recherchés, postes proches, zone, TJM plancher, recherches LinkedIn. Écrit dans Paramètres.
-  var regl = null;
+  // Écran ⚙ (v20) : sections, conditions sur deux colonnes en paysage, heure de passage (update_trigger), plateformes
+  // désactivées ou réactivées à l'enregistrement, postes proches proposés par Claude. Écrit dans Paramètres et Sources.
+  var regl = null, reglBase = "", propos = null;
+  var TXT = {
+    postes: "Claude rapproche chaque offre de ces intitulés par le sens : « PO » vaut Product Owner, une séniorité ou un secteur ajouté au titre ne change pas le poste. Une offre qui ne correspond à aucun poste recherché ni proche est écartée.",
+    proches: "Postes voisins que tu acceptes aussi, lus de la même façon par Claude.",
+    zone: "Claude juge si le lieu de l'offre est dans ta zone, variantes d'écriture et communes comprises. Le script écarte ensuite un présentiel ou un hybride hors zone ; un télétravail total n'est jamais écarté pour la zone. Lieu non affiché : « À vérifier : Lieu ».",
+    intro: "Ces critères sont appliqués par le script, sur ce que l'offre affiche. Un fait absent n'écarte rien : l'offre est gardée avec une étiquette « À vérifier ».",
+    types: "Gardée si l'un de ses types est accepté. Intérim, alternance ou stage seuls : toujours écartés. Type non affiché : « À vérifier : Contrat », sauf une rémunération annuelle ou mensuelle quand ni CDI ni CDD n'est accepté : écartée.",
+    temps: "Temps affiché et non accepté : écartée. Temps non affiché : « À vérifier : Temps de travail », sauf avec « plein ou partiel ».",
+    modes: "Mode affiché et non accepté : écartée. Mode non affiché : « À vérifier : Télétravail » si le présentiel n'est pas accepté ou si un minimum de jours est fixé.",
+    jours: "Hybride sous ce minimum : écartée. Nombre de jours non affiché : « À vérifier : Télétravail ».",
+    tjm: "Écartée si le tarif journalier maximum affiché est sous ce plancher. Tarif non affiché ou non journalier : jamais écartée.",
+    heure: "La tâche planifiée « Brique Offres » passe chaque jour à cette heure. Le changement s'applique dès l'enregistrement.",
+    heureKit: "Modifiable après la mise à jour du kit (modèle Notion 8).",
+    rech: "« Générer les recherches » crée une recherche par groupe de trois postes, avec ta zone et « freelance » si ce type est accepté. Ouvre chacune dans LinkedIn pour vérifier qu'elle renvoie des posts. Libellé libre."
+  };
   $("reglBtn").addEventListener("click", function(){
     if (!$("reglView").hidden) { fermerRegl(); return; }
     ouvrirReglages();
   });
   function ouvrirReglages(){
     if (!$("reglView").hidden) return;
-    regl = copieRegl();
+    regl = copieRegl(); propos = null; annulerCibles();
     ["listView","readView","finView","bar","candView","alertView","detView"].forEach(function(id){ $(id).hidden = true; });
-    document.body.classList.remove("lecture");
+    document.body.classList.remove("lecture"); document.body.classList.add("regl");
     $("reglView").hidden = false; $("reglMsg").textContent = ""; $("reglMsg").className = "cres";
-    renderRegl(); window.scrollTo(0, 0);
+    $("reglQuit").hidden = true; $("reglBas").hidden = false;
+    renderRegl(); reglBase = signature(); majSave(); window.scrollTo(0, 0);
   }
   function copieRegl(){
     // v19.4 : paramètres incomplets (Notion non lu) : valeurs par défaut, jamais d'erreur.
     var L = function(v, def){ return Array.isArray(v) ? v.slice() : (def || []).slice(); };
     return {postes: L(params.postes), proches: L(params.proches), zone: L(params.zone), plancher: params.plancher ? String(params.plancher) : "",
       contrats: L(params.contrats, TYPES), temps: params.temps || "plein ou partiel", modes: L(params.modes, MODES), jours: params.jours ? String(params.jours) : "",
+      heure: params.heure || "08:45",
       recherches: L(params.recherches).map(function(r){ return {libelle:r.libelle, url:r.url, page:r.page, dernier:r.dernier, retiree:false}; })};
   }
+  // v20 : modifications repérées par comparaison avec l'état à l'ouverture (bouton « Enregistrer » grisé sinon).
+  function annulerCibles(){ (sources || []).forEach(function(s){ delete s.cible; }); }
+  function ciblesEnAttente(){ return (sources || []).filter(function(s){ return s.cible !== undefined && s.cible !== s.actif; }); }
+  function signature(){
+    if (!regl) return "";
+    var tri = function(a){ return a.slice().sort(); };
+    return JSON.stringify([regl.postes, regl.proches, regl.zone, regl.plancher, tri(regl.contrats), regl.temps, tri(regl.modes), regl.jours, regl.heure,
+      regl.recherches.filter(function(r){ return r.page || !r.retiree; }).map(function(r){ return [r.page, r.libelle, r.url, r.retiree]; }),
+      ciblesEnAttente().map(function(s){ return s.url; })]);
+  }
+  function majSave(){
+    var mod = !!regl && signature() !== reglBase, s = $("reglSave");
+    s.disabled = !mod || s.dataset.occupe === "1"; s.title = mod ? "" : "Aucune modification";
+    var pb = $("proposBtn"); if (pb && regl) { var vide = !regl.postes.length; pb.disabled = vide || (propos && propos.etat === "attente"); pb.title = vide ? "Ajoute d'abord un poste recherché." : ""; }
+    return mod;
+  }
+  ["input", "change", "click", "focusout", "keyup"].forEach(function(t){ $("reglView").addEventListener(t, function(){ majSave(); setTimeout(majSave, 0); }); });
+  function fermerRegl(force){
+    if (!force && regl && majSave()) { $("reglBas").hidden = true; $("reglQuit").hidden = false; $("quitRetour").focus(); return; }
+    $("reglView").hidden = true; document.body.classList.remove("regl"); regl = null; propos = null; annulerCibles();
+    show("list");
+  }
+  $("reglFermer").addEventListener("click", function(){ fermerRegl(); });
+  $("quitSans").addEventListener("click", function(){ fermerRegl(true); });
+  $("quitRetour").addEventListener("click", function(){ $("reglQuit").hidden = true; $("reglBas").hidden = false; });
+  $("quitSave").addEventListener("click", async function(){
+    $("reglQuit").hidden = true; $("reglBas").hidden = false;
+    if (await enregistrerRegl()) fermerRegl(true);
+  });
   // v18 : cases à cocher (types de collaboration, modes de travail) et choix unique (temps de travail).
   function editeurCases(titre, aide, options, arr){
     var f = el("fieldset", "champ"); f.style.border = "0"; f.style.margin = "0"; f.style.padding = "10px 0 0";
@@ -1743,7 +1847,7 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
     var z = el("div", "puces");
     options.forEach(function(o){
       var l = el("label", "switch"), c = el("input"); c.type = "checkbox"; c.checked = arr.indexOf(o) >= 0;
-      c.addEventListener("change", function(){ var i = arr.indexOf(o); if (c.checked && i < 0) arr.push(o); if (!c.checked && i >= 0) arr.splice(i, 1); });
+      c.addEventListener("change", function(){ var i = arr.indexOf(o); if (c.checked && i < 0) arr.push(o); if (!c.checked && i >= 0) arr.splice(i, 1); majSave(); });
       l.append(c, o); z.append(l);
     });
     f.append(z); return f;
@@ -1754,10 +1858,18 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
     var z = el("div", "puces"), nomG = "g" + Math.random().toString(36).slice(2);
     options.forEach(function(o){
       var l = el("label", "switch"), c = el("input"); c.type = "radio"; c.name = nomG; c.checked = o === val;
-      c.addEventListener("change", function(){ if (c.checked) fn(o); });
+      c.addEventListener("change", function(){ if (c.checked) fn(o); majSave(); });
       l.append(c, o); z.append(l);
     });
     f.append(z); return f;
+  }
+  function champNombre(titre, aide, id, attrs, val, suffixe, fn){
+    var f = el("div", "champ"), lb = el("label", "clib", titre); lb.htmlFor = id; f.append(lb);
+    if (aide) f.append(el("div", "corig", aide));
+    var row = el("div", "trow"), inp = el("input"); inp.type = "number"; inp.className = "nombre"; inp.id = id; inp.value = val;
+    Object.keys(attrs).forEach(function(k){ inp[k] = attrs[k]; });
+    inp.addEventListener("input", function(){ fn(inp.value.trim()); majSave(); });
+    row.append(inp, el("span", "corig", suffixe)); f.append(row); return f;
   }
   // v19 : recherches de posts LinkedIn générées depuis les réglages, trois postes au plus par recherche
   // (au-delà de 3 à 4 « OR », LinkedIn peut ne rien renvoyer).
@@ -1777,17 +1889,15 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
     return n;
   }
   function blocConfig(){
-    var f = el("div", "champ"); f.append(el("div", "clib", "Page de configuration Notion"));
+    var f = el("div", "champ");
     var c = lireCfg(); f.append(el("div", "corig", c ? c.page : "aucune"));
     f.append(bouton("Changer de page de configuration", function(){ try { localStorage.removeItem(CFG_KEY); } catch(e){} location.reload(); }));
     return f;
   }
-  function fermerRegl(){ $("reglView").hidden = true; regl = null; show("list"); }
-  $("reglFermer").addEventListener("click", fermerRegl);
-
-  function editeurPuces(titre, aide, arr){
+  // titre null : le titre de section sert de libellé (aria-label sur le champ de saisie).
+  function editeurPuces(titre, aide, arr, aria){
     var f = el("div", "champ");
-    f.append(el("div", "clib", titre));
+    if (titre) f.append(el("div", "clib", titre));
     if (aide) f.append(el("div", "corig", aide));
     var zone = el("div", "puces");
     function dessiner(){
@@ -1795,104 +1905,152 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
       arr.forEach(function(v, i){
         var p = el("span", "puce", v);
         var x = el("button", "pucex", "×"); x.type = "button"; x.setAttribute("aria-label", "Retirer « " + v + " »");
-        x.addEventListener("click", function(){ arr.splice(i, 1); dessiner(); });
+        x.addEventListener("click", function(){ arr.splice(i, 1); dessiner(); majSave(); });
         p.append(x); zone.append(p);
       });
-      var inp = el("input"); inp.type = "text"; inp.placeholder = "Ajouter…"; inp.className = "pucein";
+      var inp = el("input"); inp.type = "text"; inp.placeholder = "Ajouter…"; inp.className = "pucein"; inp.setAttribute("aria-label", "Ajouter : " + (titre || aria));
       inp.addEventListener("keydown", function(ev){
         if (ev.key === "Enter" || ev.key === ";") { ev.preventDefault(); ajouter(); }
       });
       inp.addEventListener("blur", function(){ ajouter(false); });
-      function ajouter(garder){ var v = inp.value.replace(/;/g, " ").trim(); inp.value = ""; if (v && arr.indexOf(v) < 0) { arr.push(v); dessiner(); if (garder !== false) zone.querySelector("input").focus(); } }
+      function ajouter(garder){ var v = inp.value.replace(/;/g, " ").trim(); inp.value = ""; if (v && arr.indexOf(v) < 0) { arr.push(v); dessiner(); majSave(); if (garder !== false) zone.querySelector("input").focus(); } }
       zone.append(inp);
     }
     dessiner(); f.append(zone);
     return f;
   }
+  function section(b, t){ b.append(el("div", "rsec", t)); }
+  // ---- Postes proches proposés par Claude (capacité sample) ----
+  function blocPropos(){
+    var z = el("div", "propos");
+    var bt = bouton("Proposer des postes proches", proposerProches); bt.id = "proposBtn";
+    var r = el("div", "reglbas"); r.append(bt); z.append(r);
+    if (!propos) return z;
+    if (propos.etat === "attente") { var w = el("div", "attente"); w.append(el("span", "spin"), "Claude cherche des postes proches…"); z.append(w); }
+    else if (propos.etat === "vide") z.append(el("div", "corig", "Claude n'a proposé aucun nouveau poste proche."));
+    else if (propos.etat === "erreur") z.append(el("p", "cres ko", "Proposition impossible : " + propos.texte + "."));
+    else {
+      z.append(el("div", "corig", "Propositions de Claude : clique sur un poste pour l'ajouter, puis Enregistrer."));
+      var pz = el("div", "puces");
+      propos.liste.forEach(function(p){
+        var b = el("button", "puce", "+ " + p); b.type = "button"; b.setAttribute("aria-label", "Ajouter « " + p + " » aux postes proches");
+        b.addEventListener("click", function(){
+          if (regl.proches.indexOf(p) < 0) regl.proches.push(p);
+          propos.liste = propos.liste.filter(function(x){ return x !== p; });
+          if (!propos.liste.length) propos = null;
+          renderRegl();
+        });
+        pz.append(b);
+      });
+      z.append(pz);
+      var ig = el("div", "reglbas"); ig.append(bouton("Ignorer les propositions", function(){ propos = null; renderRegl(); })); z.append(ig);
+    }
+    return z;
+  }
+  function promptProches(){
+    return ["Tu aides un freelance à régler sa veille d'offres de mission.",
+      "Postes recherchés : " + regl.postes.join(" ; ") + ".",
+      "Postes proches déjà retenus : " + (regl.proches.join(" ; ") || "aucun") + ".",
+      "Propose au plus 8 intitulés de postes voisins, en français ou tels qu'ils sont publiés en France, qu'une même personne peut exercer sans changer de métier. N'en propose aucun déjà listé ci-dessus, ni une simple variante de séniorité ou de secteur.",
+      'Réponds uniquement par un tableau JSON de chaînes, par exemple ["Business Analyst", "Chef de projet MOA"].'].join("\n");
+  }
+  async function proposerProches(){
+    if (!regl || !regl.postes.length || (propos && propos.etat === "attente")) return;
+    var r = regl;
+    if (!sampleRef) { propos = {etat: "erreur", texte: "Claude n'est pas accessible depuis cette vue"}; renderRegl(); return; }
+    propos = {etat: "attente"}; renderRegl();
+    try {
+      var rep = await sampleRef.json(promptProches(), {cache: false});
+      if (regl !== r) return;
+      var deja = r.postes.concat(r.proches).map(norm), vus = {};
+      var l = (Array.isArray(rep) ? rep : (rep && Array.isArray(rep.postes) ? rep.postes : [])).filter(function(x){ return typeof x === "string"; })
+        .map(function(x){ return x.replace(/;/g, " ").replace(/\s+/g, " ").trim(); })
+        .filter(function(x){ var k = norm(x); if (!x || x.length > 60 || deja.indexOf(k) >= 0 || vus[k]) return false; vus[k] = 1; return true; }).slice(0, 8);
+      propos = l.length ? {etat: "liste", liste: l} : {etat: "vide"};
+    } catch(e){ if (regl !== r) return; propos = {etat: "erreur", texte: sampleErr(e)}; }
+    renderRegl();
+  }
+  function aideLinkedIn(){
+    var d = el("details", "aidepli"); d.append(el("summary", "", "Où trouver l'adresse d'une recherche ?"));
+    var ol = el("ol");
+    ["Dans LinkedIn, tape tes mots-clés dans la barre de recherche, puis choisis le filtre « Posts ».",
+     "Trie par « Les plus récents » et, si tu veux, règle « Date de publication » sur « 24 dernières heures ».",
+     "Copie l'adresse de la page dans la barre du navigateur : elle commence par https://www.linkedin.com/search/results/content/."].forEach(function(t){ ol.append(el("li", "", t)); });
+    d.append(ol, el("p", "", "Au-delà de 3 ou 4 « OR » dans une même recherche, LinkedIn peut ne rien renvoyer."));
+    return d;
+  }
+  function heureModifiable(){ return tacheOffresOk() && !!(params.pages && params.pages.heure); }
   function renderRegl(){
     var b = $("reglBody"); b.textContent = "";
-    b.append(editeurPuces("Postes recherchés", "Une offre qui n'est ni un poste recherché ni un poste proche est écartée.", regl.postes));
-    b.append(editeurPuces("Postes proches (facultatif)", null, regl.proches));
-    b.append(editeurPuces("Zone", "Présentiel ou hybride hors zone : écartée. Télétravail total : jamais écartée. Lieu non indiqué : « Lieu à vérifier ».", regl.zone));
-    b.append(editeurCases("Types de collaboration acceptés", "Une offre est gardée si l'un de ses types est accepté ; type non indiqué : « Contrat à vérifier ». Intérim, alternance et stage toujours écartés.", TYPES, regl.contrats));
-    b.append(editeurChoix("Temps de travail", "Temps non indiqué : « Temps de travail à vérifier », sauf avec « plein ou partiel ».", TEMPS, regl.temps, function(v){ regl.temps = v; }));
-    b.append(editeurCases("Modes de travail acceptés", "Un mode affiché et non accepté écarte l'offre. Le télétravail total n'est jamais écarté pour la zone ni pour le pays.", MODES, regl.modes));
-    var fj = el("div", "champ"); fj.append(el("label", "clib", "Jours de télétravail minimum (offres hybrides, facultatif)"));
-    var rj = el("div", "trow"), ij = el("input"); ij.type = "number"; ij.min = "1"; ij.max = "5"; ij.step = "1"; ij.value = regl.jours; ij.className = "nombre"; ij.id = "reglJours";
-    fj.querySelector("label").htmlFor = "reglJours";
-    ij.addEventListener("input", function(){ regl.jours = ij.value.trim(); });
-    rj.append(ij, el("span", "corig", "jours par semaine · vide : aucun minimum")); fj.append(rj); b.append(fj);
-    var f = el("div", "champ"); f.append(el("label", "clib", "TJM plancher (facultatif)"));
-    var row = el("div", "trow"); var inp = el("input"); inp.type = "number"; inp.min = "0"; inp.step = "10"; inp.value = regl.plancher; inp.className = "nombre"; inp.id = "reglTjm";
-    f.querySelector("label").htmlFor = "reglTjm";
-    inp.addEventListener("input", function(){ regl.plancher = inp.value.trim(); });
-    row.append(inp, el("span", "corig", "€/jour · vide : aucune offre écartée pour son tarif")); f.append(row); b.append(f);
+    section(b, "POSTES");
+    b.append(editeurPuces("Postes recherchés", TXT.postes, regl.postes));
+    var fp = editeurPuces("Postes proches (facultatif)", TXT.proches, regl.proches); fp.append(blocPropos()); b.append(fp);
+    section(b, "ZONE DE PRÉSENTIEL");
+    b.append(editeurPuces(null, TXT.zone, regl.zone, "Zone de présentiel"));
+    section(b, "CONDITIONS ÉCARTÉES PAR LE SCRIPT");
+    b.append(el("p", "rintro", TXT.intro));
+    var cols = el("div", "cols"), g = el("div"), d = el("div");
+    g.append(editeurCases("Types de collaboration acceptés", TXT.types, TYPES, regl.contrats));
+    g.append(editeurChoix("Temps de travail", TXT.temps, TEMPS, regl.temps, function(v){ regl.temps = v; }));
+    d.append(editeurCases("Modes de travail acceptés", TXT.modes, MODES, regl.modes));
+    d.append(champNombre("Jours de télétravail minimum (offres hybrides, facultatif)", TXT.jours, "reglJours", {min: "1", max: "5", step: "1"}, regl.jours,
+      "jours par semaine · vide : aucun minimum", function(v){ regl.jours = v; }));
+    d.append(champNombre("TJM plancher (facultatif)", TXT.tjm, "reglTjm", {min: "0", step: "10"}, regl.plancher,
+      "€/jour · vide : aucune offre écartée pour son tarif", function(v){ regl.plancher = v; }));
+    cols.append(g, d); b.append(cols);
+    section(b, "PASSAGE QUOTIDIEN");
+    var fh = el("div", "champ"), lh = el("label", "clib", "Heure de passage de la brique Offres"); lh.htmlFor = "reglHeure"; fh.append(lh);
+    var ih = el("input"); ih.type = "time"; ih.id = "reglHeure"; ih.value = regl.heure;
+    if (heureModifiable()) { fh.append(el("div", "corig", TXT.heure)); ih.addEventListener("input", function(){ regl.heure = ih.value.trim(); majSave(); }); }
+    else { fh.append(el("div", "corig", TXT.heureKit)); ih.disabled = true; }
+    fh.append(ih); b.append(fh);
+    section(b, "PLATEFORMES SUIVIES");
     b.append(blocPlateformes());
-    var fr = el("div", "champ"); fr.append(el("div", "clib", "Recherches de posts LinkedIn"));
-    if (!extImport) {
-      fr.append(el("div", "corig", "Import des posts LinkedIn indisponible : installe l'extension Chrome du lecteur d'offres pour l'activer."));
-      b.append(fr); b.append(blocAide()); b.append(blocConfig()); return;
-    }
-    fr.append(el("div", "corig", "Libellé libre ; adresse copiée depuis la recherche de posts LinkedIn (au plus 3 à 4 « OR » par recherche)."));
-    regl.recherches.forEach(function(r, i){
-      if (r.retiree) return;
-      var l = el("div", "rech");
-      var a = el("input"); a.type = "text"; a.value = r.libelle; a.placeholder = "Libellé"; a.setAttribute("aria-label", "Libellé de la recherche");
-      a.addEventListener("input", function(){ r.libelle = a.value; });
-      var u = el("input"); u.type = "url"; u.value = r.url; u.placeholder = "https://www.linkedin.com/search/results/content/?keywords=…"; u.setAttribute("aria-label", "Adresse de la recherche");
-      u.addEventListener("input", function(){ r.url = u.value.trim(); });
-      var x = bouton("Retirer", function(){ if (r.page) r.retiree = true; else regl.recherches.splice(i, 1); renderRegl(); });
-      var info = r.dernier ? el("span", "corig", "dernier import : " + (faiteAujourdhui(r) ? "aujourd'hui" : jjmm(jourParis(r.dernier))) + " à " + heureParis(r.dernier)) : null;
-      l.append(a, u, x); if (info) l.append(info); fr.append(l);
-    });
-    var rb = el("div", "reglbas");
-    rb.append(bouton("+ Ajouter une recherche", function(){ regl.recherches.push({libelle:"", url:"", page:null, retiree:false}); renderRegl(); }));
-    rb.append(bouton("Générer les recherches", function(){ var n = genererRecherches(); renderRegl(); $("reglMsg").textContent = n ? n + " recherche" + (n > 1 ? "s" : "") + " ajoutée" + (n > 1 ? "s" : "") + " à partir des postes et de la zone : ouvre-les dans LinkedIn pour vérifier qu'elles renvoient des posts, puis Enregistrer." : "Aucune nouvelle recherche : elles existent déjà, ou aucun poste recherché."; $("reglMsg").className = "cres"; }));
-    fr.append(rb);
-    b.append(fr);
-    b.append(blocAide());
-    b.append(blocConfig());
-  }
-  // v19.6 : rubrique « Que demander à Claude » : une phrase à copier par action courante, à coller dans une conversation Cowork.
-  var AIDE = [
-    ["Ajouter une plateforme", "Ajoute la plateforme <nom> au lecteur d'offres."],
-    ["Changer mes critères", "Règle mes critères du lecteur d'offres."],
-    ["Changer l'heure de passage", "Change l'heure de passage de la brique Offres à <HH:MM>."],
-    ["Comprendre le dernier passage", "Explique-moi le dernier débrief de la brique Offres."],
-    ["Mettre à jour", "Mets à jour le lecteur d'offres."]
-  ];
-  function copier(texte){
-    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(texte).then(function(){ return true; }, function(){ return copierVieux(texte); });
-    return Promise.resolve(copierVieux(texte));
-  }
-  function copierVieux(texte){
-    var t = document.createElement("textarea"); t.value = texte; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0";
-    document.body.append(t); t.select(); var ok = false; try { ok = document.execCommand("copy"); } catch(e){} t.remove(); return ok;
-  }
-  function blocAide(){
-    var f = el("div", "champ aide"); f.append(el("div", "clib", "Que demander à Claude"));
-    f.append(el("div", "corig", "Colle une de ces phrases dans une conversation Cowork :"));
-    var ul = el("ul", "aidel");
-    AIDE.forEach(function(a){
-      var li = el("li"), tx = el("div"); tx.append(el("span", "aidet", a[0]), el("span", "aidep", a[1]));
-      var bt = bouton("Copier", function(){
-        copier(a[1]).then(function(ok){ if (!ok) return; bt.textContent = "Copié"; setTimeout(function(){ bt.textContent = "Copier"; }, 2000); });
+    section(b, "RECHERCHES DE POSTS LINKEDIN");
+    var fr = el("div", "champ");
+    if (!extImport) fr.append(el("div", "corig", "Import des posts LinkedIn indisponible : installe l'extension Chrome du lecteur d'offres pour l'activer."));
+    else {
+      fr.append(el("div", "corig", TXT.rech));
+      var gb = el("div", "reglbas");
+      gb.append(bouton("Générer les recherches", function(){ var n = genererRecherches(); renderRegl(); majSave(); $("reglMsg").textContent = n ? n + " recherche" + (n > 1 ? "s" : "") + " ajoutée" + (n > 1 ? "s" : "") + " à partir des postes et de la zone : ouvre-les dans LinkedIn pour vérifier qu'elles renvoient des posts, puis Enregistrer." : "Aucune nouvelle recherche : elles existent déjà, ou aucun poste recherché."; $("reglMsg").className = "cres"; }));
+      fr.append(gb);
+      regl.recherches.forEach(function(r, i){
+        if (r.retiree) return;
+        var l = el("div", "rech");
+        var a = el("input"); a.type = "text"; a.value = r.libelle; a.placeholder = "Libellé"; a.setAttribute("aria-label", "Libellé de la recherche");
+        a.addEventListener("input", function(){ r.libelle = a.value; majSave(); });
+        var u = el("input"); u.type = "url"; u.value = r.url; u.placeholder = "https://www.linkedin.com/search/results/content/?keywords=…"; u.setAttribute("aria-label", "Adresse de la recherche");
+        u.addEventListener("input", function(){ r.url = u.value.trim(); majSave(); });
+        var x = bouton("Retirer", function(){ if (r.page) r.retiree = true; else regl.recherches.splice(i, 1); renderRegl(); });
+        var info = r.dernier ? el("span", "corig", "dernier import : " + (faiteAujourdhui(r) ? "aujourd'hui" : jjmm(jourParis(r.dernier))) + " à " + heureParis(r.dernier)) : null;
+        l.append(a, u, x); if (info) l.append(info); fr.append(l);
       });
-      bt.setAttribute("aria-label", "Copier : " + a[1]);
-      li.append(tx, bt); ul.append(li);
-    });
-    f.append(ul); return f;
+      var rb = el("div", "reglbas");
+      rb.append(bouton("+ Ajouter une recherche", function(){ regl.recherches.push({libelle:"", url:"", page:null, retiree:false}); renderRegl(); }));
+      fr.append(rb, aideLinkedIn());
+    }
+    b.append(fr);
+    section(b, "PAGE DE CONFIGURATION NOTION");
+    b.append(blocConfig());
+    majSave();
   }
-  $("reglSave").addEventListener("click", enregistrerRegl);
+  function fuseau(){ try { return Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Paris"; } catch(e){ return "Europe/Paris"; } }
+  $("reglSave").addEventListener("click", function(){ enregistrerRegl(); });
+  // Renvoie true si tout est enregistré.
   async function enregistrerRegl(){
     var msg = $("reglMsg");
-    function ko(t){ msg.textContent = t; msg.className = "cres ko"; }
+    function ko(t){ msg.textContent = t; msg.className = "cres ko"; return false; }
     if (!regl.postes.length) return ko("Il faut au moins un poste recherché.");
     if (regl.plancher && !/^\d+$/.test(regl.plancher)) return ko("Le TJM plancher doit être un nombre entier, ou vide.");
     if (!regl.contrats.length) return ko("Il faut au moins un type de collaboration accepté.");
     if (!regl.modes.length) return ko("Il faut au moins un mode de travail accepté.");
     if (regl.jours && !/^[1-5]$/.test(regl.jours)) return ko("Les jours de télétravail minimum doivent être un entier de 1 à 5, ou vides.");
-    var manque = ["contrats","temps","modes","jours"].filter(function(k){ return !params.pages[k]; });
+    if (heureModifiable() && !/^([01]\d|2[0-3]):[0-5]\d$/.test(regl.heure)) return ko("L'heure de passage doit être au format HH:MM, par exemple 08:45.");
+    // v20 : blocage seulement si un réglage modifié n'a pas sa ligne (les plateformes restent enregistrables).
+    var tri = function(x){ return (x || []).slice().sort().join("; "); };
+    var change = {contrats: tri(regl.contrats) !== tri(params.contrats), temps: regl.temps !== params.temps, modes: tri(regl.modes) !== tri(params.modes),
+      jours: regl.jours !== (params.jours ? String(params.jours) : "")};
+    var manque = ["contrats","temps","modes","jours"].filter(function(k){ return !params.pages[k] && change[k]; });
     if (manque.length) return ko("Lignes absentes de Paramètres (modèle 1) : " + manque.join(", ") + ". Mets à jour ta configuration (dans Cowork : « mets à jour le lecteur d'offres ») avant de modifier ces réglages.");
     var actives = regl.recherches.filter(function(r){ return !r.retiree; });
     for (var i = 0; i < actives.length; i++) {
@@ -1919,25 +2077,42 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
           pages:[{properties:{"Paramètre": "Recherche posts LinkedIn : " + r.libelle.trim(), "Valeur": r.url, "À supprimer": "__NO__",
             "Commentaire": "Ajoutée" + parQui() + " via le lecteur d'offres le " + dateFr() + "."}}]}); });
     });
-    if (!ops.length) { msg.textContent = "Aucune modification."; msg.className = "cres"; return; }
-    $("reglSave").disabled = true; msg.textContent = "Enregistrement dans Notion…"; msg.className = "cres";
+    // v20 : plateformes désactivées ou réactivées à l'enregistrement (plus d'écriture immédiate).
+    ciblesEnAttente().forEach(function(s){
+      ops.push(function(){ return majPage(s.url, {"Actif": s.cible ? "__YES__" : "__NO__"}).then(function(){ s.actif = s.cible; delete s.cible; }); });
+    });
+    var changeHeure = heureModifiable() && regl.heure !== params.heure;
+    if (!ops.length && !changeHeure) { msg.textContent = "Aucune modification."; msg.className = "cres"; return true; }
+    var sv = $("reglSave"); sv.dataset.occupe = "1"; sv.disabled = true; msg.textContent = "Enregistrement dans Notion…"; msg.className = "cres";
+    // v20 : heure de passage : la tâche d'abord (update_trigger), la ligne Paramètres seulement si la tâche a suivi.
+    var heureKo = "";
+    if (changeHeure) {
+      var t = regl.heure.split(":");
+      try {
+        await mcpRef.callTool(CC_SERVER, UPD_TOOL, {trigger_id: params.tacheOffres, cron_expression: "CRON_TZ=" + fuseau() + " " + (+t[1]) + " " + (+t[0]) + " * * *"}, {cache: false});
+        var hpage = params.pages.heure, hval = regl.heure;
+        ops.unshift(function(){ return majPage(hpage, {"Valeur": hval}); });
+      } catch(e){ heureKo = "Heure non modifiée : " + errCC(e, "modification") + "."; }
+    }
     var echecs = 0;
     for (var k = 0; k < ops.length; k++) { try { await ops[k](); } catch(e){ echecs++; ko("Échec d'une écriture : " + errText(e)); } }
     try { params = lireParams(await lireVue(PARAM_VIEW)); } catch(e){}
-    $("reglSave").disabled = false;
-    if (!echecs) {
-      msg.textContent = "Réglages enregistrés. Ils s'appliquent au prochain passage de la brique Offres (" + fmtHeure(params.heure) + ") et au prochain import de posts.";
-      msg.className = "cres ok";
-      regl = copieRegl();
-      renderRegl(); majImportBtn();
-    }
+    delete sv.dataset.occupe;
+    if (echecs) { majSave(); return false; }
+    var autres = ops.length > 0;
+    regl = copieRegl(); if (heureKo) regl.heure = params.heure;
+    renderRegl(); reglBase = signature(); majImportBtn(); renderBandeau();
+    if (heureKo) { msg.textContent = heureKo + (autres ? " Les autres réglages sont enregistrés." : ""); msg.className = "cres ko"; majSave(); return false; }
+    msg.textContent = "Réglages enregistrés. Ils s'appliquent au prochain passage de la brique Offres (" + fmtHeure(params.heure) + ") et au prochain import de posts.";
+    msg.className = "cres ok"; majSave();
+    return true;
   }
 
   // ===================== Plateformes suivies, test de source, expéditeurs détectés (v19.2) =====================
   // Sources : base de la page de configuration (vue « Lecteur : ne pas modifier »), lignes de Type « mail ».
   // Test : la tâche « Brique Offres : test de source » (identifiant dans la ligne Paramètres « Tâche Test de source ») est
   // déclenchée par le connecteur Claude Code Remote ; son résultat est relu dans la ligne Paramètres « Dernier test de source ».
-  var CC_SERVER = "Claude Code Remote", FIRE_TOOL = "fire_trigger", DS_TOOL = "notion-update-data-source";
+  var CC_SERVER = "Claude Code Remote", FIRE_TOOL = "fire_trigger", UPD_TOOL = "update_trigger", DS_TOOL = "notion-update-data-source";
   var SONDE_MS = window.LECTEUR_SONDE_MS || 30000, ABANDON_MS = 15 * 60000;
   var GABARITS_CONNUS = {"linkedin.com": "linkedin_digest", "free-work.com": "freework_alerte", "collective.work": "collective_opportunite"};
   var sources = null, sourcesTout = [], ajout = null, essai = null, msgPlat = null;
@@ -1984,37 +2159,35 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
   function dessinerPlateformes(f){
     f = f || $("platBox"); if (!f) return;
     f.textContent = "";
-    f.append(el("div", "clib", "Plateformes suivies"));
     if (!SRC_VIEW) { f.append(el("div", "corig", "Base Sources absente de la configuration gardée dans ce navigateur : utilise « Changer de page de configuration » ci-dessous pour relancer l'analyse.")); return; }
     if (sources === null) {
       var w = el("div", "attente"); w.append(el("span", "spin"), "Lecture de la base Sources…"); f.append(w);
       chargerSources().then(function(){ dessinerPlateformes(); }, function(e){ sources = []; msgPlat = {t: "Sources illisibles : " + errText(e), ko: true}; dessinerPlateformes(); });
       return;
     }
-    f.append(el("div", "corig", "Alertes emploi reçues par mail, lues chaque matin par la brique Offres. « Désactiver » et « Réactiver » écrivent tout de suite dans Notion."));
+    f.append(el("div", "corig", "Alertes emploi reçues par mail, lues chaque matin par la brique Offres. « Désactiver » et « Réactiver » s'appliquent à l'enregistrement."));
     var ul = el("ul");
     if (!sources.length) ul.append(el("li", "corig", "Aucune plateforme suivie."));
     sources.forEach(function(s){
-      var li = el("li", "plat-ligne");
-      li.append(el("span", "cname", (s.nom || s.plateforme || "?") + (s.actif ? "" : " (désactivée)")));
-      li.append(el("span", "corig", [s.plateforme || "plateforme ?", s.adresse || "expéditeur ?", s.actif ? "active" : "désactivée"].join(" · ")));
+      var li = el("li", "plat-ligne"), tete = el("div", "plat-tete");
+      var change = s.cible !== undefined && s.cible !== s.actif;
+      var etatTxt = (s.actif ? "● Active" : "○ Désactivée") + (change ? (s.cible ? " → sera réactivée" : " → sera désactivée") : "");
+      tete.append(el("span", "cname", s.nom || s.plateforme || "?"), el("span", "etat-plat " + (change ? "change" : (s.actif ? "actif" : "inactif")), etatTxt));
+      li.append(tete);
+      li.append(el("span", "corig", [s.domaine || s.plateforme || "plateforme ?", s.adresse || "expéditeur ?"].join(" · ")));
       if (s.erreur) li.append(el("span", "cres ko", "Dernière erreur : " + s.erreur));
       var r = el("div", "cbtns");
-      if (s._occupe) r.append(el("span", "corig", "Enregistrement…"));
-      else r.append(bouton(s.actif ? "Désactiver" : "Réactiver", function(){ basculerSource(s); }));
+      r.append(bouton(change ? "Annuler" : (s.actif ? "Désactiver" : "Réactiver"), function(){ basculerSource(s); }));
       li.append(r); ul.append(li);
     });
     f.append(ul);
     if (msgPlat) f.append(el("p", "cres" + (msgPlat.ko ? " ko" : " ok"), msgPlat.t));
     if (ajout) f.append(formulaireAjout()); else f.append(bouton("+ Ajouter une plateforme", function(){ ouvrirAjout({}); }));
   }
-  async function basculerSource(s){
-    s._occupe = true; msgPlat = null; dessinerPlateformes();
-    try {
-      await majPage(s.url, {"Actif": s.actif ? "__NO__" : "__YES__"}); s.actif = !s.actif;
-      msgPlat = {t: "« " + (s.nom || s.plateforme) + " » " + (s.actif ? "réactivée" : "désactivée") + " : pris en compte au prochain passage de la brique Offres."};
-    } catch(e){ msgPlat = {t: "Échec pour « " + (s.nom || s.plateforme) + " » : " + errText(e), ko: true}; }
-    s._occupe = false; dessinerPlateformes();
+  // v20 : bascule mémorisée (s.cible), écrite par « Enregistrer » ; un second clic l'annule.
+  function basculerSource(s){
+    if (s.cible !== undefined && s.cible !== s.actif) delete s.cible; else s.cible = !s.actif;
+    msgPlat = null; dessinerPlateformes(); majSave();
   }
 
   // ---- Formulaire « Ajouter une plateforme » ----
@@ -2065,12 +2238,12 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
     return "TEST SOURCE " + ajout.id + " GABARIT " + ajout.gabarit + " PLATEFORME " + ajout.nom.trim() + " PRÉFIXE " + ajout.prefixe +
       " DOMAINE " + domaineDe(ajout.site) + " EXPÉDITEUR " + (ajout.expediteur || "-");
   }
-  function errCC(e){
+  function errCC(e, quoi){
     switch(e && e.code){
       case "server_not_connected": return "le connecteur Claude Code Remote n'est pas disponible sur ce compte";
       case "not_in_manifest": case "not_granted": return "accès au connecteur Claude Code Remote refusé pour cette page (recharge la page et accepte la demande)";
       case "needs_reauth": return "connexion Claude Code Remote expirée";
-      case "tool_error": return "la tâche a refusé le déclenchement (" + (e.message || "erreur inconnue") + ")";
+      case "tool_error": return "la tâche a refusé " + (quoi === "modification" ? "la modification" : "le déclenchement") + " (" + (e.message || "erreur inconnue") + ")";
       default: return (e && (e.message || e.code)) || "erreur inconnue";
     }
   }
@@ -2292,6 +2465,118 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
     if (r.childNodes.length) { r.style.marginTop = "10px"; s.append(r); }
   }
 
+  // ===================== Bandeau d'actions (v20) =====================
+  // Afficheur (dernier passage, prochain passage, version du kit, mise à jour disponible), passage lancé par fire_trigger
+  // sur la ligne Paramètres « Tâche Brique Offres », lien de mise à jour vers claude.ai/new, dernier débrief replié.
+  var PASS_ABANDON_MS = window.LECTEUR_PASS_ABANDON_MS || 30 * 60000, PASS_SONDE_MS = window.LECTEUR_PASS_SONDE_MS || 60000, MINUTE_MS = window.LECTEUR_MINUTE_MS || 60000, REPLI_MIN = 10;
+  var passage = null, PHRASE_MAJ = "Mets à jour le lecteur d'offres.";
+  function hhmmParis(iso){ try { return new Intl.DateTimeFormat("fr-FR",{timeZone:"Europe/Paris",hour:"2-digit",minute:"2-digit"}).format(new Date(iso)); } catch(e){ return "?"; } }
+  function dateOk(iso){ return !!iso && !isNaN(new Date(iso)); }
+  function versionOk(v){ return /^v?\d+(\.\d+)*$/i.test(String(v || "").trim()); }
+  function vtxt(v){ return "v" + String(v).trim().replace(/^v/i, ""); }
+  function cmpVersion(a, b){
+    var x = String(a).trim().replace(/^v/i, "").split("."), y = String(b).trim().replace(/^v/i, "").split(".");
+    for (var i = 0; i < Math.max(x.length, y.length); i++) { var d = (+x[i] || 0) - (+y[i] || 0); if (d) return d > 0 ? 1 : -1; }
+    return 0;
+  }
+  function majDispo(){ return versionOk(params.versionKit) && versionOk(params.versionDispo) && cmpVersion(params.versionDispo, params.versionKit) > 0; }
+  function tacheOffresOk(){ return /^trig_\w+$/.test(params.tacheOffres || ""); }
+  // Durée du dernier passage planifié : heure de fin (« Dernière exécution Offres ») moins l'heure de passage, le même jour.
+  // Hors de 1 à 29 minutes (passage lancé à la main, retard) : pas d'estimation, repli de 10 minutes.
+  function dureeEstimee(){
+    if (!dateOk(params.derniereOffres)) return null;
+    var f = hhmmParis(params.derniereOffres).split(":"), h = String(params.heure || "08:45").split(":");
+    var m = (+f[0] * 60 + +f[1]) - (+h[0] * 60 + +h[1]);
+    return m >= 1 && m <= 29 ? m : null;
+  }
+  function renderBandeau(){
+    var bd = $("bandeau"); bd.hidden = false;
+    var d = params.derniereOffres;
+    $("affDernier").textContent = "DERNIER PASSAGE  " + (dateOk(d) ? jjmm(jourParis(d)) + "  " + hhmmParis(d) : "AUCUN");
+    $("affProchain").textContent = passage && passage.statut === "encours" ? "OFFRES ATTENDUES VERS " + hhmmParis(new Date(passage.attendu).toISOString())
+      : "PROCHAIN  " + (briquePasseeAujourdhui() ? jjmm(plusJours(todayParis(), 1)) : "AUJOURD'HUI") + "  " + (params.heure || "08:45");
+    var kit = versionOk(params.versionKit);
+    $("affKit").textContent = kit ? "KIT " + vtxt(params.versionKit) : "";
+    var m = $("affMaj");
+    if (kit && majDispo()) { m.textContent = "MISE À JOUR " + vtxt(params.versionDispo) + " DISPONIBLE"; m.className = "majdispo"; }
+    else { m.textContent = kit && params.pages.versionDispo ? "À JOUR" : ""; m.className = ""; }
+    var pb = $("passBtn"), enCours = passage && passage.statut === "encours";
+    pb.textContent = enCours ? "Passage en cours…" : "▶ Lancer un passage maintenant";
+    pb.disabled = enCours || !tacheOffresOk(); pb.title = tacheOffresOk() ? "" : "Disponible après la mise à jour du kit.";
+    var mb = $("majBtn"); mb.hidden = !majDispo(); mb.href = "https://claude.ai/new?q=" + encodeURIComponent(PHRASE_MAJ);
+    renderDebrief(); hauteurBandeau();
+  }
+  function hauteurBandeau(){ var h = $("bandeau").hidden ? 0 : $("bandeau").offsetHeight; document.documentElement.style.setProperty("--bh", h + "px"); }
+  window.addEventListener("resize", function(){ if (!$("bandeau").hidden) hauteurBandeau(); });
+  function msgBandeau(texte, cls, verifier){
+    var z = $("passZone"); z.textContent = ""; z.className = "bmsg" + (cls ? " " + cls : "");
+    z.append(el("span", "", texte));
+    if (verifier) z.append(bouton("Vérifier maintenant", function(){ sonderPassage(true); }));
+    z.hidden = false; hauteurBandeau();
+  }
+  function msgPassage(){
+    var p = passage; if (!p) { $("passZone").hidden = true; hauteurBandeau(); return; }
+    var vers = hhmmParis(new Date(p.attendu || Date.now()).toISOString());
+    if (p.statut === "encours" && !p.retard)
+      msgBandeau(p.duree ? "La brique Offres tourne dans Cowork. Le dernier passage a pris " + p.duree + (p.duree > 1 ? " minutes" : " minute") + " : le lecteur relira Notion vers " + vers + "."
+        : "La brique Offres tourne dans Cowork : le lecteur relira Notion vers " + vers + ".", "", true);
+    else if (p.statut === "encours") msgBandeau("Le passage n'est pas encore revenu.", "", true);
+    else msgBandeau(p.texte, p.statut === "fini" ? "ok" : "ko", false);
+  }
+  $("passBtn").addEventListener("click", function(){ lancerPassage(); });
+  async function lancerPassage(){
+    if (!tacheOffresOk() || (passage && passage.statut === "encours")) return;
+    var duree = dureeEstimee(), t0 = Date.now();
+    var p = passage = {statut: "encours", lance: t0, avant: params.derniereOffres || "", duree: duree, attendu: t0 + (duree || REPLI_MIN) * MINUTE_MS,
+      ids: rows.map(function(o){ return o.Identifiant; })};
+    renderBandeau(); msgPassage();
+    try { await mcpRef.callTool(CC_SERVER, FIRE_TOOL, {trigger_id: params.tacheOffres}, {cache: false}); }
+    catch(e){ passage = {statut: "erreur", texte: "Lancement impossible : " + errCC(e) + "."}; renderBandeau(); msgPassage(); return; }
+    if (passage !== p) return;
+    p.timer = setTimeout(sonderPassage, Math.max(0, p.attendu - Date.now()));
+  }
+  async function sonderPassage(manuel){
+    var p = passage; if (!p || p.statut !== "encours" || p.lecture) return;
+    clearTimeout(p.timer); p.lecture = true;
+    try { params = lireParams(await lireVue(PARAM_VIEW)); } catch(x){}
+    p.lecture = false;
+    if (passage !== p) return;
+    var revenu = dateOk(params.derniereOffres) && params.derniereOffres !== p.avant;
+    if (revenu) {
+      var n = 0;
+      try { rows = await lireVue(VIEW); n = rows.filter(function(o){ return p.ids.indexOf(o.Identifiant) < 0; }).length; } catch(x){}
+      passage = {statut: "fini", texte: "Passage terminé à " + hhmmParis(params.derniereOffres) + " : " + n + (n > 1 ? " nouvelles offres." : " nouvelle offre.")};
+      calculerListe(); if (!$("listView").hidden) renderList();
+      renderBandeau(); msgPassage(); return;
+    }
+    var now = Date.now();
+    if (now - p.lance >= PASS_ABANDON_MS) {
+      passage = {statut: "abandon", texte: "Le passage n'est pas revenu au bout de 30 minutes. Ouvre la tâche « Brique Offres » dans Cowork pour voir où il en est."};
+      renderBandeau(); msgPassage(); return;
+    }
+    if (now >= p.attendu) p.retard = true;
+    var prochain = p.retard ? PASS_SONDE_MS : p.attendu - now;
+    p.timer = setTimeout(sonderPassage, Math.min(prochain, Math.max(0, p.lance + PASS_ABANDON_MS - now)));
+    renderBandeau(); msgPassage();
+  }
+  $("majBtn").addEventListener("click", function(){
+    if (passage && passage.statut === "encours") return;
+    msgBandeau("Un onglet claude.ai s'ouvre avec la phrase « " + PHRASE_MAJ + " » déjà écrite. Choisis Cowork, puis envoie : rien ne part sans toi.", "", false);
+  });
+  $("debTog").addEventListener("click", function(){
+    var v = $("debView"), ouvrir = v.hidden; v.hidden = !ouvrir;
+    $("debTog").setAttribute("aria-expanded", String(ouvrir)); $("debTog").textContent = (ouvrir ? "▾" : "▸") + " Dernier débrief";
+    renderDebrief(); hauteurBandeau();
+  });
+  function renderDebrief(){
+    var v = $("debView"); if (v.hidden) return;
+    v.textContent = "";
+    if (!params.debrief) { v.append(el("p", "corig", "Aucun débrief pour l'instant : la brique Offres n'est pas encore passée.")); return; }
+    var d = params.derniereOffres;
+    v.append(el("h3", "", dateOk(d) ? "Dernier débrief du " + jjmm(jourParis(d)) + " à " + hhmmParis(d) : "Dernier débrief"));
+    v.append(el("pre", "", params.debrief));
+  }
+
   // ===================== Démarrage =====================
   async function boot(){
     var mcp = window.claude && window.claude.use ? await window.claude.use("mcp") : null;
@@ -2308,6 +2593,7 @@ ol.list li.jour{display:block;padding:8px 14px;background:var(--bg);color:var(--
     await Promise.all([pParam, pCand]);
     synchroVues();
     calculerListe();
+    renderBandeau();
     if (params.prenom) $("reglH").textContent = "Réglages de la veille de " + params.prenom;
     $("foot").textContent = "Lecteur v" + VERSION + " (modèles " + MODELES.slice(0, -1).join(", ") + " et " + MODELES[MODELES.length - 1] + (params.modele && MODELES.indexOf(params.modele) < 0 ? ", Notion en modèle " + params.modele + " : mise à jour à appliquer" : "") + "). Lu dans Notion à " + new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}) + ". Recharge la page pour relire. Une offre affichée est marquée « vue » dans Notion (colonne Vue le) et disparaît de la liste.";
     setTimeout(function(){ $("foot").textContent += extOK ? " Extension active." : " Extension non détectée : ouverture en onglet, import des posts indisponible."; }, 1500);

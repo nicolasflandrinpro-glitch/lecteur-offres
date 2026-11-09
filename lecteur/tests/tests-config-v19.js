@@ -60,7 +60,7 @@ const btn = t => [...w.document.querySelectorAll("button")].find(b => b.textCont
   // Réglages sans extension
   $("reglBtn").click(); await wait(50);
   check("sans extension : recherches LinkedIn indisponibles", /Import des posts LinkedIn indisponible/.test($("reglBody").textContent) && !btn("Générer les recherches"));
-  check("bloc configuration dans les réglages", /Page de configuration Notion/.test($("reglBody").textContent) && !!btn("Changer de page de configuration"));
+  check("bloc configuration dans les réglages", /PAGE DE CONFIGURATION NOTION/.test($("reglBody").textContent) && !!btn("Changer de page de configuration"));
   // Extension détectée
   w.dispatchEvent(new w.MessageEvent("message", {data:{source:"lecteur-offres-ext", type:"presente", capacites:["ouvrir","import","file"]}, source:w})); await wait(80);
   check("avec extension : bouton Générer les recherches", !!btn("Générer les recherches"));

@@ -2,6 +2,7 @@
 // Usage : node lecteur/tests/tests-plateformes-v19-2.js (lecteur/lecteur.html = page de l'artefact sans la ligne d'enveloppe)
 // 25/10/2026 : seul changement pour la 19.4, le contrôle du pied de page (v19.4, modèles 5 et 4) et le chemin du lecteur.
 // 27/10/2026 : 19.6 (modèle 7), pied de page seulement. Avant : seul changement pour la 19.5, le contrôle du pied de page (v19.5, modèles 6, 5 et 4).
+// 09/11/2026 : 20 (modèle 8) : pied de page, réglages v20 (bouton Enregistrer grisé sans modification, plateformes écrites à l'enregistrement, titres de section, rubrique « Que demander à Claude » retirée).
 const fs = require("fs");
 const { JSDOM } = require("jsdom");
 const html = fs.readFileSync(__dirname + "/../lecteur.html", "utf8");
@@ -56,16 +57,18 @@ const RES_OK = i => `24/10/2026 16:10 ; ${i.text.split(" ")[2]} ; generique ; co
   // ---- Encart des expéditeurs détectés ----
   const det = [...$("detList").querySelectorAll("li")].map(l => l.querySelector(".cname").textContent);
   check("encart visible avec l'expéditeur non suivi seulement", !$("detView").hidden && JSON.stringify(det) === JSON.stringify(["Hiway · jobs@hiway.fr","Autre · jobs@autre.fr"]), JSON.stringify(det));
-  check("pied de page 19.6, modèle 4 accepté", /^Lecteur v19\.6 \(modèles 7, 6, 5 et 4\)\./.test($("foot").textContent), $("foot").textContent);
+  check("pied de page 20, modèle 4 accepté", /^Lecteur v20 \(modèles 8, 7, 6, 5 et 4\)\./.test($("foot").textContent), $("foot").textContent);
   // ---- Réglages : plateformes suivies ----
   $("reglBtn").click(); await wait(80);
   const lignes = [...$("platBox").querySelectorAll("li.plat-ligne")];
   check("deux sources mail listées (la source rss exclue)", lignes.length === 2, String(lignes.length));
-  check("expéditeur lu dans un lien Markdown", /ops@collective\.work · active/.test(lignes[1].textContent), lignes[1].textContent);
+  check("expéditeur lu dans un lien Markdown", /collective\.work · ops@collective\.work/.test(lignes[1].textContent), lignes[1].textContent);
   check("dernière erreur affichée en rouge", !!lignes[1].querySelector(".cres.ko") && /recherche Gmail impossible/.test(lignes[1].textContent));
   btn("Désactiver", lignes[0]).click(); await wait(50);
+  check("v20 : Désactiver n'écrit rien avant Enregistrer", !updates.some(u => u.page_id.endsWith("401")) && /● Active → sera désactivée/.test($("platBox").textContent) && !$("reglSave").disabled, JSON.stringify(updates));
+  $("reglSave").click(); await wait(80);
   check("Désactiver écrit Actif décoché", updates.some(u => u.page_id.endsWith("401") && u.properties.Actif === "__NO__"), JSON.stringify(updates));
-  check("la ligne passe en désactivée", /Free-Work \(désactivée\)/.test($("platBox").textContent) && !!btn("Réactiver"));
+  check("la ligne passe en désactivée", /Free-Work○ Désactivée/.test($("platBox").textContent) && !!btn("Réactiver"), $("platBox").textContent.slice(0, 200));
   // ---- Ajout : validations ----
   btn("+ Ajouter une plateforme").click(); await wait(20);
   saisir("Nom de la plateforme", "Free Lance Pro"); saisir("Site (domaine des offres)", "flp.fr");

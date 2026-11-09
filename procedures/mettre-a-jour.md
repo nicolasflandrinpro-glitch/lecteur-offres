@@ -46,7 +46,8 @@ Télécharge `schema/configuration.json` au tag NOUVEAU. Chaque migration ajoute
   - Candidatures : ajoute l'option « En pause » à la colonne « Statut » (options existantes gardées) ; remplace la formule de « À relancer » et sa description par celles du schéma (« En pause » ajouté aux statuts exclus).
   - Sources : ajoute la ligne « Collective (alertes quotidiennes) » du schéma (Identifiant S07, Actif décoché) si aucune ligne n'a déjà l'adresse no-reply@collective.work ; si l'Identifiant S07 est pris, prends le premier identifiant Sxx libre.
   - Puis écris 7 dans « Version du modèle ».
-- Les migrations s'enchaînent : un modèle 4 passe par le modèle 5, puis par le modèle 6, puis par le modèle 7.
+- Modèle 7 vers 8 : ajoute dans Paramètres les lignes « Tâche Brique Offres » et « Version disponible » (Commentaire du schéma). La Valeur de « Tâche Brique Offres » est l'identifiant (trig_…) de la tâche « Brique Offres » (list_triggers ; plusieurs candidates : carte ; aucune : Valeur vide, signalée au bilan) ; celle de « Version disponible » reste vide (la brique l'écrit à son prochain passage). Puis écris 8 dans « Version du modèle ».
+- Les migrations s'enchaînent : un modèle 4 passe par le modèle 5, puis par le modèle 6, puis par le modèle 7, puis par le modèle 8.
 
 Pour toute autre différence entre la configuration et le schéma (colonne, option, vue) : signale-la, sans la corriger d'office ; propose la correction et applique-la seulement après confirmation.
 

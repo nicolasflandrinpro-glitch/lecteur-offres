@@ -1,3 +1,4 @@
+// 09/11/2026 : lecteur 20, contrôles de la rubrique « Que demander à Claude » remplacés par son absence.
 // Tests jsdom du lecteur 19.6 : heure de passage lue dans Paramètres, statut « En pause », alertes Collective sans offres, rubrique « Que demander à Claude ».
 // Usage : node lecteur/tests/tests-v19-6.js (lecteur/lecteur.html = page de l'artefact sans la ligne d'enveloppe)
 const fs = require("fs"); const { JSDOM } = require("jsdom");
@@ -77,16 +78,9 @@ async function scenario(opts){
   check("après la pause : « Candidatures (1) » (Mission B reprise), En pause (2)", r.$("candH").textContent === "Candidatures (1)" && /En pause \(2\)/.test(r.$("pauseTog").textContent), r.$("candH").textContent + " / " + r.$("pauseTog").textContent);
   r = await scenario({derniere: new Date().toISOString(), cands: [C("Mission B", "En pause", 2)]});
   check("seulement des pauses : zone Candidatures visible, « Candidatures (0) »", !r.$("candView").hidden && r.$("candH").textContent === "Candidatures (0)");
-  // Aide
+  // Aide : rubrique « Que demander à Claude » retirée des réglages en v20 (#015, 09/11/2026)
   r = await scenario({derniere: new Date().toISOString()});
   r.$("reglBtn").click(); await wait(80);
-  const aide = r.w.document.querySelector(".champ.aide");
-  check("rubrique « Que demander à Claude » présente", aide && aide.querySelector(".clib").textContent === "Que demander à Claude");
-  check("intro « Colle une de ces phrases dans une conversation Cowork : »", aide && aide.querySelector(".corig").textContent === "Colle une de ces phrases dans une conversation Cowork :");
-  const phrases = aide ? [...aide.querySelectorAll(".aidep")].map(x => x.textContent) : [];
-  check("cinq phrases validées", phrases.join("|") === "Ajoute la plateforme <nom> au lecteur d'offres.|Règle mes critères du lecteur d'offres.|Change l'heure de passage de la brique Offres à <HH:MM>.|Explique-moi le dernier débrief de la brique Offres.|Mets à jour le lecteur d'offres.", phrases.join("|"));
-  const b0 = aide.querySelectorAll("button")[3]; b0.click(); await wait(30);
-  check("« Copier » copie la phrase et affiche « Copié »", r.copies[0] === "Explique-moi le dernier débrief de la brique Offres." && b0.textContent === "Copié", r.copies.join("|") + " / " + b0.textContent);
-  r.$("reglSave").click(); await wait(80);
+  check("v20 : rubrique « Que demander à Claude » absente des réglages", !r.w.document.querySelector(".champ.aide") && !/Que demander à Claude/.test(r.$("reglBody").textContent));
   console.log(`\n${ok}/${ok + ko} contrôles OK`); process.exit(ko ? 1 : 0);
 })();
