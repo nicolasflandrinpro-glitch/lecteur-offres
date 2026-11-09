@@ -24,6 +24,7 @@ async function scenario(o){
     P("Dernière exécution Offres", o.derniere === undefined ? new Date(Date.now() - 2 * 86400000).toISOString() : o.derniere, 4),
     P("Heure de passage", o.heure || "08:45", 5), P("Types de collaboration acceptés", "Freelance", 6), P("Temps de travail", "plein ou partiel", 7),
     P("Modes de travail acceptés", "présentiel; hybride; télétravail total", 8), P("Jours de télétravail minimum", "", 9), P("Dernier débrief", o.debrief || "", 10)];
+  if (o.detectes) par.push(P("Expéditeurs détectés", o.detectes, 14));
   if (o.tache !== null) par.push(P("Tâche Brique Offres", o.tache || "trig_OFFRES1", 11));
   if (o.kit !== null) par.push(P("Version du kit", o.kit || "v5.2", 12));
   if (o.dispo !== null) par.push(P("Version disponible", o.dispo === undefined ? "v5.2" : o.dispo, 13));
@@ -182,5 +183,11 @@ async function scenario(o){
   r = await scenario({sampleErreur: {code: "rate_limited"}});
   r.$("reglBtn").click(); await wait(80); r.$("proposBtn").click(); await wait(60);
   check("échec : « Proposition impossible : … »", r.$("reglBody").textContent.indexOf("Proposition impossible : trop de demandes à Claude, réessaie dans quelques minutes.") >= 0);
+  // ---- Carte « Nouveaux expéditeurs d'offres » (#014) ----
+  r = await scenario({derniere: new Date().toISOString(), detectes: "[nsappey@inspiire.fr](mailto:nsappey@inspiire.fr) ; Inspiire ; 1 mails ; dernier 28/10/2026 ; Mission PO"});
+  const dl = r.$("detList").textContent.replace(/\u00a0/g, " ");
+  check("expéditeur : adresse seule (lien Markdown retiré)", /^Inspiire · nsappey@inspiire\.fr/.test(dl) && dl.indexOf("mailto") < 0, dl);
+  check("expéditeur : « 1 mail » au singulier", /1 mail ·/.test(dl) && !/1 mails/.test(dl), dl);
+  check("guillemets insécables (objet et aide)", r.$("detList").textContent.indexOf("«\u00a0Mission PO\u00a0»") >= 0 && r.$("detView").querySelector(".hint").textContent.indexOf("«\u00a0Créer\u00a0»") >= 0);
   console.log(`\n${ok}/${ok + ko} contrôles OK`); process.exit(ko ? 1 : 0);
 })();

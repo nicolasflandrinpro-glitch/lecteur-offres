@@ -1,10 +1,10 @@
 # Brique Offres 1.12 : jeu de vérification (09/11/2026)
 
-Script vérifié : brique/offres.py, empreinte sha256 `2d40295d01967ffd5a6e704648ae6efc35e79515ca02e2fc545b0c3221d5c721` (420 lignes).
+Script vérifié : brique/offres.py, empreinte sha256 `9067099ef324188cdb19d2832011ca42dfb5ccde48d6f67d6dcafada5775dcdd` (443 lignes).
 Version précédente : brique 1.11, empreinte `38adcd91777d45477b2bf22ea3b39dcb484d47454442bd990f416c04ea76c7a5` (420 lignes, 148 contrôles).
-Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 09/11/2026 : 149/149 contrôles OK.
+Lancement : `python3 brique/tests/test_offres.py brique/offres.py`. Résultat au 09/11/2026 : 155/155 contrôles OK.
 
-Écarts avec la 1.11 : modèle 8 attendu (ligne Paramètres « Version disponible », écrite par l'agent à l'étape 7, point 8, d'après le versions.json de main), modèles 7, 6, 5 et 4 tolérés (modèle 7 sans avertissement).
+Écarts avec la 1.11 : modèle 8 attendu (ligne Paramètres « Version disponible », écrite par l'agent à l'étape 7, point 8, d'après le versions.json de main), modèles 7, 6, 5 et 4 tolérés (modèle 7 sans avertissement) ; mode `--candidatures` (filtre de l'étape 6 bis appliqué par le script, sortie candidatures.out, ligne CANDIDATURES_FILTRE) ; expéditeurs détectés filtrés aussi par domaine des sources et par mot-clé d'objet ; « N j/semaine » dans le titre ou le lieu : mode hybride ; « 1 mail » au singulier dans « Expéditeurs détectés ».
 
 Écarts de la 1.11 avec la 1.10 : modèle 7 attendu, modèles 6, 5 et 4 tolérés (modèle 6 sans avertissement) ; débrief écrit par le script dans `debrief.txt` et dans la valeur `debrief` de `notion.json` (parade contre la compaction du contexte) ; `consigne.out` écrit par `--consigne` ; gabarit collective_alerte (aucune offre, signalement dans `non_affichees` avec la plateforme). Jeu de base passé au modèle 7 ; contrôles de version réécrits ; contrôles 139 à 148 ajoutés.
 
@@ -163,3 +163,9 @@ Non couvert (1.12) : lecture de versions.json et écriture de « Version disponi
 147. 1.11 : non_affichees.source inconnue refusée : OK
 148. 1.11 : AVERTISSEMENT et FUSION en fin de debrief.txt : OK
 149. 1.11 : --consigne écrit consigne.out : OK
+150. 1.12 : --candidatures garde domaine de source, hors adresses de sources (sauf collective_alerte) et objets d'alerte : OK
+151. 1.12 : --candidatures sans mail : fichier vide : OK
+152. 1.12 : expéditeurs détectés : domaine d'une source et objet sans mot-clé retirés : OK
+153. 1.12 : 2j/semaine dans le titre : hybride, hors zone écartée : OK
+154. 1.12 : 3 jours / sem dans le lieu : hybride, présentiel seul accepté écarté : OK
+155. 1.12 : sans mention : mode inconnu, gardé : OK

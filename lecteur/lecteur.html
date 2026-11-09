@@ -346,7 +346,7 @@ body.regl .wrap{max-width:960px}
 
   <section class="panel bloc" id="detView" hidden aria-labelledby="detH">
     <h2 id="detH">Nouveaux expéditeurs d'offres</h2>
-    <p class="hint">Ces expéditeurs t'envoient des mails qui ressemblent à des alertes emploi, sans être suivis. « Créer » ouvre l'ajout de la plateforme ; « Ignorer » ne les propose plus.</p>
+    <p class="hint">Ces expéditeurs t'envoient des mails qui ressemblent à des alertes emploi, sans être suivis. «&nbsp;Créer&nbsp;» ouvre l'ajout de la plateforme ; «&nbsp;Ignorer&nbsp;» ne les propose plus.</p>
     <ul id="detList"></ul>
     <p class="cres" id="detMsg" role="status" aria-live="polite"></p>
   </section>
@@ -2397,7 +2397,8 @@ body.regl .wrap{max-width:960px}
   function lireDetectes(){
     return String(params.detectes || "").split("\n").map(function(l){
       var c = l.split(" ; ").map(function(x){ return x.trim(); });
-      return {adresse: (c[0] || "").toLowerCase(), nom: c[1] || "", mails: c[2] || "", dernier: (c[3] || "").replace(/^dernier\s*/, ""), objet: c.slice(4).join(" ; ")};
+      // v20 : adresse débarrassée du lien Markdown renvoyé par Notion ; « 1 mails » (brique 1.11) accordé au singulier.
+      return {adresse: propre(c[0]).toLowerCase(), nom: c[1] || "", mails: (c[2] || "").replace(/^1 mails$/, "1 mail"), dernier: (c[3] || "").replace(/^dernier\s*/, ""), objet: c.slice(4).join(" ; ")};
     }).filter(function(d){ return /@/.test(d.adresse) && !estIgnore(d.adresse) && !(sources || []).some(function(s){ return s.adresse === d.adresse; }); });
   }
   function renderDetectes(){
@@ -2407,7 +2408,7 @@ body.regl .wrap{max-width:960px}
     l.forEach(function(d){
       var li = el("li");
       li.append(el("div", "cname", d.nom ? d.nom + " · " + d.adresse : d.adresse));
-      li.append(el("div", "corig", [d.mails, d.dernier ? "dernier le " + d.dernier : "", d.objet ? "« " + d.objet + " »" : ""].filter(Boolean).join(" · ")));
+      li.append(el("div", "corig", [d.mails, d.dernier ? "dernier le " + d.dernier : "", d.objet ? "«\u00a0" + d.objet + "\u00a0»" : ""].filter(Boolean).join(" · ")));
       var r = el("div", "cbtns"), ig;
       r.append(bouton("Créer", function(){ creerDepuisDetecte(d); }, "prim"));
       ig = bouton("Ignorer", function(){ ignorerDetecte(d, ig); }); r.append(ig);

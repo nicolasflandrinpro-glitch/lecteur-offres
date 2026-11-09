@@ -296,4 +296,24 @@ r, out, deb = run_deb(BASE, [off(610004), off(610005)], lambda D, K: D.update(of
 verdict("1.11 : AVERTISSEMENT et FUSION en fin de debrief.txt", r.returncode == 0 and (deb or "").rstrip().splitlines()[-1].startswith("FUSION "), deb)
 d = tempfile.mkdtemp(); c = subprocess.run([sys.executable, SCRIPT, "--consigne", "offres", "", "2026-10-27T10:00:00+00:00"], cwd=d, capture_output=True, text=True)
 verdict("1.11 : --consigne écrit consigne.out", os.path.exists(f"{d}/consigne.out") and open(f"{d}/consigne.out").read().startswith("CONSIGNE mode=normal"), c.stdout)
+# ---- v1.12 : filtres appliqués par le script (étapes 6 bis et 6 ter), « N j/semaine » ----
+def run_cand(mails):
+    d = tempfile.mkdtemp()
+    json.dump(mails, open(f"{d}/m.json", "w")); json.dump({"parametres": dict(BASE), "sources": copy.deepcopy(SOURCES + CA)}, open(f"{d}/c.json", "w"))
+    r = subprocess.run([sys.executable, SCRIPT, "--candidatures", "m.json", "c.json"], cwd=d, capture_output=True, text=True)
+    return r, (open(f"{d}/candidatures.out", encoding="utf-8").read().split() if os.path.exists(f"{d}/candidatures.out") else None)
+MC = [{"id": "m1", "de": "yo@collective.work", "objet": "Candidature pour PO envoyée"}, {"id": "m2", "de": "ops@collective.work", "objet": "3 nouvelles missions"},
+      {"id": "m3", "de": "no-reply@collective.work", "objet": "Offre PO - Collective.work"}, {"id": "m4", "de": "news@hiway.example", "objet": "Votre candidature"},
+      {"id": "m5", "de": "messages@linkedin.com", "objet": "12 nouvelles offres d'emploi"}, {"id": "m6", "de": "Recrutement@Mail.Free-Work.com", "objet": "Votre candidature a été vue"}]
+r, g = run_cand(MC)
+verdict("1.12 : --candidatures garde domaine de source, hors adresses de sources (sauf collective_alerte) et objets d'alerte", r.returncode == 0 and g == ["m1", "m3", "m6"] and "CANDIDATURES_FILTRE lus=6 gardes=3 ecartes=3" in r.stdout, f"{g} {r.stdout}{r.stderr}")
+r, g = run_cand({"mails": []}); verdict("1.12 : --candidatures sans mail : fichier vide", r.returncode == 0 and g == [], f"{g} {r.stderr}")
+r, out = run(BASE, [], det([X1, {**X1, "adresse": "info@news.linkedin.com", "nom": "LinkedIn"}, {**X1, "adresse": "promo@boutique.example", "objet": "Soldes d'hiver"}]))
+verdict("1.12 : expéditeurs détectés : domaine d'une source et objet sans mot-clé retirés", r.returncode == 0 and out["expediteurs_detectes"].startswith("jobs@hiway.example") and "linkedin" not in out["expediteurs_detectes"] and "boutique" not in out["expediteurs_detectes"], str(out))
+CAS2 = [("2j/semaine dans le titre : hybride, hors zone écartée", off(700001, titre="Senior Business Analyst (Bruxelles - 2j/semaine)", zone="hors", lieu="Bruxelles"), "ecarte"),
+        ("3 jours / sem dans le lieu : hybride, présentiel seul accepté écarté", off(700002, lieu="Paris, 3 jours / sem"), "ecarte_mode"),
+        ("sans mention : mode inconnu, gardé", off(700003, titre="Product Owner"), "garde")]
+r, out = run(BASE, [CAS2[0][1]]); verdict("1.12 : " + CAS2[0][0], r.returncode == 0 and not out["offres_a_creer"] and any("hors de la zone" in e for e in out["ecartees"]), str(out and out["ecartees"]))
+r, out = run({**BASE, "Modes de travail acceptés": "présentiel"}, [CAS2[1][1]]); verdict("1.12 : " + CAS2[1][0], r.returncode == 0 and not out["offres_a_creer"] and any("mode hybride" in e for e in out["ecartees"]), str(out and out["ecartees"]))
+r, out = run({**BASE, "Modes de travail acceptés": "présentiel"}, [CAS2[2][1]]); verdict("1.12 : " + CAS2[2][0], r.returncode == 0 and len(out["offres_a_creer"]) == 1, str(out and out["ecartees"]))
 print(f"\n{nb - ko}/{nb} contrôles OK"); sys.exit(1 if ko else 0)

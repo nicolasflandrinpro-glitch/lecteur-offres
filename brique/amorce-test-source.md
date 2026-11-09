@@ -9,7 +9,7 @@ Tu testes une source d'alertes emploi avant son activation, à la demande du lec
 
 CONFIGURATION = <adresse de la page Notion de configuration>
 MANUEL = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.2/brique/manuel.md
-EMPREINTE MANUEL = 69145bf63554e2991ba64bea3763137dbf888bdd26b009d01e0f8d906f591b8a
+EMPREINTE MANUEL = eb8f4d2bfa29dc20736c1f3034e8e07d84235aeb6ee5a3a23ade9aa1afbce334
 TEST = https://raw.githubusercontent.com/nicolasflandrinpro-glitch/lecteur-offres/v5.2/brique/test-source.md
 EMPREINTE TEST = 00877466c22d3d199566fdaa1ded3cfbd85939eb86e8c8eca1f2d14a99e876b5
 

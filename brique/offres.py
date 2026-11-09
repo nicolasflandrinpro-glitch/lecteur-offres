@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-# Brique Offres v1.11 générique : lit offres.json (faits relevés) et config.json (Paramètres et Sources recopiés), applique les critères, écrit notion.json.
+# Brique Offres v1.12 générique : lit offres.json (faits relevés) et config.json (Paramètres et Sources recopiés), applique les critères, écrit notion.json.
 # Usage : python3 offres.py offres.json config.json ; avant le dédoublonnage : python3 offres.py --empreintes offres.json config.json (identifiants generique_suivi) ;
 #         au début du passage : python3 offres.py --consigne <offres|test> "<Valeur de « Prochain passage »>" <debut_iso>
+#         étape 6 bis : python3 offres.py --candidatures mails_candidatures.json config.json (sortie : candidatures.out, v1.12)
 # Sorties : notion.json (écritures), debrief.txt (débrief à recopier, v1.11), consigne.out (ligne CONSIGNE, v1.11)
 # Évolution : un critère = une fonction c_<nom> + une entrée dans CRITERES + un gabarit à l'étape 5 du prompt ; un gabarit de mail = une entrée dans GABARITS + une section à l'étape 4.
 import json, sys, re, unicodedata, hashlib, datetime
@@ -11,6 +12,7 @@ VERSION_BRIQUE, MODELE_ATTENDU, MODELES_TOLERES = "1.12", "8", ("7", "6", "5", "
 # v1.9 : script écrit à la fin du prompt de la tâche (amorce), jamais téléchargé ; modèle 5 = modèle 4 + ligne Paramètres « Dernier débrief » ; modèle 4 : débrief non écrit
 # v1.9 (complément du 25/10) : fusion des offres de même entreprise et de même titre dans un même passage (compteur doublons_passage, lignes FUSION)
 # v1.11 : débrief écrit par le script (debrief.txt et champ debrief de notion.json), parade contre la compaction du contexte ; gabarit collective_alerte (alertes quotidiennes Collective : aucune offre, signalement dans non_affichees) ; non_affichees.source facultatif (plateforme ajoutée à la ligne) ; modèle 7 = modèle 6 + ligne Paramètres « Heure de passage », ligne « Offres non affichées (alertes) » renommée, statut de candidature « En pause » ; modèles 6, 5 et 4 tolérés
+# v1.12 : modèle 8 (ligne « Version disponible », écrite par la tâche) ; mode --candidatures (filtre de l'étape 6 bis appliqué par le script, quelle que soit la messagerie) ; expéditeurs détectés filtrés aussi par domaine des sources et par mot-clé d'objet ; « N j/semaine » dans le titre ou le lieu : mode hybride
 # v1.10 : échappements Markdown de la lecture en mode vue retirés des valeurs de Paramètres et de la consigne ; modèle 6 = modèle 5 + ligne Paramètres « Prochain passage » (consigne du passage lancé à la main : mode sans écriture ou test de source) ; mode --consigne ; modèles 5 et 4 tolérés
 
 # ---- Table de correspondance (seul endroit où figurent les noms Notion utilisés par le script) ----
@@ -58,6 +60,10 @@ def lien_service(lien):
 def empreinte(o): return hashlib.sha256("|".join(norm(o.get(k)) for k in ("titre", "org", "lieu")).encode("utf-8")).hexdigest()[:12]
 def jfr(d): return "/".join(reversed(str(d).split("-")))
 def propre(s): return " ".join(re.sub(r"<br\s*/?>|;", ",", str(s or "")).split())
+def dom_racine(a):   # v1.12 : domaine d'une adresse ramené à sa racine (jobs.hiway.fr et hiway.fr donnent hiway.fr)
+    p = str(a or "").strip().lower().rsplit("@", 1)[-1].split(".")
+    return ".".join(p[-3:] if len(p) > 2 and p[-2] in ("co", "com", "org", "net", "gouv") else p[-2:])
+MOTS_OBJET = re.compile(r"\b(offres?|opportunites?|missions?|jobs?|emploi|alerte)\b")   # v1.12 : mots de la recherche de l'étape 6 ter
 def desechappe(s): return re.sub(r"\\([^\w\s])", r"\1", str(s or ""))   # v1.10 : la lecture Notion en mode vue échappe la ponctuation (« 20:15\:04 »)
 
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
@@ -104,6 +110,18 @@ if "--empreintes" in sys.argv:
             print(f'EMPREINTE {o["id"]} ; {o.get("titre")} ; {"deja_vue" if o["id"] in CONNUS else "nouvelle"}')
     json.dump(D, open(ARGS[0], "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(f"EMPREINTES calculees={n}"); sys.exit(0)
+
+# ---- Mode --candidatures (v1.12) : filtre de l'étape 6 bis appliqué par le script, quelle que soit la messagerie ----
+# Entrée : liste [{"id", "de", "objet"}] (ou {"mails": [...]}) ; gardé : domaine d'une source active, adresse qui n'est pas celle d'une source
+# (sauf gabarit collective_alerte, qui envoie aussi les réponses), objet sans « nouvelles offres ». Sortie : candidatures.out, un identifiant par ligne.
+if "--candidatures" in sys.argv:
+    srcs = [x for x in K.get("sources", []) if "@" in str(x.get("adresse") or "")]
+    doms = {dom_racine(x.get("adresse")) for x in srcs}
+    exclues = {str(x.get("adresse")).strip().lower() for x in srcs if str(x.get("gabarit") or "").strip() != "collective_alerte"}
+    L = D if isinstance(D, list) else D.get("mails", [])
+    garde = [str(m.get("id")) for m in L if dom_racine(m.get("de")) in doms and str(m.get("de") or "").strip().lower() not in exclues and "nouvelles offres" not in norm(m.get("objet"))]
+    open("candidatures.out", "w", encoding="utf-8").write("".join(g + "\n" for g in garde))
+    print(f"CANDIDATURES_FILTRE lus={len(L)} gardes={len(garde)} ecartes={len(L) - len(garde)}"); sys.exit(0)
 
 err, errc, avert, avert_src = [], [], [], []
 TEST = bool(K.get("test"))
@@ -233,7 +251,10 @@ CRITERES = [("poste", c_poste), ("contrat", c_contrat), ("temps", c_temps), ("lo
 
 # ---- Contrôles de forme des faits relevés ----
 ENUM = {"temps": ("plein", "partiel"), "mode": tuple(MODES), "zone": ("dans", "hors")}
-O = D.get("offres", []); CONNUS = set(str(i) for i in K.get("ids_offres", []))
+O = D.get("offres", [])
+for o in O:   # v1.12 : « 2j/semaine », « 3 jours / sem » dans le titre ou le lieu : mode hybride si la session ne l'a pas relevé
+    if o.get("mode") is None and re.search(r"\d\s*j(ours?)?\s*/\s*sem(aine)?\b", norm(f'{o.get("titre") or ""} {o.get("lieu") or ""}')): o["mode"] = "hybride"
+CONNUS = set(str(i) for i in K.get("ids_offres", []))
 if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", AUJ): err.append("date_iso invalide (AAAA-MM-JJ)")
 ids = [str(o.get("id")) for o in O]
 if len(ids) != len(set(ids)): err.append("identifiants en double : " + ", ".join(sorted({i for i in ids if ids.count(i) > 1})))
@@ -351,16 +372,18 @@ if DET is not None and not TEST:
             anciens[f[0].lower()] = {"adresse": f[0].lower(), "nom": f[1], "mails": int(mm.group(1)) if mm else 1,
                                      "dernier": f"{dd.group(3)}-{dd.group(2)}-{dd.group(1)}" if dd else AUJ, "objet": " ; ".join(f[4:])}
     det = {k: dict(v) for k, v in anciens.items()}
+    DOMS = {dom_racine(s.get("adresse")) for s in SRC.values() if "@" in str(s.get("adresse") or "")}
     for x in DET:
         a = str(x["adresse"]).strip().lower(); e = det.get(a)
+        if not e and not MOTS_OBJET.search(norm(x.get("objet"))): continue   # v1.12 : objet sans mot de la recherche (messagerie sans filtre d'objet)
         if e: e.update(mails=e["mails"] + x["mails"], dernier=max(e["dernier"], x["dernier"]), nom=x.get("nom") or e["nom"], objet=x.get("objet") or e["objet"])
         else: det[a] = {"adresse": a, "nom": x.get("nom") or "", "mails": x["mails"], "dernier": x["dernier"], "objet": x.get("objet") or ""}
     IGN = [re.sub(r"^@", "", norm(e).replace(" ", "")) for e in re.split(r"[;,\n]|<br\s*/?>", par("ignores")) if e.strip()]
     ADR = {str(a or "").strip().lower() for a in K.get("adresses_sources", [])} | {str(s.get("adresse") or "").strip().lower() for s in SRC.values()}
     def ignore(a): return any(a == e or a.endswith("@" + e) or a.endswith("." + e) for e in IGN)
     lim = (datetime.date.fromisoformat(AUJ) - datetime.timedelta(days=JOURS_DETECTES)).isoformat()
-    garde = sorted((e for a, e in det.items() if not ignore(a) and a not in ADR and e["dernier"] >= lim), key=lambda e: (e["dernier"], e["adresse"]), reverse=True)[:N_DETECTES]
-    TXT_DET = "<br>".join(f'{e["adresse"]} ; {propre(e["nom"])} ; {e["mails"]} mails ; dernier {jfr(e["dernier"])} ; {propre(e["objet"])[:120]}' for e in garde)
+    garde = sorted((e for a, e in det.items() if not ignore(a) and a not in ADR and dom_racine(a) not in DOMS and e["dernier"] >= lim), key=lambda e: (e["dernier"], e["adresse"]), reverse=True)[:N_DETECTES]
+    TXT_DET = "<br>".join(f'{e["adresse"]} ; {propre(e["nom"])} ; {e["mails"]} mail{"s" if e["mails"] > 1 else ""} ; dernier {jfr(e["dernier"])} ; {propre(e["objet"])[:120]}' for e in garde)
     NOUV = [e for e in garde if e["adresse"] not in anciens]; N_RETIRES = len(anciens) - (len(garde) - len(NOUV))
 
 TXT_TEST = None
